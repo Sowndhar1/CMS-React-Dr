@@ -79,8 +79,8 @@ const PatientPortal = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [showActivityModal, setShowActivityModal] = useState(false);
 
-  // Auto-scroll ref for WhatsApp chat logs
-  const chatEndRef = useRef(null);
+  // Ref for WhatsApp chat logs scroll container
+  const chatContainerRef = useRef(null);
 
   // Derive the active message text based on whether the user has edited the text manually
   const messageText = userEditedText !== null ? userEditedText : getInterpolatedTemplate(selectedTemplateId, patient);
@@ -154,8 +154,8 @@ const PatientPortal = () => {
 
   // Auto-scroll chat to bottom when custom message is added
   useEffect(() => {
-    if (simulatorTab === 'whatsapp' && chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (simulatorTab === 'whatsapp' && chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [customSentMessages, simulatorTab]);
 
@@ -246,7 +246,7 @@ const PatientPortal = () => {
   const patientAppointments = appointments.filter(a => a.patientId === patient.id);
 
   return (
-    <div className="screen-fade h-full overflow-y-auto p-4 md:p-6 flex flex-col gap-6 bg-slate-50/50 min-h-0 relative select-none">
+    <div className="screen-fade h-full overflow-y-auto lg:overflow-hidden p-4 md:p-6 flex flex-col gap-6 bg-slate-50/50 min-h-0 relative select-none">
       
       {/* Toast alert widget */}
       {toastMessage && (
@@ -619,6 +619,7 @@ const PatientPortal = () => {
 
                   {/* Scrollable WhatsApp Chat logs container */}
                   <div 
+                    ref={chatContainerRef}
                     className="flex-grow overflow-y-auto p-3 space-y-3 relative"
                     style={{
                       backgroundImage: `url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')`,
@@ -668,8 +669,6 @@ const PatientPortal = () => {
                         </div>
                       </div>
                     ))}
-
-                    <div ref={chatEndRef} />
                   </div>
 
                   {/* WhatsApp input bar */}
