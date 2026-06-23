@@ -224,33 +224,36 @@ const Appointments = () => {
     // Hardcoded exact day schedule for June 23 2026 matching the reference mockup
     if (year === 2026 && month === 6 && day === 23) {
       const june23Patients = [
-        // 9 Completed
-        { id: '#1010', name: 'Ananya Rao',     reason: 'Routine general health',    type: 'Consultation', status: 'Completed',   startTime: '07:00', priority: false },
-        { id: '#1011', name: 'Rohan Joshi',    reason: 'Fever checkup',             type: 'Follow-up',    status: 'Completed',   startTime: '07:20', priority: false },
-        { id: '#1012', name: 'Vikram Seth',    reason: 'Stomach ache',              type: 'Consultation', status: 'Completed',   startTime: '07:40', priority: false },
-        { id: '#1013', name: 'Sneha Reddy',    reason: 'Acidity checkup',           type: 'Consultation', status: 'Completed',   startTime: '08:00', priority: false },
-        { id: '#1014', name: 'Amit Mehta',     reason: 'BP Check',                  type: 'Follow-up',    status: 'Completed',   startTime: '08:20', priority: false },
-        { id: '#1015', name: 'Neha Kapoor',    reason: 'Headache',                  type: 'Consultation', status: 'Completed',   startTime: '08:40', priority: false },
-        { id: '#1017', name: 'Priya Desai',    reason: 'Routine Checkup',           type: 'Consultation', status: 'Completed',   startTime: '09:20', priority: false },
-        { id: '#1018', name: 'Sanjay Gupta',   reason: 'Cardio checkup',            type: 'New Patient',  status: 'Completed',   startTime: '09:40', priority: false },
-        { id: '#1019', name: 'Meera Ghosh',    reason: 'Thyroid follow-up',         type: 'Follow-up',    status: 'Completed',   startTime: '10:00', priority: false },
-        // 3 In Progress
-        { id: '#1020', name: 'Asha Kiran',     reason: 'Eye infection',             type: 'Consultation', status: 'In Progress', startTime: '10:20', priority: false },
-        { id: '#1021', name: 'Vijay Nair',     reason: 'Diabetes checkup',          type: 'Follow-up',    status: 'In Progress', startTime: '10:40', priority: false },
-        { id: '#1022', name: 'Rahul Kumar',    reason: 'Cough & cold',              type: 'New Patient',  status: 'In Progress', startTime: '11:00', priority: false },
-        // 5 Waiting
-        { id: '#1023', name: 'Kavita Sharma',  reason: 'Migraine followup',         type: 'Follow-up',    status: 'Waiting',     startTime: '11:20', priority: false },
-        { id: '#1024', name: 'Karan Malhotra', reason: 'Knee joint consultation',   type: 'Consultation', status: 'Waiting',     startTime: '11:40', priority: false },
-        { id: '#1025', name: 'Gaurav Jain',    reason: 'Back pain followup',        type: 'Follow-up',    status: 'Waiting',     startTime: '13:00', priority: false },
-        { id: '#1026', name: 'Ritu Verma',     reason: 'Skin allergy consultation', type: 'Consultation', status: 'Waiting',     startTime: '13:20', priority: false },
-        { id: '#1027', name: 'Aarav Patel',    reason: 'Post surgery review',       type: 'Follow-up',    status: 'Waiting',     startTime: '13:40', priority: false },
+        // 2 Completed (early morning)
+        { id: '#1010', name: 'Ananya Rao',     reason: 'Routine general health',    type: 'Consultation', visitCategory: 'Follow-up',    status: 'Completed',   startTime: '07:00', priority: false },
+        { id: '#1011', name: 'Rohan Joshi',    reason: 'Fever checkup',             type: 'Follow-up',    visitCategory: 'Follow-up',    status: 'Completed',   startTime: '07:20', priority: false },
+        // 1 In Progress (morning)
+        { id: '#1012', name: 'Vikram Seth',    reason: 'Stomach ache',              type: 'Consultation', visitCategory: 'New Patient',  status: 'In Progress', startTime: '07:40', priority: false },
+        // 3 Waiting (morning)
+        { id: '#1013', name: 'Sneha Reddy',    reason: 'Acidity checkup',           type: 'Consultation', visitCategory: 'Follow-up',    status: 'Waiting',     startTime: '08:00', priority: false },
+        { id: '#1014', name: 'Amit Mehta',     reason: 'BP Check',                  type: 'Follow-up',    visitCategory: 'Follow-up',    status: 'Waiting',     startTime: '08:20', priority: false },
+        { id: '#1015', name: 'Neha Kapoor',    reason: 'Headache',                  type: 'Consultation', visitCategory: 'New Patient',  status: 'Waiting',     startTime: '08:40', priority: false },
+        // 1 Scheduled/Upcoming
+        { id: '#1016', name: 'Arun Kumar',     reason: 'Back pain',                 type: 'Consultation', visitCategory: 'Follow-up',    status: 'Scheduled',   startTime: '09:00', priority: true  },
+        // 7 more Completed (late morning/afternoon) → total 9 Completed
+        { id: '#1017', name: 'Priya Desai',    reason: 'Routine Checkup',           type: 'Consultation', visitCategory: 'Follow-up',    status: 'Completed',   startTime: '09:20', priority: false },
+        { id: '#1018', name: 'Sanjay Gupta',   reason: 'Cardio checkup',            type: 'New Patient',  visitCategory: 'New Patient',  status: 'Completed',   startTime: '09:40', priority: false },
+        { id: '#1019', name: 'Meera Ghosh',    reason: 'Thyroid follow-up',         type: 'Follow-up',    visitCategory: 'Follow-up',    status: 'Completed',   startTime: '10:00', priority: false },
+        { id: '#1020', name: 'Asha Kiran',     reason: 'Eye infection',             type: 'Consultation', visitCategory: 'Follow-up',    status: 'Completed',   startTime: '10:20', priority: false },
+        { id: '#1021', name: 'Vijay Nair',     reason: 'Diabetes checkup',          type: 'Follow-up',    visitCategory: 'Follow-up',    status: 'Completed',   startTime: '10:40', priority: false },
+        { id: '#1022', name: 'Rahul Kumar',    reason: 'Cough & cold',              type: 'New Patient',  visitCategory: 'New Patient',  status: 'Completed',   startTime: '11:00', priority: false },
+        { id: '#1023', name: 'Kavita Sharma',  reason: 'Migraine followup',         type: 'Follow-up',    visitCategory: 'Follow-up',    status: 'Completed',   startTime: '11:20', priority: false },
+        // 2 more In Progress → total 3 In Progress
+        { id: '#1024', name: 'Karan Malhotra', reason: 'Knee joint consultation',   type: 'Consultation', visitCategory: 'New Patient',  status: 'In Progress', startTime: '11:40', priority: false },
+        { id: '#1025', name: 'Gaurav Jain',    reason: 'Back pain followup',        type: 'Follow-up',    visitCategory: 'Follow-up',    status: 'In Progress', startTime: '13:00', priority: false },
+        // 2 more Waiting → total 5 Waiting
+        { id: '#1026', name: 'Ritu Verma',     reason: 'Skin allergy consultation', type: 'Consultation', visitCategory: 'Follow-up',    status: 'Waiting',     startTime: '13:20', priority: false },
+        { id: '#1027', name: 'Aarav Patel',    reason: 'Post surgery review',       type: 'Follow-up',    visitCategory: 'Follow-up',    status: 'Waiting',     startTime: '13:40', priority: false },
         // 1 Urgent
-        { id: '#1028', name: 'Diya Sharma',    reason: 'Chest pain – high priority',type: 'Consultation', status: 'Urgent',      startTime: '14:00', priority: true  },
+        { id: '#1028', name: 'Diya Sharma',    reason: 'Chest pain',                type: 'Consultation', visitCategory: 'Emergency',    status: 'Urgent',      startTime: '14:00', priority: true  },
         // 2 No Show
-        { id: '#1029', name: 'Ishaan Gupta',   reason: 'BP tracking',               type: 'Follow-up',    status: 'No Show',     startTime: '14:20', priority: false },
-        { id: '#1030', name: 'Anika Iyer',     reason: 'Skin allergy',              type: 'Consultation', status: 'No Show',     startTime: '14:40', priority: false },
-        // 1 Upcoming (Scheduled) - Arun Kumar at 09:00 per mockup
-        { id: '#1016', name: 'Arun Kumar',     reason: 'Back pain',                 type: 'Consultation', status: 'Scheduled',   startTime: '09:00', priority: true  },
+        { id: '#1029', name: 'Ishaan Gupta',   reason: 'BP tracking',               type: 'Follow-up',    visitCategory: 'Follow-up',    status: 'No Show',     startTime: '14:20', priority: false },
+        { id: '#1030', name: 'Anika Iyer',     reason: 'Skin allergy',              type: 'Consultation', visitCategory: 'Follow-up',    status: 'No Show',     startTime: '14:40', priority: false },
       ];
       return june23Patients.map((p, i) => {
         const [h, m] = p.startTime.split(':').map(Number);
@@ -271,6 +274,7 @@ const Appointments = () => {
           room: 'Room 203',
           reason: p.reason,
           type: p.type,
+          visitCategory: p.visitCategory || p.type,
           status: p.status,
           priority: p.priority
         };
@@ -565,6 +569,24 @@ const Appointments = () => {
 
   // Selected Day appointments
   const dayAppointments = getFilteredAppointments(selectedDateStr);
+
+  // Day-level KPI stats (shown on the 5 KPI cards)
+  const dayTotal = dayAppointments.length;
+  const dayCompleted = dayAppointments.filter(a => a.status === 'Completed').length;
+  const dayWaiting  = dayAppointments.filter(a => a.status === 'Waiting').length;
+  const dayUrgent   = dayAppointments.filter(a => a.status === 'Urgent').length;
+  const dayNoShows  = dayAppointments.filter(a => a.status === 'No Show').length;
+  const dayStats = {
+    total:         dayTotal,
+    completed:     dayCompleted,
+    completedPct:  dayTotal > 0 ? `${((dayCompleted / dayTotal) * 100).toFixed(1)}%` : '0%',
+    waiting:       dayWaiting,
+    waitingPct:    dayTotal > 0 ? `${((dayWaiting  / dayTotal) * 100).toFixed(1)}%` : '0%',
+    urgent:        dayUrgent,
+    urgentPct:     dayTotal > 0 ? `${((dayUrgent   / dayTotal) * 100).toFixed(1)}%` : '0%',
+    noShows:       dayNoShows,
+    noShowsPct:    dayTotal > 0 ? `${((dayNoShows  / dayTotal) * 100).toFixed(1)}%` : '0%',
+  };
 
   // Today's summary calculations for the Doughnut Chart
   const compToday = dayAppointments.filter(a => a.status === 'Completed').length;
@@ -870,9 +892,9 @@ const Appointments = () => {
                   <Calendar size={15} />
                 </div>
                 <div className="min-w-0 leading-none">
-                  <p className="text-2xl font-black text-slate-800 leading-none">{monthStats.total}</p>
-                  <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Total Appts</p>
-                  <p className="text-[8.5px] text-slate-400 font-semibold leading-none mt-0.5">This Month</p>
+                  <p className="text-2xl font-black text-slate-800 leading-none">{dayStats.total}</p>
+                  <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Total Appointments</p>
+                  <p className="text-[8.5px] text-slate-400 font-semibold leading-none mt-0.5">Today</p>
                 </div>
               </div>
               
@@ -895,9 +917,9 @@ const Appointments = () => {
                   <Check size={15} />
                 </div>
                 <div className="min-w-0 leading-none">
-                  <p className="text-2xl font-black text-slate-800 leading-none">{monthStats.completed}</p>
+                  <p className="text-2xl font-black text-slate-800 leading-none">{dayStats.completed}</p>
                   <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Completed</p>
-                  <p className="text-[8.5px] text-emerald-600 font-extrabold leading-none mt-0.5">{monthStats.completedPct}</p>
+                  <p className="text-[8.5px] text-emerald-600 font-extrabold leading-none mt-0.5">{dayStats.completedPct}</p>
                 </div>
               </div>
               
@@ -920,9 +942,9 @@ const Appointments = () => {
                   <Clock size={15} />
                 </div>
                 <div className="min-w-0 leading-none">
-                  <p className="text-2xl font-black text-slate-800 leading-none">{monthStats.waiting}</p>
+                  <p className="text-2xl font-black text-slate-800 leading-none">{dayStats.waiting}</p>
                   <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Waiting</p>
-                  <p className="text-[8.5px] text-amber-600 font-extrabold leading-none mt-0.5">{monthStats.waitingPct}</p>
+                  <p className="text-[8.5px] text-amber-600 font-extrabold leading-none mt-0.5">{dayStats.waitingPct}</p>
                 </div>
               </div>
               
@@ -945,9 +967,9 @@ const Appointments = () => {
                   <AlertCircle size={15} />
                 </div>
                 <div className="min-w-0 leading-none">
-                  <p className="text-2xl font-black text-slate-800 leading-none">{monthStats.urgent}</p>
+                  <p className="text-2xl font-black text-slate-800 leading-none">{dayStats.urgent}</p>
                   <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Urgent</p>
-                  <p className="text-[8.5px] text-rose-600 font-extrabold leading-none mt-0.5">{monthStats.urgentPct}</p>
+                  <p className="text-[8.5px] text-rose-600 font-extrabold leading-none mt-0.5">{dayStats.urgentPct}</p>
                 </div>
               </div>
               
@@ -970,9 +992,9 @@ const Appointments = () => {
                   <X size={15} />
                 </div>
                 <div className="min-w-0 leading-none">
-                  <p className="text-2xl font-black text-slate-800 leading-none">{monthStats.noShows}</p>
+                  <p className="text-2xl font-black text-slate-800 leading-none">{dayStats.noShows}</p>
                   <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">No Shows</p>
-                  <p className="text-[8.5px] text-purple-600 font-extrabold leading-none mt-0.5">{monthStats.noShowsPct}</p>
+                  <p className="text-[8.5px] text-purple-600 font-extrabold leading-none mt-0.5">{dayStats.noShowsPct}</p>
                 </div>
               </div>
               
@@ -1277,11 +1299,11 @@ const Appointments = () => {
                                   
                                   <div className="flex items-center gap-3 text-[10px] text-slate-400 mt-1.5 font-semibold">
                                     <span className="flex items-center gap-1">
-                                      <User size={10} />
-                                      <span className="text-slate-500">{apt.doctor}</span>
+                                      <MapPin size={10} className="text-slate-400" />
+                                      <span className="text-slate-500">{apt.room}</span>
                                     </span>
                                     <span className="text-slate-300">·</span>
-                                    <span className="text-slate-400">{apt.room}</span>
+                                    <span className="text-slate-400">{apt.visitCategory || apt.type}</span>
                                   </div>
                                 </div>
                               </div>
@@ -1593,8 +1615,12 @@ const Appointments = () => {
             </div>
 
             <div className="flex flex-col gap-3.5 flex-grow min-h-0 overflow-y-auto pr-0.5">
-              {dayAppointments.length > 0 ? (
-                dayAppointments.slice(0, 5).map((apt) => {
+              {(() => {
+                const activeQueue = dayAppointments
+                  .filter(a => ['Waiting', 'In Progress', 'Scheduled', 'Urgent'].includes(a.status))
+                  .slice(0, 5);
+                return activeQueue.length > 0 ? (
+                  activeQueue.map((apt) => {
                   const initials = getInitials(apt.patientName);
                   
                   // Color codes for status texts
@@ -1649,9 +1675,10 @@ const Appointments = () => {
                 })
               ) : (
                 <div className="text-center text-xs text-slate-400 py-8 font-bold bg-slate-50/40 rounded-xl border border-slate-100">
-                  No appointments scheduled today
+                  No active appointments in queue
                 </div>
-              )}
+              );
+            })()}
             </div>
           </div>
 
