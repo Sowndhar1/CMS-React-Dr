@@ -202,7 +202,7 @@ const Dashboard = () => {
       </div>
 
       {/* Row 2: Quick Actions horizontal bar */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 flex-shrink-0">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 flex-shrink-0">
 
         {/* Action: New Appointment */}
         <button
@@ -250,7 +250,7 @@ const Dashboard = () => {
 
         {/* Action: More Actions */}
         <button
-          className="p-3.5 bg-white hover:bg-slate-50 rounded-2xl border border-slate-200/60 flex items-center gap-3 transition-all duration-200 cursor-pointer shadow-sm group text-left col-span-2 md:col-span-1"
+          className="p-3.5 bg-white hover:bg-slate-50 rounded-2xl border border-slate-200/60 flex items-center gap-3 transition-all duration-200 cursor-pointer shadow-sm group text-left col-span-2 sm:col-span-1 lg:col-span-1"
           onClick={() => alert('More clinical actions menu.')}
         >
           <div className="w-8 h-8 rounded-xl bg-[#FFF0F3] text-[#810B38] flex items-center justify-center group-hover:scale-105 transition-transform duration-200">

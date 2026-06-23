@@ -494,7 +494,7 @@ const Appointments = () => {
       </div>
 
       {/* 2. Top KPI Cards Row */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 flex-shrink-0">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 flex-shrink-0">
         
         {/* Total Card */}
         <div className="bg-white border border-slate-200 rounded-2xl p-4 flex items-center gap-3 shadow-xs">
@@ -839,79 +839,81 @@ const Appointments = () => {
           {scheduleView === 'Week' && (
             <div className="flex-1 flex flex-col p-5 overflow-hidden">
               <h2 className="font-bold text-slate-800 text-sm mb-4">Weekly Overview Grid</h2>
-              <div className="grid grid-cols-7 gap-3 flex-1 overflow-y-auto">
-                {Array.from({ length: 7 }).map((_, i) => {
-                  // Generate days of current week based on selectedDate
-                  const currDayNum = selectedDate.getDay() || 7; // sunday = 0 -> 7
-                  const distance = i + 1 - currDayNum;
-                  const date = new Date(selectedDate);
-                  date.setDate(selectedDate.getDate() + distance);
-                  
-                  const isDaySelected = date.getDate() === selectedDate.getDate() && date.getMonth() === selectedDate.getMonth();
-                  const dStr = formatDateStr(date);
-                  
-                  // Filter apths for that date
-                  const dayApts = appointments.filter((a) => a.date === dStr && (selectedDoctor === 'All Doctors' || a.doctor === selectedDoctor));
-                  const complCount = dayApts.filter((a) => a.status === 'Completed').length;
-                  const waitCount = dayApts.filter((a) => a.status === 'Waiting' || a.status === 'Urgent').length;
-                  const schedCount = dayApts.filter((a) => a.status === 'Scheduled' || a.status === 'In Progress').length;
-                  
-                  const daysNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                  
-                  return (
-                    <div
-                      key={i}
-                      className={`border rounded-xl p-3 flex flex-col justify-between hover:border-primary-400 transition cursor-pointer min-h-[200px] ${
-                        isDaySelected ? 'border-primary-500 bg-primary-50/10 ring-1 ring-primary-500' : 'border-slate-200 bg-white'
-                      }`}
-                      onClick={() => {
-                        setSelectedDate(date);
-                        setScheduleView('Day');
-                      }}
-                    >
-                      <div className="text-center pb-2 border-b border-slate-100">
-                        <p className="text-[10px] text-slate-400 uppercase font-bold">{daysNames[date.getDay()]}</p>
-                        <p className="text-sm font-extrabold text-slate-700 mt-0.5">{date.getDate()}</p>
-                      </div>
-                      
-                      <div className="flex-1 flex flex-col gap-1.5 py-3 text-[10px] font-bold">
-                        <div className="flex justify-between items-center text-slate-500">
-                          <span>Total</span>
-                          <span className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-700">{dayApts.length}</span>
-                        </div>
-                        {complCount > 0 && (
-                          <div className="flex justify-between items-center text-emerald-600 bg-emerald-50 px-1 py-0.5 rounded">
-                            <span>Done</span>
-                            <span>{complCount}</span>
-                          </div>
-                        )}
-                        {waitCount > 0 && (
-                          <div className="flex justify-between items-center text-amber-700 bg-amber-50 px-1 py-0.5 rounded">
-                            <span>Queue</span>
-                            <span>{waitCount}</span>
-                          </div>
-                        )}
-                        {schedCount > 0 && (
-                          <div className="flex justify-between items-center text-blue-600 bg-blue-50 px-1 py-0.5 rounded">
-                            <span>Booked</span>
-                            <span>{schedCount}</span>
-                          </div>
-                        )}
-                      </div>
-
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
+              <div className="overflow-x-auto flex-grow flex flex-col min-w-full">
+                <div className="grid grid-cols-7 gap-3 flex-1 overflow-y-auto min-w-[750px]">
+                  {Array.from({ length: 7 }).map((_, i) => {
+                    // Generate days of current week based on selectedDate
+                    const currDayNum = selectedDate.getDay() || 7; // sunday = 0 -> 7
+                    const distance = i + 1 - currDayNum;
+                    const date = new Date(selectedDate);
+                    date.setDate(selectedDate.getDate() + distance);
+                    
+                    const isDaySelected = date.getDate() === selectedDate.getDate() && date.getMonth() === selectedDate.getMonth();
+                    const dStr = formatDateStr(date);
+                    
+                    // Filter apths for that date
+                    const dayApts = appointments.filter((a) => a.date === dStr && (selectedDoctor === 'All Doctors' || a.doctor === selectedDoctor));
+                    const complCount = dayApts.filter((a) => a.status === 'Completed').length;
+                    const waitCount = dayApts.filter((a) => a.status === 'Waiting' || a.status === 'Urgent').length;
+                    const schedCount = dayApts.filter((a) => a.status === 'Scheduled' || a.status === 'In Progress').length;
+                    
+                    const daysNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                    
+                    return (
+                      <div
+                        key={i}
+                        className={`border rounded-xl p-3 flex flex-col justify-between hover:border-primary-400 transition cursor-pointer min-h-[200px] ${
+                          isDaySelected ? 'border-primary-500 bg-primary-50/10 ring-1 ring-primary-500' : 'border-slate-200 bg-white'
+                        }`}
+                        onClick={() => {
                           setSelectedDate(date);
-                          openBookingModal();
+                          setScheduleView('Day');
                         }}
-                        className="w-full text-center text-[9px] font-extrabold text-primary-600 hover:text-white hover:bg-primary-500 transition py-1 rounded border border-primary-200"
                       >
-                        + Book Day
-                      </button>
-                    </div>
-                  );
-                })}
+                        <div className="text-center pb-2 border-b border-slate-100">
+                          <p className="text-[10px] text-slate-400 uppercase font-bold">{daysNames[date.getDay()]}</p>
+                          <p className="text-sm font-extrabold text-slate-700 mt-0.5">{date.getDate()}</p>
+                        </div>
+                        
+                        <div className="flex-1 flex flex-col gap-1.5 py-3 text-[10px] font-bold">
+                          <div className="flex justify-between items-center text-slate-500">
+                            <span>Total</span>
+                            <span className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-700">{dayApts.length}</span>
+                          </div>
+                          {complCount > 0 && (
+                            <div className="flex justify-between items-center text-emerald-600 bg-emerald-50 px-1 py-0.5 rounded">
+                              <span>Done</span>
+                              <span>{complCount}</span>
+                            </div>
+                          )}
+                          {waitCount > 0 && (
+                            <div className="flex justify-between items-center text-amber-700 bg-amber-50 px-1 py-0.5 rounded">
+                              <span>Queue</span>
+                              <span>{waitCount}</span>
+                            </div>
+                          )}
+                          {schedCount > 0 && (
+                            <div className="flex justify-between items-center text-blue-600 bg-blue-50 px-1 py-0.5 rounded">
+                              <span>Booked</span>
+                              <span>{schedCount}</span>
+                            </div>
+                          )}
+                        </div>
+  
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedDate(date);
+                            openBookingModal();
+                          }}
+                          className="w-full text-center text-[9px] font-extrabold text-primary-600 hover:text-white hover:bg-primary-500 transition py-1 rounded border border-primary-200"
+                        >
+                          + Book Day
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           )}
@@ -923,62 +925,66 @@ const Appointments = () => {
                 <span className="text-xs text-slate-400 font-semibold">Click any cell to inspect schedule</span>
               </div>
               
-              {/* Day headers */}
-              <div className="grid grid-cols-7 gap-1 text-center font-bold text-slate-400 text-[10.5px] uppercase tracking-wider mb-2">
-                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
-              </div>
-
-              {/* Day cells (starts on Monday June 1st, 2026) */}
-              <div className="grid grid-cols-7 gap-1 flex-1 overflow-y-auto">
-                {Array.from({ length: 30 }).map((_, i) => {
-                  const dayVal = i + 1;
-                  const date = new Date(2026, 5, dayVal); // June is Month index 5
-                  const isDaySelected = date.getDate() === selectedDate.getDate() && date.getMonth() === selectedDate.getMonth();
-                  const dStr = formatDateStr(date);
-                  
-                  // Filter appointments for this date
-                  const dayApts = appointments.filter((a) => a.date === dStr && (selectedDoctor === 'All Doctors' || a.doctor === selectedDoctor));
-                  const types = [...new Set(dayApts.map((a) => a.type))];
-
-                  return (
-                    <div
-                      key={i}
-                      className={`border rounded-lg p-2 hover:border-primary-400 transition cursor-pointer min-h-[75px] flex flex-col justify-between ${
-                        isDaySelected ? 'border-primary-500 bg-primary-50/10' : 'border-slate-100 bg-white'
-                      }`}
-                      onClick={() => {
-                        setSelectedDate(date);
-                        setScheduleView('Day');
-                      }}
-                    >
-                      <span className="text-[10px] font-extrabold text-slate-500">{dayVal}</span>
+              <div className="overflow-x-auto flex-grow flex flex-col min-w-full">
+                <div className="min-w-[700px] flex flex-col flex-1">
+                  {/* Day headers */}
+                  <div className="grid grid-cols-7 gap-1 text-center font-bold text-slate-400 text-[10.5px] uppercase tracking-wider mb-2">
+                    <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                  </div>
+    
+                  {/* Day cells (starts on Monday June 1st, 2026) */}
+                  <div className="grid grid-cols-7 gap-1 flex-1 overflow-y-auto">
+                    {Array.from({ length: 30 }).map((_, i) => {
+                      const dayVal = i + 1;
+                      const date = new Date(2026, 5, dayVal); // June is Month index 5
+                      const isDaySelected = date.getDate() === selectedDate.getDate() && date.getMonth() === selectedDate.getMonth();
+                      const dStr = formatDateStr(date);
                       
-                      {dayApts.length > 0 ? (
-                        <div className="flex flex-col gap-1">
-                          <span className="text-[9px] font-extrabold text-slate-700 bg-slate-100 px-1 rounded w-fit self-end">
-                            {dayApts.length} slots
-                          </span>
+                      // Filter appointments for this date
+                      const dayApts = appointments.filter((a) => a.date === dStr && (selectedDoctor === 'All Doctors' || a.doctor === selectedDoctor));
+                      const types = [...new Set(dayApts.map((a) => a.type))];
+    
+                      return (
+                        <div
+                          key={i}
+                          className={`border rounded-lg p-2 hover:border-primary-400 transition cursor-pointer min-h-[75px] flex flex-col justify-between ${
+                            isDaySelected ? 'border-primary-500 bg-primary-50/10' : 'border-slate-100 bg-white'
+                          }`}
+                          onClick={() => {
+                            setSelectedDate(date);
+                            setScheduleView('Day');
+                          }}
+                        >
+                          <span className="text-[10px] font-extrabold text-slate-500">{dayVal}</span>
                           
-                          {/* Dot legends */}
-                          <div className="flex gap-0.5 justify-end">
-                            {types.map((type) => (
-                              <span
-                                key={type}
-                                className={`w-1.5 h-1.5 rounded-full ${
-                                  type === 'New Patient' ? 'bg-purple-500' :
-                                  type === 'Follow-up' ? 'bg-blue-500' :
-                                  type === 'Consultation' ? 'bg-emerald-500' :
-                                  type === 'Emergency' ? 'bg-rose-500' :
-                                  'bg-slate-400'
-                                }`}
-                              ></span>
-                            ))}
-                          </div>
+                          {dayApts.length > 0 ? (
+                            <div className="flex flex-col gap-1">
+                              <span className="text-[9px] font-extrabold text-slate-700 bg-slate-100 px-1 rounded w-fit self-end">
+                                {dayApts.length} slots
+                              </span>
+                              
+                              {/* Dot legends */}
+                              <div className="flex gap-0.5 justify-end">
+                                {types.map((type) => (
+                                  <span
+                                    key={type}
+                                    className={`w-1.5 h-1.5 rounded-full ${
+                                      type === 'New Patient' ? 'bg-purple-500' :
+                                      type === 'Follow-up' ? 'bg-blue-500' :
+                                      type === 'Consultation' ? 'bg-emerald-500' :
+                                      type === 'Emergency' ? 'bg-rose-500' :
+                                      'bg-slate-400'
+                                    }`}
+                                  ></span>
+                                ))}
+                              </div>
+                            </div>
+                          ) : null}
                         </div>
-                      ) : null}
-                    </div>
-                  );
-                })}
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
           )}

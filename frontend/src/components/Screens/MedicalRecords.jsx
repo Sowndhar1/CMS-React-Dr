@@ -71,7 +71,7 @@ const MedicalRecords = () => {
       </div>
 
       {/* KPI Cards Row */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 flex-shrink-0">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 flex-shrink-0">
         <div className="stat-card flex items-center gap-4 py-3 px-4">
           <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 flex-shrink-0">
             <FolderHeart size={20} />
@@ -145,73 +145,77 @@ const MedicalRecords = () => {
       </div>
 
       {/* Records Table Card */}
-      <div className="section-card flex-1 flex flex-col overflow-hidden bg-white">
-        <div className="table-head text-[10.5px] items-center" style={{ gridTemplateColumns: '1.2fr 2fr 1.2fr 1.2fr 1.2fr 1fr 1fr' }}>
-          <span>Record ID</span>
-          <span>Patient</span>
-          <span>Document Name</span>
-          <span>Category</span>
-          <span>Date Added</span>
-          <span>Status</span>
-          <span className="text-right pr-4">Actions</span>
-        </div>
+      <div className="section-card flex-1 flex flex-col overflow-hidden bg-white min-h-0">
+        <div className="overflow-x-auto flex-grow flex flex-col min-w-full">
+          <div className="min-w-[850px] flex flex-col flex-1">
+            <div className="table-head text-[10.5px] items-center flex-shrink-0" style={{ gridTemplateColumns: '1.2fr 2fr 1.2fr 1.2fr 1.2fr 1fr 1fr' }}>
+              <span>Record ID</span>
+              <span>Patient</span>
+              <span>Document Name</span>
+              <span>Category</span>
+              <span>Date Added</span>
+              <span>Status</span>
+              <span className="text-right pr-4">Actions</span>
+            </div>
 
-        <div className="divide-y divide-slate-50 overflow-y-auto flex-grow">
-          {filteredRecords.length > 0 ? (
-            filteredRecords.map((rec) => (
-              <div
-                key={rec.id}
-                className="table-row items-center py-3 hover:bg-slate-50/50"
-                style={{ gridTemplateColumns: '1.2fr 2fr 1.2fr 1.2fr 1.2fr 1fr 1fr' }}
-              >
-                <span className="text-slate-400 font-semibold text-xs">{rec.id}</span>
-                <div className="flex items-center gap-2 min-w-0">
-                  <div className="avatar bg-blue-50 text-blue-700 font-bold flex-shrink-0" style={{ width: '28px', height: '28px', fontSize: '10px' }}>
-                    {rec.patientName.split(' ').map(n => n[0]).join('')}
-                  </div>
-                  <div className="truncate">
-                    <div className="font-semibold text-slate-800 text-xs truncate">{rec.patientName}</div>
-                    <div className="text-[10px] text-slate-400">{rec.patientId}</div>
-                  </div>
-                </div>
-                <span className="text-slate-700 text-xs font-medium truncate pr-2">{rec.docName}</span>
-                <span className={`badge ${
-                  rec.category === 'Discharge' ? 'badge-red' :
-                  rec.category === 'Lab Reports' ? 'badge-teal' :
-                  rec.category === 'Imaging' ? 'badge-purple' :
-                  'badge-gray'
-                } text-[9px] w-fit`}>
-                  {rec.category}
-                </span>
-                <span className="text-slate-500 text-xs">{rec.date}</span>
-                <span className={`badge ${
-                  rec.status === 'Signed' ? 'badge-green' : 'badge-amber'
-                } text-[9px] w-fit`}>
-                  {rec.status}
-                </span>
-                <div className="flex items-center justify-end gap-1.5 pr-2">
-                  <button className="btn-ghost p-1 text-slate-400 hover:text-slate-700 cursor-pointer" title="View Document">
-                    <Eye size={13} />
-                  </button>
-                  <button className="btn-ghost p-1 text-slate-400 hover:text-slate-700 cursor-pointer" title="Download Document">
-                    <Download size={13} />
-                  </button>
-                  <button 
-                    className="btn-ghost p-1 text-slate-400 hover:text-red-600 cursor-pointer" 
-                    title="Delete"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDelete(rec.id);
-                    }}
+            <div className="divide-y divide-slate-50 overflow-y-auto flex-grow">
+              {filteredRecords.length > 0 ? (
+                filteredRecords.map((rec) => (
+                  <div
+                    key={rec.id}
+                    className="table-row items-center py-3 hover:bg-slate-50/50"
+                    style={{ gridTemplateColumns: '1.2fr 2fr 1.2fr 1.2fr 1.2fr 1fr 1fr' }}
                   >
-                    <Trash2 size={13} />
-                  </button>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="p-8 text-center text-slate-400 text-xs">No medical records match the filter criteria.</div>
-          )}
+                    <span className="text-slate-400 font-semibold text-xs">{rec.id}</span>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="avatar bg-blue-50 text-blue-700 font-bold flex-shrink-0" style={{ width: '28px', height: '28px', fontSize: '10px' }}>
+                        {rec.patientName.split(' ').map(n => n[0]).join('')}
+                      </div>
+                      <div className="truncate">
+                        <div className="font-semibold text-slate-800 text-xs truncate">{rec.patientName}</div>
+                        <div className="text-[10px] text-slate-400">{rec.patientId}</div>
+                      </div>
+                    </div>
+                    <span className="text-slate-700 text-xs font-medium truncate pr-2">{rec.docName}</span>
+                    <span className={`badge ${
+                      rec.category === 'Discharge' ? 'badge-red' :
+                      rec.category === 'Lab Reports' ? 'badge-teal' :
+                      rec.category === 'Imaging' ? 'badge-purple' :
+                      'badge-gray'
+                    } text-[9px] w-fit`}>
+                      {rec.category}
+                    </span>
+                    <span className="text-slate-500 text-xs">{rec.date}</span>
+                    <span className={`badge ${
+                      rec.status === 'Signed' ? 'badge-green' : 'badge-amber'
+                    } text-[9px] w-fit`}>
+                      {rec.status}
+                    </span>
+                    <div className="flex items-center justify-end gap-1.5 pr-2">
+                      <button className="btn-ghost p-1 text-slate-400 hover:text-slate-700 cursor-pointer" title="View Document">
+                        <Eye size={14} />
+                      </button>
+                      <button className="btn-ghost p-1 text-slate-400 hover:text-slate-700 cursor-pointer" title="Download Document">
+                        <Download size={14} />
+                      </button>
+                      <button 
+                        className="btn-ghost p-1 text-slate-400 hover:text-red-600 cursor-pointer" 
+                        title="Delete"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(rec.id);
+                        }}
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="p-8 text-center text-slate-400 text-xs">No medical records match the filter criteria.</div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

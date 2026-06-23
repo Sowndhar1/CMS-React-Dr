@@ -393,7 +393,7 @@ const PatientDetail = () => {
               {selectedPatient.billingHistory && selectedPatient.billingHistory.length > 0 ? (
                 selectedPatient.billingHistory.map((bill, index) => (
                   <div key={index} className="flex items-center gap-4 bg-slate-50 rounded-xl p-4">
-                    <div className="flex-1 grid grid-cols-4 gap-4 text-sm">
+                    <div className="flex-1 grid grid-cols-2 sm:grid-cols-4 gap-3.5 sm:gap-4 text-sm">
                       <div>
                         <p className="text-xs text-slate-400">Invoice</p>
                         <p className="font-500 text-slate-800">{bill.id}</p>

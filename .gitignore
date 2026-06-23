@@ -18,13 +18,9 @@ dist.zip
 **/.env.*
 
 # Backups and temporary files
-*_backup*/
-*backup*
+backups/
 backup.ps1
 backup_frontend.ps1
-project_backup/
-project_backup_17_06_2026/
-frontend_backup_19_06_2026_173535/
 
 # Logs
 logs

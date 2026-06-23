@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import {
   ArrowLeft,
@@ -9,9 +9,7 @@ import {
   CalendarCheck,
   Eye,
   Printer,
-  Calendar,
-  AlertTriangle,
-  Check
+  AlertTriangle
 } from 'lucide-react';
 
 const LabReports = () => {
@@ -30,7 +28,7 @@ const LabReports = () => {
     { id: 'LAB-2026-107', patientName: 'Kavita Sharma', patientId: '#1015', testName: 'Renal Function Test (Creatinine)', value: '1.2 mg/dL', refRange: '0.6 - 1.2 mg/dL', flag: 'Normal', date: '18 May 2026', doctor: 'Dr. Rajan', status: 'Completed' }
   ];
 
-  const [labTests, setLabTests] = useState(initialLabTests);
+  const [labTests] = useState(initialLabTests);
 
   const filteredTests = labTests.filter(test => {
     const matchesSearch = 
@@ -67,7 +65,7 @@ const LabReports = () => {
       </div>
 
       {/* KPI Cards Row */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 flex-shrink-0">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 flex-shrink-0">
         <div className="stat-card flex items-center gap-4 py-3 px-4">
           <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 flex-shrink-0">
             <FlaskConical size={20} />
@@ -140,61 +138,65 @@ const LabReports = () => {
       </div>
 
       {/* Lab Reports Table Card */}
-      <div className="section-card flex-1 flex flex-col overflow-hidden bg-white">
-        <div className="table-head text-[10.5px] items-center" style={{ gridTemplateColumns: '1.2fr 2fr 2fr 1.2fr 1.2fr 1.2fr 1fr' }}>
-          <span>Report ID</span>
-          <span>Patient</span>
-          <span>Test Name</span>
-          <span>Result Value</span>
-          <span>Reference Range</span>
-          <span>Status / Alert</span>
-          <span className="text-right pr-4">Actions</span>
-        </div>
+      <div className="section-card flex-1 flex flex-col overflow-hidden bg-white min-h-0">
+        <div className="overflow-x-auto flex-grow flex flex-col min-w-full">
+          <div className="min-w-[850px] flex flex-col flex-1">
+            <div className="table-head text-[10.5px] items-center flex-shrink-0" style={{ gridTemplateColumns: '1.2fr 2fr 2fr 1.2fr 1.2fr 1.2fr 1fr' }}>
+              <span>Report ID</span>
+              <span>Patient</span>
+              <span>Test Name</span>
+              <span>Result Value</span>
+              <span>Reference Range</span>
+              <span>Status / Alert</span>
+              <span className="text-right pr-4">Actions</span>
+            </div>
 
-        <div className="divide-y divide-slate-50 overflow-y-auto flex-grow">
-          {filteredTests.length > 0 ? (
-            filteredTests.map((test) => (
-              <div
-                key={test.id}
-                className="table-row items-center py-3 hover:bg-slate-50/50"
-                style={{ gridTemplateColumns: '1.2fr 2fr 2fr 1.2fr 1.2fr 1.2fr 1fr' }}
-              >
-                <span className="text-slate-400 font-semibold text-xs">{test.id}</span>
-                <div className="flex items-center gap-2 min-w-0">
-                  <div className="avatar bg-blue-50 text-blue-700 font-bold flex-shrink-0" style={{ width: '28px', height: '28px', fontSize: '10px' }}>
-                    {test.patientName.split(' ').map(n => n[0]).join('')}
+            <div className="divide-y divide-slate-50 overflow-y-auto flex-grow">
+              {filteredTests.length > 0 ? (
+                filteredTests.map((test) => (
+                  <div
+                    key={test.id}
+                    className="table-row items-center py-3 hover:bg-slate-50/50"
+                    style={{ gridTemplateColumns: '1.2fr 2fr 2fr 1.2fr 1.2fr 1.2fr 1fr' }}
+                  >
+                    <span className="text-slate-400 font-semibold text-xs">{test.id}</span>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="avatar bg-blue-50 text-blue-700 font-bold flex-shrink-0" style={{ width: '28px', height: '28px', fontSize: '10px' }}>
+                        {test.patientName.split(' ').map(n => n[0]).join('')}
+                      </div>
+                      <div className="truncate">
+                        <div className="font-semibold text-slate-800 text-xs truncate">{test.patientName}</div>
+                        <div className="text-[10px] text-slate-400">{test.patientId}</div>
+                      </div>
+                    </div>
+                    <span className="text-slate-700 text-xs font-semibold truncate pr-2">{test.testName}</span>
+                    <span className={`text-xs font-bold ${
+                      test.flag === 'Critical' ? 'text-red-600' :
+                      test.flag === 'High' ? 'text-amber-600' : 'text-slate-700'
+                    }`}>{test.value}</span>
+                    <span className="text-slate-500 text-xs">{test.refRange}</span>
+                    <span className={`badge ${
+                      test.flag === 'Critical' ? 'badge-red' :
+                      test.status === 'Pending' ? 'badge-amber' :
+                      test.flag === 'High' ? 'badge-amber' : 'badge-green'
+                    } text-[9px] w-fit font-bold`}>
+                      {test.flag === 'Critical' ? 'Critical' : test.status}
+                    </span>
+                    <div className="flex items-center justify-end gap-1.5 pr-2">
+                      <button className="btn-ghost p-1 text-slate-400 hover:text-slate-700 cursor-pointer" title="View Report">
+                        <Eye size={13} />
+                      </button>
+                      <button className="btn-ghost p-1 text-slate-400 hover:text-slate-700 cursor-pointer" title="Print Report">
+                        <Printer size={13} />
+                      </button>
+                    </div>
                   </div>
-                  <div className="truncate">
-                    <div className="font-semibold text-slate-800 text-xs truncate">{test.patientName}</div>
-                    <div className="text-[10px] text-slate-400">{test.patientId}</div>
-                  </div>
-                </div>
-                <span className="text-slate-700 text-xs font-semibold truncate pr-2">{test.testName}</span>
-                <span className={`text-xs font-bold ${
-                  test.flag === 'Critical' ? 'text-red-600' :
-                  test.flag === 'High' ? 'text-amber-600' : 'text-slate-700'
-                }`}>{test.value}</span>
-                <span className="text-slate-500 text-xs">{test.refRange}</span>
-                <span className={`badge ${
-                  test.flag === 'Critical' ? 'badge-red' :
-                  test.status === 'Pending' ? 'badge-amber' :
-                  test.flag === 'High' ? 'badge-amber' : 'badge-green'
-                } text-[9px] w-fit font-bold`}>
-                  {test.flag === 'Critical' ? 'Critical' : test.status}
-                </span>
-                <div className="flex items-center justify-end gap-1.5 pr-2">
-                  <button className="btn-ghost p-1 text-slate-400 hover:text-slate-700 cursor-pointer" title="View Report">
-                    <Eye size={13} />
-                  </button>
-                  <button className="btn-ghost p-1 text-slate-400 hover:text-slate-700 cursor-pointer" title="Print Report">
-                    <Printer size={13} />
-                  </button>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="p-8 text-center text-slate-400 text-xs">No lab reports match the filter criteria.</div>
-          )}
+                ))
+              ) : (
+                <div className="p-8 text-center text-slate-400 text-xs">No lab reports match the filter criteria.</div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

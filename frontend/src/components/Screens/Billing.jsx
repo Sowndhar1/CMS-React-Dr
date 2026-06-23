@@ -127,62 +127,66 @@ const Billing = () => {
               </button>
             </div>
             <div className="p-4">
-              <div className="grid text-xs font-600 text-slate-400 uppercase tracking-wide mb-3"
-                style={{ gridTemplateColumns: '3fr 1fr 1fr 1fr auto', gap: '8px' }}>
-                <span>Description</span>
-                <span>HSN/SAC</span>
-                <span>Qty</span>
-                <span>Amount</span>
-                <span></span>
-              </div>
-              
-              <div className="space-y-2">
-                {items.map((item, index) => (
-                  <div
-                    key={index}
-                    className="grid items-center gap-2"
-                    style={{ gridTemplateColumns: '3fr 1fr 1fr 1fr auto' }}
-                  >
-                    <input
-                      type="text"
-                      className="form-input text-sm py-2"
-                      placeholder="Consultation, medicine name etc."
-                      value={item.desc}
-                      onChange={(e) => handleUpdateItem(index, 'desc', e.target.value)}
-                    />
-                    <input
-                      type="text"
-                      className="form-input text-sm py-2"
-                      placeholder="HSN"
-                      value={item.hsn}
-                      onChange={(e) => handleUpdateItem(index, 'hsn', e.target.value)}
-                    />
-                    <input
-                      type="number"
-                      className="form-input text-sm py-2"
-                      placeholder="Qty"
-                      value={item.qty}
-                      onChange={(e) => handleUpdateItem(index, 'qty', e.target.value)}
-                    />
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm" style={{ pointerEvents: 'none' }}>₹</span>
-                      <input
-                        type="number"
-                        className="form-input text-sm py-2"
-                        style={{ paddingLeft: '26px' }}
-                        placeholder="Rate"
-                        value={item.rate}
-                        onChange={(e) => handleUpdateItem(index, 'rate', e.target.value)}
-                      />
-                    </div>
-                    <button
-                      className="btn-ghost text-red-400 p-1.5 hover:text-red-600"
-                      onClick={() => handleRemoveItem(index)}
-                    >
-                      <Trash2 size={14} />
-                    </button>
+              <div className="overflow-x-auto">
+                <div className="min-w-[600px] pb-2">
+                  <div className="grid text-xs font-600 text-slate-400 uppercase tracking-wide mb-3"
+                    style={{ gridTemplateColumns: '3fr 1fr 1fr 1fr auto', gap: '8px' }}>
+                    <span>Description</span>
+                    <span>HSN/SAC</span>
+                    <span>Qty</span>
+                    <span>Amount</span>
+                    <span></span>
                   </div>
-                ))}
+                  
+                  <div className="space-y-2">
+                    {items.map((item, index) => (
+                      <div
+                        key={index}
+                        className="grid items-center gap-2"
+                        style={{ gridTemplateColumns: '3fr 1fr 1fr 1fr auto' }}
+                      >
+                        <input
+                          type="text"
+                          className="form-input text-sm py-2"
+                          placeholder="Consultation, medicine name etc."
+                          value={item.desc}
+                          onChange={(e) => handleUpdateItem(index, 'desc', e.target.value)}
+                        />
+                        <input
+                          type="text"
+                          className="form-input text-sm py-2"
+                          placeholder="HSN"
+                          value={item.hsn}
+                          onChange={(e) => handleUpdateItem(index, 'hsn', e.target.value)}
+                        />
+                        <input
+                          type="number"
+                          className="form-input text-sm py-2"
+                          placeholder="Qty"
+                          value={item.qty}
+                          onChange={(e) => handleUpdateItem(index, 'qty', e.target.value)}
+                        />
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm" style={{ pointerEvents: 'none' }}>₹</span>
+                          <input
+                            type="number"
+                            className="form-input text-sm py-2"
+                            style={{ paddingLeft: '26px' }}
+                            placeholder="Rate"
+                            value={item.rate}
+                            onChange={(e) => handleUpdateItem(index, 'rate', e.target.value)}
+                          />
+                        </div>
+                        <button
+                          className="btn-ghost text-red-400 p-1.5 hover:text-red-600"
+                          onClick={() => handleRemoveItem(index)}
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               {/* Totals computation */}

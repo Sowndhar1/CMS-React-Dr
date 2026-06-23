@@ -62,7 +62,7 @@ const Settings = () => {
   };
 
   return (
-    <div className="screen-fade h-full overflow-hidden p-6 flex flex-col gap-6 bg-slate-50/50 min-h-0 relative select-none">
+    <div className="screen-fade h-full overflow-y-auto lg:overflow-hidden p-6 flex flex-col gap-6 bg-slate-50/50 min-h-0 relative select-none">
       
       {/* Toast alert widget */}
       {showToast && (
@@ -87,7 +87,7 @@ const Settings = () => {
       </div>
 
       {/* Main Settings Panel Grid */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 overflow-hidden min-h-0">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:overflow-hidden lg:min-h-0">
         
         {/* Left Side: Navigation Tabs List (lg:col-span-4) */}
         <div className="lg:col-span-4 bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col p-4 gap-2 h-fit">

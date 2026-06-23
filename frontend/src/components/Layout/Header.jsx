@@ -55,23 +55,23 @@ const Header = () => {
       </div>
 
       {/* Right User Actions */}
-      <div className="flex items-center gap-4.5">
+      <div className="flex items-center gap-2 sm:gap-4.5">
         {/* New Appointment or Upload Document Button */}
         {currentScreen === 'documents' ? (
           <button 
-            className="flex items-center gap-1.5 px-4.5 py-2.5 bg-[#810B38] hover:bg-[#6B082D] text-white rounded-xl text-xs font-bold shadow-sm transition-all duration-200 cursor-pointer"
+            className="flex items-center gap-1.5 px-2.5 py-2 sm:px-4.5 sm:py-2.5 bg-[#810B38] hover:bg-[#6B082D] text-white rounded-xl text-xs font-bold shadow-sm transition-all duration-200 cursor-pointer"
             onClick={() => window.dispatchEvent(new CustomEvent('trigger-document-upload'))}
           >
-            <Plus size={14} />
-            <span>Upload Document</span>
+            <Plus size={14} className="flex-shrink-0" />
+            <span className="hidden sm:inline">Upload Document</span>
           </button>
         ) : (
           <button 
-            className="flex items-center gap-2 px-4 py-2 bg-[#810B38] text-white hover:bg-[#6B082D] rounded-full text-xs font-bold shadow-sm transition-all duration-200 cursor-pointer"
+            className="flex items-center gap-1.5 px-2.5 py-2 sm:px-4 sm:py-2 bg-[#810B38] text-white hover:bg-[#6B082D] rounded-full text-xs font-bold shadow-sm transition-all duration-200 cursor-pointer"
             onClick={() => showScreen('appointments')}
           >
-            <Plus size={14} />
-            <span>New Appointment</span>
+            <Plus size={14} className="flex-shrink-0" />
+            <span className="hidden sm:inline">New Appointment</span>
           </button>
         )}
 
@@ -99,15 +99,15 @@ const Header = () => {
           />
         </button>
 
-        <div className="w-px h-5 bg-slate-200"></div>
+        <div className="w-px h-5 bg-slate-200 hidden lg:block"></div>
 
         {/* Calendar Date Display */}
-        <div className="flex items-center gap-2 text-xs text-slate-600 font-bold bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 font-sans">
+        <div className="hidden lg:flex items-center gap-2 text-xs text-slate-600 font-bold bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 font-sans">
           <Calendar size={14} className="text-slate-500" />
           <span>{formatDateTime(currentTime)}</span>
         </div>
 
-        <div className="w-px h-5 bg-slate-200"></div>
+        <div className="w-px h-5 bg-slate-200 hidden lg:block"></div>
 
         {/* Admin profile pill */}
         <div className="flex items-center gap-3">

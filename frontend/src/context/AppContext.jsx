@@ -51,7 +51,12 @@ export const AppProvider = ({ children }) => {
   const [currentScreen, setCurrentScreen] = useState('dashboard');
   const [screenHistory, setScreenHistory] = useState([]);
   const [selectedPatientId, setSelectedPatientId] = useState('#1042');
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 768;
+    }
+    return false;
+  });
   const [theme, setTheme] = useState(() => localStorage.getItem('hms-theme') || 'classic');
   const [customColor, setCustomColorState] = useState(() => localStorage.getItem('hms-custom-color') || '#2563EB');
 
@@ -59,6 +64,16 @@ export const AppProvider = ({ children }) => {
     localStorage.setItem('hms-custom-color', color);
     setCustomColorState(color);
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsSidebarCollapsed(true);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('hms-theme', theme);

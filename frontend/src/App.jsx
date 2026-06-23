@@ -17,7 +17,7 @@ import FollowUps from './components/Screens/FollowUps';
 import Settings from './components/Screens/Settings';
 
 const MainLayout = () => {
-  const { currentScreen } = useApp();
+  const { currentScreen, isSidebarCollapsed, setIsSidebarCollapsed } = useApp();
 
   // Screen router map
   const renderScreen = () => {
@@ -54,7 +54,15 @@ const MainLayout = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden font-sans">
+    <div className="flex h-screen overflow-hidden font-sans relative">
+      {/* Backdrop overlay for mobile when sidebar is open */}
+      {!isSidebarCollapsed && (
+        <div 
+          className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 md:hidden transition-opacity duration-300"
+          onClick={() => setIsSidebarCollapsed(true)}
+        />
+      )}
+
       {/* Sidebar Layout */}
       <Sidebar />
 

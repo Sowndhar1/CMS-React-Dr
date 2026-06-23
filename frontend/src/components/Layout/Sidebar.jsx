@@ -37,7 +37,9 @@ const Sidebar = () => {
 
   return (
     <aside 
-      className={`transition-all duration-300 ease-in-out ${isSidebarCollapsed ? 'w-20' : 'w-60'} flex flex-col flex-shrink-0 text-white h-full overflow-hidden`}
+      className={`fixed md:static inset-y-0 left-0 z-50 transition-all duration-300 ease-in-out ${
+        isSidebarCollapsed ? 'w-20 -translate-x-full md:translate-x-0' : 'w-60 translate-x-0'
+      } flex flex-col flex-shrink-0 text-white h-full overflow-hidden`}
       style={{ backgroundColor: 'var(--color-primary)' }} // Primary Theme Background
     >
       {/* Brand Logo Header */}
@@ -45,7 +47,7 @@ const Sidebar = () => {
         <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center flex-shrink-0 shadow-md">
           {/* White Cross Shield Icon */}
           <svg className="w-6 h-6 text-[#810B38]" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-3H8v-2h3V8h2v3h3v2h-3v3z" />
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 h-2v-3H8v-2h3V8h2v3h3v2h-3v3z" />
           </svg>
         </div>
         {!isSidebarCollapsed && (
@@ -73,7 +75,12 @@ const Sidebar = () => {
                   ? 'bg-[#F1E2D1] text-[#810B38] shadow-sm' 
                   : 'text-white/75 hover:bg-white/10 hover:text-white'
               } ${isSidebarCollapsed ? 'justify-center sidebar-tooltip' : ''}`}
-              onClick={() => showScreen(item.id)}
+              onClick={() => {
+                showScreen(item.id);
+                if (window.innerWidth < 768) {
+                  setIsSidebarCollapsed(true);
+                }
+              }}
               data-tip={isSidebarCollapsed ? item.name : undefined}
             >
               <Icon size={16} className="flex-shrink-0" />

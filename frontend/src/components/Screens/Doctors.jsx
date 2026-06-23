@@ -256,7 +256,7 @@ const Doctors = () => {
         <>
           <div className="flex-grow overflow-y-auto pr-1 min-h-0">
             {filteredDoctors.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pb-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pb-2">
                 {filteredDoctors.map((doc, idx) => (
                   <div key={doc.id} className="section-card bg-white p-5 flex flex-col items-center hover:border-slate-300 hover:shadow-md transition-all relative">
                     
@@ -352,52 +352,56 @@ const Doctors = () => {
       ) : (
         // Table View
         <div className="section-card flex-grow flex flex-col overflow-hidden bg-white min-h-0">
-          <div className="table-head text-[10.5px] items-center flex-shrink-0" style={tableColWidths}>
-            <span>Avatar</span>
-            <span>Name</span>
-            <span>Department</span>
-            <span>Specialization</span>
-            <span>Experience</span>
-            <span>Availability Status</span>
-            <span>Patients Today</span>
-            <span className="text-right pr-4">Actions</span>
-          </div>
-          <div className="divide-y divide-slate-50 overflow-y-auto flex-grow scrollbar-hide min-h-0">
-            {filteredDoctors.length > 0 ? (
-              filteredDoctors.map((doc, idx) => (
-                <div
-                  key={doc.id}
-                  className="table-row items-center py-3 hover:bg-slate-50/50"
-                  style={tableColWidths}
-                >
-                  <div className="flex items-center">
-                    <div className="scale-75 origin-left">
-                      <DoctorAvatar name={doc.name} specialty={doc.specialty} index={idx} />
+          <div className="overflow-x-auto flex-grow flex flex-col min-w-full">
+            <div className="min-w-[900px] flex flex-col flex-1">
+              <div className="table-head text-[10.5px] items-center flex-shrink-0" style={tableColWidths}>
+                <span>Avatar</span>
+                <span>Name</span>
+                <span>Department</span>
+                <span>Specialization</span>
+                <span>Experience</span>
+                <span>Availability Status</span>
+                <span>Patients Today</span>
+                <span className="text-right pr-4">Actions</span>
+              </div>
+              <div className="divide-y divide-slate-50 overflow-y-auto flex-grow scrollbar-hide min-h-0">
+                {filteredDoctors.length > 0 ? (
+                  filteredDoctors.map((doc, idx) => (
+                    <div
+                      key={doc.id}
+                      className="table-row items-center py-3 hover:bg-slate-50/50"
+                      style={tableColWidths}
+                    >
+                      <div className="flex items-center">
+                        <div className="scale-75 origin-left">
+                          <DoctorAvatar name={doc.name} specialty={doc.specialty} index={idx} />
+                        </div>
+                      </div>
+                      <span className="text-slate-800 text-xs font-bold">{doc.name}</span>
+                      <span className="text-slate-500 text-xs">{doc.dept}</span>
+                      <span className="text-primary-600 text-xs font-semibold">{doc.specialty}</span>
+                      <span className="text-slate-600 text-xs">{doc.exp} Years</span>
+                      <div>
+                        <span className={`badge border ${getStatusBg(doc.status)} text-[9px] font-semibold w-fit`}>
+                          {doc.status}
+                        </span>
+                      </div>
+                      <span className="text-slate-700 text-xs font-bold">{doc.patients} Patients</span>
+                      <div className="flex items-center justify-end gap-1.5 pr-2">
+                        <button className="btn-ghost p-1 text-slate-400 hover:text-slate-700 cursor-pointer" title="View Profile">
+                          <Eye size={13} />
+                        </button>
+                        <button className="btn-ghost p-1 text-slate-400 hover:text-slate-700 cursor-pointer" title="Schedule">
+                          <Calendar size={13} />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                  <span className="text-slate-800 text-xs font-bold">{doc.name}</span>
-                  <span className="text-slate-500 text-xs">{doc.dept}</span>
-                  <span className="text-primary-600 text-xs font-semibold">{doc.specialty}</span>
-                  <span className="text-slate-600 text-xs">{doc.exp} Years</span>
-                  <div>
-                    <span className={`badge border ${getStatusBg(doc.status)} text-[9px] font-semibold w-fit`}>
-                      {doc.status}
-                    </span>
-                  </div>
-                  <span className="text-slate-700 text-xs font-bold">{doc.patients} Patients</span>
-                  <div className="flex items-center justify-end gap-1.5 pr-2">
-                    <button className="btn-ghost p-1 text-slate-400 hover:text-slate-700 cursor-pointer" title="View Profile">
-                      <Eye size={13} />
-                    </button>
-                    <button className="btn-ghost p-1 text-slate-400 hover:text-slate-700 cursor-pointer" title="Schedule">
-                      <Calendar size={13} />
-                    </button>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="p-8 text-center text-slate-400 text-xs">No doctors match the filter criteria.</div>
-            )}
+                  ))
+                ) : (
+                  <div className="p-8 text-center text-slate-400 text-xs">No doctors match the filter criteria.</div>
+                )}
+              </div>
+            </div>
           </div>
           
           {/* Table pagination footer controls */}

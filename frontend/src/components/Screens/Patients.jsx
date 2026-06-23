@@ -265,7 +265,7 @@ const Patients = () => {
 
       {/* Row 1: 5 Statistics Cards with Sparklines */}
       {showStats && (
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 transition-all duration-300 flex-shrink-0">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 transition-all duration-300 flex-shrink-0">
           {/* Total Patients */}
           <div className="stat-card flex flex-col justify-between py-2.5 px-3.5 h-26">
             <div>
@@ -351,7 +351,7 @@ const Patients = () => {
           </div>
 
           {/* High Risk (New card) */}
-          <div className="stat-card flex flex-col justify-between py-2.5 px-3.5 h-26">
+          <div className="stat-card flex flex-col justify-between py-2.5 px-3.5 h-26 col-span-2 sm:col-span-1 lg:col-span-1">
             <div>
               <div className="flex items-start justify-between">
                 <div>
@@ -703,115 +703,119 @@ const Patients = () => {
       ) : (
         // Table View
         <div className="section-card flex-1 flex flex-col overflow-hidden bg-white min-h-0">
-          <div className="table-head text-[10.5px] items-center flex-shrink-0" style={tableColWidths}>
-            <input
-              type="checkbox"
-              className="cursor-pointer rounded border-slate-300"
-              checked={selectedIds.length > 0 && selectedIds.length === filteredPatients.length}
-              onChange={handleSelectAll}
-            />
-            <span>ID</span>
-            <span>Patient</span>
-            <span>Age</span>
-            <span>Phone</span>
-            <span>Last Visit</span>
-            <span>Last Doctor</span>
-            <span>Condition</span>
-            <span>Risk</span>
-            <span>Status</span>
-            <span className="text-right pr-4">Actions</span>
-          </div>
-          <div className="divide-y divide-slate-50 overflow-y-auto flex-grow scrollbar-hide min-h-0">
-            {filteredPatients.length > 0 ? (
-              filteredPatients.map((patient) => {
-                const docName = doctorMap[patient.id] || 'Dr. Rajan, General Physician';
-                const riskLevel = riskMap[patient.id] || 'Low';
-                const isChecked = selectedIds.includes(patient.id);
-                
-                return (
-                  <div
-                    key={patient.id}
-                    className={`table-row items-center py-3 hover:bg-slate-50/50 ${isChecked ? 'bg-slate-50/70' : ''}`}
-                    style={tableColWidths}
-                    onClick={() => handleViewPatient(patient.id)}
-                  >
-                    <input
-                      type="checkbox"
-                      className="cursor-pointer rounded border-slate-300"
-                      checked={isChecked}
-                      onClick={(e) => e.stopPropagation()}
-                      onChange={(e) => handleSelectOne(patient.id, e.target.checked)}
-                    />
-                    <span className="text-slate-400 text-xs font-semibold">{patient.id}</span>
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="avatar bg-blue-100 text-blue-700 font-bold flex-shrink-0" style={{ width: '28px', height: '28px', fontSize: '10.5px' }}>
-                        {patient.name.split(' ').map(n => n[0]).join('')}
-                      </div>
-                      <div className="truncate">
-                        <div className="font-semibold text-slate-800 text-xs truncate">{patient.name}</div>
-                        <div className="text-[10px] text-slate-400 truncate">{patient.email}</div>
-                      </div>
-                    </div>
-                    <span className="text-slate-600 text-xs">{patient.age}</span>
-                    <span className="text-slate-600 text-xs truncate">{patient.phone}</span>
-                    <span className="text-slate-600 text-xs truncate">{patient.lastVisit.split(',')[0]}</span>
+          <div className="overflow-x-auto flex-grow flex flex-col min-w-full">
+            <div className="min-w-[1000px] flex flex-col flex-1">
+              <div className="table-head text-[10.5px] items-center flex-shrink-0" style={tableColWidths}>
+                <input
+                  type="checkbox"
+                  className="cursor-pointer rounded border-slate-300"
+                  checked={selectedIds.length > 0 && selectedIds.length === filteredPatients.length}
+                  onChange={handleSelectAll}
+                />
+                <span>ID</span>
+                <span>Patient</span>
+                <span>Age</span>
+                <span>Phone</span>
+                <span>Last Visit</span>
+                <span>Last Doctor</span>
+                <span>Condition</span>
+                <span>Risk</span>
+                <span>Status</span>
+                <span className="text-right pr-4">Actions</span>
+              </div>
+              <div className="divide-y divide-slate-50 overflow-y-auto flex-grow scrollbar-hide min-h-0">
+                {filteredPatients.length > 0 ? (
+                  filteredPatients.map((patient) => {
+                    const docName = doctorMap[patient.id] || 'Dr. Rajan, General Physician';
+                    const riskLevel = riskMap[patient.id] || 'Low';
+                    const isChecked = selectedIds.includes(patient.id);
                     
-                    {/* Premium Doctor Column layout */}
-                    <div className="flex items-center gap-2 min-w-0 pr-1">
-                      <div className="w-6 h-6 rounded-full bg-primary-50 flex items-center justify-center font-bold text-[9px] text-primary-600 border border-primary-100 flex-shrink-0">
-                        {docName.split(',')[0].replace('Dr. ', '').substring(0, 2).toUpperCase()}
-                      </div>
-                      <div className="truncate">
-                        <span className="text-xs text-slate-700 font-semibold block leading-none truncate">{docName.split(',')[0]}</span>
-                        <span className="text-[9.5px] text-slate-400 leading-none truncate mt-0.5 block">{docName.split(',')[1] || 'Physician'}</span>
-                      </div>
-                    </div>
-
-                    <span className={`badge ${
-                      patient.condition.toLowerCase().includes('hypertension') ? 'badge-blue' :
-                      patient.condition.toLowerCase().includes('diabetes') ? 'badge-teal' :
-                      patient.condition.toLowerCase().includes('asthma') ? 'badge-gray' :
-                      patient.condition.toLowerCase().includes('new') ? 'badge-blue' :
-                      patient.condition.toLowerCase().includes('cardiac') ? 'badge-red' :
-                      'badge-teal'
-                    } text-[9.5px] w-fit`}>
-                      {patient.condition}
-                    </span>
-                    <span className="text-xs font-semibold flex items-center gap-1.5">
-                      <span className={`w-1.5 h-1.5 rounded-full ${
-                        riskLevel === 'High' ? 'bg-red-500' :
-                        riskLevel === 'Medium' ? 'bg-amber-500' : 'bg-green-500'
-                      }`}></span>
-                      <span className={
-                        riskLevel === 'High' ? 'text-red-500' :
-                        riskLevel === 'Medium' ? 'text-amber-500' : 'text-green-500'
-                      }>{riskLevel}</span>
-                    </span>
-                    <span className={`badge ${
-                      patient.status.toLowerCase() === 'active' ? 'badge-green' :
-                      patient.status.toLowerCase() === 'follow-up' ? 'badge-amber' :
-                      'badge-blue'
-                    } text-[9.5px] w-fit`}>
-                      {patient.status}
-                    </span>
-                    <div className="flex items-center justify-end gap-1.5 pr-2" onClick={(e) => e.stopPropagation()}>
-                      <button
-                        className="btn-ghost p-1 text-slate-400 hover:text-slate-700 cursor-pointer"
+                    return (
+                      <div
+                        key={patient.id}
+                        className={`table-row items-center py-3 hover:bg-slate-50/50 ${isChecked ? 'bg-slate-50/70' : ''}`}
+                        style={tableColWidths}
                         onClick={() => handleViewPatient(patient.id)}
                       >
-                        <Eye size={13} />
-                      </button>
+                        <input
+                          type="checkbox"
+                          className="cursor-pointer rounded border-slate-300"
+                          checked={isChecked}
+                          onClick={(e) => e.stopPropagation()}
+                          onChange={(e) => handleSelectOne(patient.id, e.target.checked)}
+                        />
+                        <span className="text-slate-400 text-xs font-semibold">{patient.id}</span>
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className="avatar bg-blue-100 text-blue-700 font-bold flex-shrink-0" style={{ width: '28px', height: '28px', fontSize: '10.5px' }}>
+                            {patient.name.split(' ').map(n => n[0]).join('')}
+                          </div>
+                          <div className="truncate">
+                            <div className="font-semibold text-slate-800 text-xs truncate">{patient.name}</div>
+                            <div className="text-[10px] text-slate-400 truncate">{patient.email}</div>
+                          </div>
+                        </div>
+                        <span className="text-slate-600 text-xs">{patient.age}</span>
+                        <span className="text-slate-600 text-xs truncate">{patient.phone}</span>
+                        <span className="text-slate-600 text-xs truncate">{patient.lastVisit.split(',')[0]}</span>
+                        
+                        {/* Premium Doctor Column layout */}
+                        <div className="flex items-center gap-2 min-w-0 pr-1">
+                          <div className="w-6 h-6 rounded-full bg-primary-50 flex items-center justify-center font-bold text-[9px] text-primary-600 border border-primary-100 flex-shrink-0">
+                            {docName.split(',')[0].replace('Dr. ', '').substring(0, 2).toUpperCase()}
+                          </div>
+                          <div className="truncate">
+                            <span className="text-xs text-slate-700 font-semibold block leading-none truncate">{docName.split(',')[0]}</span>
+                            <span className="text-[9.5px] text-slate-400 leading-none truncate mt-0.5 block">{docName.split(',')[1] || 'Physician'}</span>
+                          </div>
+                        </div>
 
-                      <button className="btn-ghost p-1 text-slate-400 hover:text-slate-700">
-                        <MoreVertical size={13} />
-                      </button>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div className="p-8 text-center text-slate-400 text-xs">No patients match the filter criteria.</div>
-            )}
+                        <span className={`badge ${
+                          patient.condition.toLowerCase().includes('hypertension') ? 'badge-blue' :
+                          patient.condition.toLowerCase().includes('diabetes') ? 'badge-teal' :
+                          patient.condition.toLowerCase().includes('asthma') ? 'badge-gray' :
+                          patient.condition.toLowerCase().includes('new') ? 'badge-blue' :
+                          patient.condition.toLowerCase().includes('cardiac') ? 'badge-red' :
+                          'badge-teal'
+                        } text-[9.5px] w-fit`}>
+                          {patient.condition}
+                        </span>
+                        <span className="text-xs font-semibold flex items-center gap-1.5">
+                          <span className={`w-1.5 h-1.5 rounded-full ${
+                            riskLevel === 'High' ? 'bg-red-500' :
+                            riskLevel === 'Medium' ? 'bg-amber-500' : 'bg-green-500'
+                          }`}></span>
+                          <span className={
+                            riskLevel === 'High' ? 'text-red-500' :
+                            riskLevel === 'Medium' ? 'text-amber-500' : 'text-green-500'
+                          }>{riskLevel}</span>
+                        </span>
+                        <span className={`badge ${
+                          patient.status.toLowerCase() === 'active' ? 'badge-green' :
+                          patient.status.toLowerCase() === 'follow-up' ? 'badge-amber' :
+                          'badge-blue'
+                        } text-[9.5px] w-fit`}>
+                          {patient.status}
+                        </span>
+                        <div className="flex items-center justify-end gap-1.5 pr-2" onClick={(e) => e.stopPropagation()}>
+                          <button
+                            className="btn-ghost p-1 text-slate-400 hover:text-slate-700 cursor-pointer"
+                            onClick={() => handleViewPatient(patient.id)}
+                          >
+                            <Eye size={13} />
+                          </button>
+
+                          <button className="btn-ghost p-1 text-slate-400 hover:text-slate-700">
+                            <MoreVertical size={13} />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="p-8 text-center text-slate-400 text-xs">No patients match the filter criteria.</div>
+                )}
+              </div>
+            </div>
           </div>
           
           {/* Table pagination footer controls */}
