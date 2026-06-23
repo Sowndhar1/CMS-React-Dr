@@ -1,5 +1,6 @@
 import React from 'react';
 import { AppProvider, useApp } from './context/AppContext';
+import { Analytics } from '@vercel/analytics/react';
 import Sidebar from './components/Layout/Sidebar';
 import Header from './components/Layout/Header';
 import Dashboard from './components/Screens/Dashboard';
@@ -84,6 +85,7 @@ const App = () => {
   return (
     <AppProvider>
       <MainLayout />
+      <Analytics />
     </AppProvider>
   );
 };
