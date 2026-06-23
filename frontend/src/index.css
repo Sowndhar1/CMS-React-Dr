@@ -764,3 +764,32 @@ body.theme-purple, .theme-purple {
   border-color: var(--color-primary) !important;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 25%, transparent) !important;
 }
+
+/* Patient Portal Responsive Layout Scroll Classes */
+@media (min-height: 850px) and (min-width: 1024px) {
+  .portal-screen-container {
+    overflow: hidden !important;
+  }
+  .portal-grid-container {
+    overflow: hidden !important;
+    height: 0 !important;
+    flex-grow: 1 !important;
+  }
+  .portal-column-scroll {
+    overflow-y: auto !important;
+  }
+}
+@media (max-height: 849px), (max-width: 1023px) {
+  .portal-screen-container {
+    overflow-y: auto !important;
+  }
+  .portal-grid-container {
+    overflow: visible !important;
+    height: auto !important;
+    flex-shrink: 0 !important;
+  }
+  .portal-column-scroll {
+    overflow: visible !important;
+    height: auto !important;
+  }
+}

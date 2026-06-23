@@ -246,7 +246,7 @@ const PatientPortal = () => {
   const patientAppointments = appointments.filter(a => a.patientId === patient.id);
 
   return (
-    <div className="screen-fade h-full overflow-y-auto lg:overflow-hidden p-4 md:p-6 flex flex-col gap-6 bg-slate-50/50 min-h-0 relative select-none">
+    <div className="screen-fade h-full p-4 md:p-6 flex flex-col gap-6 bg-slate-50/50 min-h-0 relative select-none portal-screen-container">
       
       {/* Toast alert widget */}
       {toastMessage && (
@@ -346,10 +346,10 @@ const PatientPortal = () => {
       </div>
 
       {/* Main Grid Content */}
-      <div className="flex-grow grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-0 overflow-y-auto lg:overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-0 portal-grid-container">
         
         {/* Left Area: Controls & Configuration (5 cols) */}
-        <div className="lg:col-span-5 flex flex-col gap-6 overflow-visible lg:overflow-y-auto pr-0 lg:pr-1 min-h-0">
+        <div className="lg:col-span-5 flex flex-col gap-6 pr-0 lg:pr-1 min-h-0 portal-column-scroll">
           
           {/* Card 1: Portal Access */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 flex flex-col gap-4">
@@ -959,7 +959,7 @@ const PatientPortal = () => {
         </div>
 
         {/* Right Area: Templates List (3 cols) */}
-        <div className="lg:col-span-3 flex flex-col gap-3 overflow-visible lg:overflow-y-auto pr-0 lg:pr-1 min-h-0">
+        <div className="lg:col-span-3 flex flex-col gap-3 pr-0 lg:pr-1 min-h-0 portal-column-scroll">
           
           <div className="flex items-center justify-between flex-shrink-0">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Message Templates</span>
