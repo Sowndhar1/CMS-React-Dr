@@ -35,9 +35,9 @@ const Appointments = () => {
   } = useApp();
 
   // Local navigation & view states - default to Month view
-  const [scheduleView, setScheduleView] = useState('Month'); 
-  const [selectedDoctor, setSelectedDoctor] = useState('All Doctors');
-  const [selectedDate, setSelectedDate] = useState(new Date(2026, 5, 8)); // Mon, 8 Jun 2026
+  const [scheduleView, setScheduleView] = useState('Day'); 
+  const [selectedDoctor, setSelectedDoctor] = useState('Dr. Rajan Kumar');
+  const [selectedDate, setSelectedDate] = useState(new Date(2026, 5, 23)); // Tue, 23 Jun 2026
   const [activeMenuId, setActiveMenuId] = useState(null);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -47,7 +47,7 @@ const Appointments = () => {
     patientId: '',
     guestName: '',
     doctor: 'Dr. Rajan Kumar',
-    date: '2026-06-08',
+    date: '2026-06-23',
     timeSlot: '10:30',
     visitType: 'Consultation',
     reason: ''
@@ -128,7 +128,7 @@ const Appointments = () => {
   };
 
   const handleSetToday = () => {
-    setSelectedDate(new Date(2026, 5, 8)); // Standard default mock date (June 8, 2026)
+    setSelectedDate(new Date(2026, 5, 23)); // Standard default mock date (June 23, 2026)
   };
 
   // Deterministic mock appointment generator for June 2026
@@ -215,10 +215,67 @@ const Appointments = () => {
     };
     
     const slots = [
+      '07:00', '07:20', '07:40', '08:00', '08:20', '08:40',
       '09:00', '09:20', '09:40', '10:00', '10:20', '10:40', '11:00', '11:20', '11:40',
       '13:00', '13:20', '13:40', '14:00', '14:20', '14:40', '15:00', '15:20', '15:40',
       '16:00', '16:20', '16:40', '17:00'
     ];
+    
+    // Hardcoded exact day schedule for June 23 2026 matching the reference mockup
+    if (year === 2026 && month === 6 && day === 23) {
+      const june23Patients = [
+        // 9 Completed
+        { id: '#1010', name: 'Ananya Rao',     reason: 'Routine general health',    type: 'Consultation', status: 'Completed',   startTime: '07:00', priority: false },
+        { id: '#1011', name: 'Rohan Joshi',    reason: 'Fever checkup',             type: 'Follow-up',    status: 'Completed',   startTime: '07:20', priority: false },
+        { id: '#1012', name: 'Vikram Seth',    reason: 'Stomach ache',              type: 'Consultation', status: 'Completed',   startTime: '07:40', priority: false },
+        { id: '#1013', name: 'Sneha Reddy',    reason: 'Acidity checkup',           type: 'Consultation', status: 'Completed',   startTime: '08:00', priority: false },
+        { id: '#1014', name: 'Amit Mehta',     reason: 'BP Check',                  type: 'Follow-up',    status: 'Completed',   startTime: '08:20', priority: false },
+        { id: '#1015', name: 'Neha Kapoor',    reason: 'Headache',                  type: 'Consultation', status: 'Completed',   startTime: '08:40', priority: false },
+        { id: '#1017', name: 'Priya Desai',    reason: 'Routine Checkup',           type: 'Consultation', status: 'Completed',   startTime: '09:20', priority: false },
+        { id: '#1018', name: 'Sanjay Gupta',   reason: 'Cardio checkup',            type: 'New Patient',  status: 'Completed',   startTime: '09:40', priority: false },
+        { id: '#1019', name: 'Meera Ghosh',    reason: 'Thyroid follow-up',         type: 'Follow-up',    status: 'Completed',   startTime: '10:00', priority: false },
+        // 3 In Progress
+        { id: '#1020', name: 'Asha Kiran',     reason: 'Eye infection',             type: 'Consultation', status: 'In Progress', startTime: '10:20', priority: false },
+        { id: '#1021', name: 'Vijay Nair',     reason: 'Diabetes checkup',          type: 'Follow-up',    status: 'In Progress', startTime: '10:40', priority: false },
+        { id: '#1022', name: 'Rahul Kumar',    reason: 'Cough & cold',              type: 'New Patient',  status: 'In Progress', startTime: '11:00', priority: false },
+        // 5 Waiting
+        { id: '#1023', name: 'Kavita Sharma',  reason: 'Migraine followup',         type: 'Follow-up',    status: 'Waiting',     startTime: '11:20', priority: false },
+        { id: '#1024', name: 'Karan Malhotra', reason: 'Knee joint consultation',   type: 'Consultation', status: 'Waiting',     startTime: '11:40', priority: false },
+        { id: '#1025', name: 'Gaurav Jain',    reason: 'Back pain followup',        type: 'Follow-up',    status: 'Waiting',     startTime: '13:00', priority: false },
+        { id: '#1026', name: 'Ritu Verma',     reason: 'Skin allergy consultation', type: 'Consultation', status: 'Waiting',     startTime: '13:20', priority: false },
+        { id: '#1027', name: 'Aarav Patel',    reason: 'Post surgery review',       type: 'Follow-up',    status: 'Waiting',     startTime: '13:40', priority: false },
+        // 1 Urgent
+        { id: '#1028', name: 'Diya Sharma',    reason: 'Chest pain – high priority',type: 'Consultation', status: 'Urgent',      startTime: '14:00', priority: true  },
+        // 2 No Show
+        { id: '#1029', name: 'Ishaan Gupta',   reason: 'BP tracking',               type: 'Follow-up',    status: 'No Show',     startTime: '14:20', priority: false },
+        { id: '#1030', name: 'Anika Iyer',     reason: 'Skin allergy',              type: 'Consultation', status: 'No Show',     startTime: '14:40', priority: false },
+        // 1 Upcoming (Scheduled) - Arun Kumar at 09:00 per mockup
+        { id: '#1016', name: 'Arun Kumar',     reason: 'Back pain',                 type: 'Consultation', status: 'Scheduled',   startTime: '09:00', priority: true  },
+      ];
+      return june23Patients.map((p, i) => {
+        const [h, m] = p.startTime.split(':').map(Number);
+        const totalMin = h * 60 + m + 20;
+        const fh = Math.floor(totalMin / 60);
+        const fm = totalMin % 60;
+        const endTime = `${String(fh).padStart(2,'0')}:${String(fm).padStart(2,'0')}`;
+        return {
+          id: `mock-${dateStr}-${i}`,
+          patientId: p.id,
+          patientName: p.name,
+          time: `${p.startTime} - ${endTime}`,
+          startTime: p.startTime,
+          endTime,
+          duration: 20,
+          date: dateStr,
+          doctor: 'Dr. Rajan Kumar',
+          room: 'Room 203',
+          reason: p.reason,
+          type: p.type,
+          status: p.status,
+          priority: p.priority
+        };
+      });
+    }
     
     const dist = (year === 2026 && month === 6) ? dayStatusDistribution[day] : null;
     const compTarget = dist ? dist.Completed : 0;
@@ -638,15 +695,15 @@ const Appointments = () => {
     data: { label: 'Lunch Break (12:00 PM – 01:00 PM)' }
   });
 
-  const isMockDate = selectedDateStr === '2026-06-08';
-  const isRealToday = selectedDateStr === todayStr;
+  const isMockDate = selectedDateStr === '2026-06-23';
+  const isRealToday = selectedDateStr === todayStr && selectedDateStr !== '2026-06-23';
 
   let insertTimeVal = null;
   let insertTimeLabel = '';
 
   if (isMockDate) {
-    insertTimeVal = '10:45';
-    insertTimeLabel = '10:45 AM';
+    insertTimeVal = '09:00';
+    insertTimeLabel = '09:00 AM';
   } else if (isRealToday) {
     const now = new Date();
     const curHour = String(now.getHours()).padStart(2, '0');
@@ -1072,9 +1129,14 @@ const Appointments = () => {
               <>
                 {/* Day View Header */}
                 <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 flex-shrink-0">
-                  <h2 className="font-bold text-slate-800 text-sm">Day Schedule</h2>
-                  <span className="text-[10.5px] text-slate-400 bg-slate-50 px-2.5 py-1 rounded-md border border-slate-100">
-                    {dayAppointments.length} Active Records for {selectedDoctor}
+                  <h2 className="font-bold text-slate-800 text-sm">
+                    Day Schedule
+                    {selectedDoctor !== 'All Doctors' && (
+                      <span className="text-slate-400 font-semibold"> – {selectedDoctor}</span>
+                    )}
+                  </h2>
+                  <span className="text-[10.5px] text-slate-400 bg-slate-50 px-2.5 py-1 rounded-md border border-slate-100 font-semibold">
+                    {dayAppointments.length} Appointments
                   </span>
                 </div>
 
@@ -1200,6 +1262,11 @@ const Appointments = () => {
                                     {apt.type && (
                                       <span className={`text-[8.5px] font-extrabold px-1.5 py-0.5 rounded-full ${getBadgeColorClass(apt.type)}`}>
                                         {apt.type}
+                                      </span>
+                                    )}
+                                    {apt.priority && (
+                                      <span className="text-[8.5px] font-extrabold px-1.5 py-0.5 rounded-full bg-rose-100 text-rose-700">
+                                        High Priority
                                       </span>
                                     )}
                                   </div>
