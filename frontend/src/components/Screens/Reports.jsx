@@ -60,51 +60,105 @@ const Reports = () => {
         </div>
       </div>
 
-      {/* KPI Cards Row */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 flex-shrink-0">
-        <div className="stat-card flex items-center gap-4 py-3.5 px-4">
-          <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center text-primary-600 flex-shrink-0">
-            <Users size={20} />
+      {/* KPI Cards Row — Premium Sparkline Style */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 flex-shrink-0">
+
+        {/* Total Consultations */}
+        <div className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-xs h-[105px] group hover:border-teal-400 hover:-translate-y-0.5 transition-all duration-300">
+          <div className="flex items-start gap-2.5">
+            <div className="w-8.5 h-8.5 rounded-xl bg-teal-50/80 flex items-center justify-center text-teal-600 flex-shrink-0 mt-0.5">
+              <Users size={15} />
+            </div>
+            <div className="min-w-0 leading-none">
+              <p className="text-2xl font-black text-slate-800 leading-none">2,840</p>
+              <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Total Consultations</p>
+              <p className="text-[8.5px] text-emerald-600 font-extrabold leading-none mt-0.5">↑ 12% vs last month</p>
+            </div>
           </div>
-          <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Consultations</p>
-            <p className="text-xl font-bold text-slate-800 mt-0.5">2,840</p>
-            <span className="text-[9px] text-green-500 font-bold block mt-0.5">↑ 12% vs last month</span>
-          </div>
+          <svg className="absolute bottom-0 left-0 right-0 h-5 w-full pointer-events-none overflow-hidden" viewBox="0 0 100 40" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="rp-sparkline-consult" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#0d9488" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#0d9488" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path d="M 0 30 C 15 25 30 28 45 18 C 60 10 75 22 90 12 L 100 8" fill="none" stroke="#0d9488" strokeWidth="2" />
+            <path d="M 0 30 C 15 25 30 28 45 18 C 60 10 75 22 90 12 L 100 8 L 100 40 L 0 40 Z" fill="url(#rp-sparkline-consult)" />
+          </svg>
         </div>
 
-        <div className="stat-card flex items-center gap-4 py-3.5 px-4">
-          <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center text-green-600 flex-shrink-0">
-            <Receipt size={20} />
+        {/* Total Revenue */}
+        <div className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-xs h-[105px] group hover:border-green-400 hover:-translate-y-0.5 transition-all duration-300">
+          <div className="flex items-start gap-2.5">
+            <div className="w-8.5 h-8.5 rounded-xl bg-green-50/80 flex items-center justify-center text-green-600 flex-shrink-0 mt-0.5">
+              <Receipt size={15} />
+            </div>
+            <div className="min-w-0 leading-none">
+              <p className="text-2xl font-black text-slate-800 leading-none">₹14.2L</p>
+              <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Total Revenue</p>
+              <p className="text-[8.5px] text-green-600 font-extrabold leading-none mt-0.5">↑ 8.4% vs last month</p>
+            </div>
           </div>
-          <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Revenue</p>
-            <p className="text-xl font-bold text-slate-800 mt-0.5">₹14.20 L</p>
-            <span className="text-[9px] text-green-500 font-bold block mt-0.5">↑ 8.4% vs last month</span>
-          </div>
+          <svg className="absolute bottom-0 left-0 right-0 h-5 w-full pointer-events-none overflow-hidden" viewBox="0 0 100 40" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="rp-sparkline-revenue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#16a34a" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#16a34a" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path d="M 0 32 C 20 28 38 20 55 16 C 72 12 85 18 100 10" fill="none" stroke="#16a34a" strokeWidth="2" />
+            <path d="M 0 32 C 20 28 38 20 55 16 C 72 12 85 18 100 10 L 100 40 L 0 40 Z" fill="url(#rp-sparkline-revenue)" />
+          </svg>
         </div>
 
-        <div className="stat-card flex items-center gap-4 py-3.5 px-4">
-          <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 flex-shrink-0">
-            <Clock size={20} />
+        {/* Avg. Wait Time */}
+        <div className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-xs h-[105px] group hover:border-amber-400 hover:-translate-y-0.5 transition-all duration-300">
+          <div className="flex items-start gap-2.5">
+            <div className="w-8.5 h-8.5 rounded-xl bg-amber-50/80 flex items-center justify-center text-amber-600 flex-shrink-0 mt-0.5">
+              <Clock size={15} />
+            </div>
+            <div className="min-w-0 leading-none">
+              <p className="text-2xl font-black text-slate-800 leading-none">12.5m</p>
+              <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Avg. Wait Time</p>
+              <p className="text-[8.5px] text-emerald-600 font-extrabold leading-none mt-0.5">↓ 15% improvement</p>
+            </div>
           </div>
-          <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Avg. Wait Time</p>
-            <p className="text-xl font-bold text-slate-800 mt-0.5">12.5m</p>
-            <span className="text-[9px] text-green-500 font-bold block mt-0.5">↓ 15% improvement</span>
-          </div>
+          <svg className="absolute bottom-0 left-0 right-0 h-5 w-full pointer-events-none overflow-hidden" viewBox="0 0 100 40" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="rp-sparkline-wait" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path d="M 0 10 C 18 18 35 25 50 20 C 65 15 80 24 100 28" fill="none" stroke="#f59e0b" strokeWidth="2" />
+            <path d="M 0 10 C 18 18 35 25 50 20 C 65 15 80 24 100 28 L 100 40 L 0 40 Z" fill="url(#rp-sparkline-wait)" />
+          </svg>
         </div>
 
-        <div className="stat-card flex items-center gap-4 py-3.5 px-4">
-          <div className="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600 flex-shrink-0">
-            <TrendingUp size={20} />
+        {/* Diagnosis Accuracy */}
+        <div className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-xs h-[105px] group hover:border-teal-500 hover:-translate-y-0.5 transition-all duration-300">
+          <div className="flex items-start gap-2.5">
+            <div className="w-8.5 h-8.5 rounded-xl bg-teal-50/80 flex items-center justify-center text-teal-700 flex-shrink-0 mt-0.5">
+              <TrendingUp size={15} />
+            </div>
+            <div className="min-w-0 leading-none">
+              <p className="text-2xl font-black text-teal-700 leading-none">99.2%</p>
+              <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Diagnosis Accuracy</p>
+              <p className="text-[8.5px] text-slate-400 font-semibold leading-none mt-0.5">Clinical QA target met</p>
+            </div>
           </div>
-          <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Diagnosis Accuracy</p>
-            <p className="text-xl font-bold text-slate-800 mt-0.5">99.2%</p>
-            <span className="text-[9px] text-slate-400 block mt-0.5">Clinical QA target met</span>
-          </div>
+          <svg className="absolute bottom-0 left-0 right-0 h-5 w-full pointer-events-none overflow-hidden" viewBox="0 0 100 40" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="rp-sparkline-accuracy" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#0f766e" stopOpacity="0.16" />
+                <stop offset="100%" stopColor="#0f766e" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path d="M 0 22 C 25 18 45 24 65 14 C 80 8 90 12 100 8" fill="none" stroke="#0f766e" strokeWidth="2" />
+            <path d="M 0 22 C 25 18 45 24 65 14 C 80 8 90 12 100 8 L 100 40 L 0 40 Z" fill="url(#rp-sparkline-accuracy)" />
+          </svg>
         </div>
+
       </div>
 
       {/* Row 2: Visual Dashboard Charts */}

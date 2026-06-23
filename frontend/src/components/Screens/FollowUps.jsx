@@ -178,65 +178,105 @@ const FollowUps = () => {
         </button>
       </div>
 
-      {/* Metric Cards Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 flex-shrink-0">
+      {/* Metric Cards Row — Premium Sparkline Style */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 flex-shrink-0">
 
-        {/* Card 1: Total */}
-        <div className="stat-card flex items-center justify-between py-3.5 px-4.5 bg-white border border-slate-200 rounded-2xl">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 flex-shrink-0">
-              <Clock size={18} />
+        {/* Total Active */}
+        <div className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-xs h-[105px] group hover:border-slate-400 hover:-translate-y-0.5 transition-all duration-300">
+          <div className="flex items-start gap-2.5">
+            <div className="w-8.5 h-8.5 rounded-xl bg-slate-100/80 flex items-center justify-center text-slate-600 flex-shrink-0 mt-0.5">
+              <Clock size={15} />
             </div>
-            <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Active</p>
-              <p className="text-xl font-extrabold text-slate-800 mt-0.5">{totalCount}</p>
+            <div className="min-w-0 leading-none">
+              <p className="text-2xl font-black text-slate-800 leading-none">{totalCount}</p>
+              <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Total Follow-Ups</p>
+              <p className="text-[8.5px] text-slate-500 font-semibold leading-none mt-0.5">Overall records</p>
             </div>
           </div>
-          <span className="text-[9px] text-slate-400 font-semibold">Overall</span>
+          <svg className="absolute bottom-0 left-0 right-0 h-5 w-full pointer-events-none overflow-hidden" viewBox="0 0 100 40" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="fu-sparkline-total" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#64748b" stopOpacity="0.15" />
+                <stop offset="100%" stopColor="#64748b" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path d="M 0 26 C 18 20 35 28 52 18 C 68 10 82 22 100 16" fill="none" stroke="#64748b" strokeWidth="2" />
+            <path d="M 0 26 C 18 20 35 28 52 18 C 68 10 82 22 100 16 L 100 40 L 0 40 Z" fill="url(#fu-sparkline-total)" />
+          </svg>
         </div>
 
-        {/* Card 2: Completed */}
-        <div className="stat-card flex items-center justify-between py-3.5 px-4.5 bg-white border border-slate-200 rounded-2xl">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 flex-shrink-0">
-              <CheckCircle size={18} />
+        {/* Completed */}
+        <div className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-xs h-[105px] group hover:border-emerald-400 hover:-translate-y-0.5 transition-all duration-300">
+          <div className="flex items-start gap-2.5">
+            <div className="w-8.5 h-8.5 rounded-xl bg-emerald-50/80 flex items-center justify-center text-emerald-600 flex-shrink-0 mt-0.5">
+              <CheckCircle size={15} />
             </div>
-            <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Completed</p>
-              <p className="text-xl font-extrabold text-slate-800 mt-0.5">{completedCount}</p>
+            <div className="min-w-0 leading-none">
+              <p className="text-2xl font-black text-slate-800 leading-none">{completedCount}</p>
+              <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Completed</p>
+              <p className="text-[8.5px] text-emerald-600 font-extrabold leading-none mt-0.5">
+                {totalCount ? Math.round((completedCount / totalCount) * 100) : 0}% completion rate
+              </p>
             </div>
           </div>
-          <span className="text-[9px] text-emerald-600 font-bold">
-            {totalCount ? Math.round((completedCount / totalCount) * 100) : 0}% rate
-          </span>
+          <svg className="absolute bottom-0 left-0 right-0 h-5 w-full pointer-events-none overflow-hidden" viewBox="0 0 100 40" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="fu-sparkline-completed" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#10b981" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path d="M 0 28 C 22 24 40 16 58 20 C 74 24 88 12 100 10" fill="none" stroke="#10b981" strokeWidth="2" />
+            <path d="M 0 28 C 22 24 40 16 58 20 C 74 24 88 12 100 10 L 100 40 L 0 40 Z" fill="url(#fu-sparkline-completed)" />
+          </svg>
         </div>
 
-        {/* Card 3: Pending */}
-        <div className="stat-card flex items-center justify-between py-3.5 px-4.5 bg-white border border-slate-200 rounded-2xl">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 flex-shrink-0">
-              <Calendar size={18} />
+        {/* Pending */}
+        <div className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-xs h-[105px] group hover:border-amber-400 hover:-translate-y-0.5 transition-all duration-300">
+          <div className="flex items-start gap-2.5">
+            <div className="w-8.5 h-8.5 rounded-xl bg-amber-50/80 flex items-center justify-center text-amber-600 flex-shrink-0 mt-0.5">
+              <Calendar size={15} />
             </div>
-            <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pending</p>
-              <p className="text-xl font-extrabold text-slate-800 mt-0.5">{pendingCount}</p>
+            <div className="min-w-0 leading-none">
+              <p className="text-2xl font-black text-slate-800 leading-none">{pendingCount}</p>
+              <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Pending</p>
+              <p className="text-[8.5px] text-amber-600 font-extrabold leading-none mt-0.5">Needs call / reminder</p>
             </div>
           </div>
-          <span className="text-[9px] text-amber-600 font-bold">Needs call</span>
+          <svg className="absolute bottom-0 left-0 right-0 h-5 w-full pointer-events-none overflow-hidden" viewBox="0 0 100 40" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="fu-sparkline-pending" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path d="M 0 18 C 20 24 38 16 55 22 C 72 28 86 18 100 20" fill="none" stroke="#f59e0b" strokeWidth="2" />
+            <path d="M 0 18 C 20 24 38 16 55 22 C 72 28 86 18 100 20 L 100 40 L 0 40 Z" fill="url(#fu-sparkline-pending)" />
+          </svg>
         </div>
 
-        {/* Card 4: Overdue */}
-        <div className="stat-card flex items-center justify-between py-3.5 px-4.5 bg-white border border-slate-200 rounded-2xl">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center text-red-650 flex-shrink-0">
-              <AlertCircle size={18} className="text-red-600" />
+        {/* Overdue */}
+        <div className="relative overflow-hidden bg-white border border-rose-200 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-xs h-[105px] group hover:border-rose-400 hover:-translate-y-0.5 transition-all duration-300">
+          <div className="flex items-start gap-2.5">
+            <div className="w-8.5 h-8.5 rounded-xl bg-rose-50/80 flex items-center justify-center text-rose-600 flex-shrink-0 mt-0.5">
+              <AlertCircle size={15} />
             </div>
-            <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Overdue</p>
-              <p className="text-xl font-extrabold text-slate-800 mt-0.5 text-red-600">{overdueCount}</p>
+            <div className="min-w-0 leading-none">
+              <p className="text-2xl font-black text-rose-600 leading-none">{overdueCount}</p>
+              <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Overdue</p>
+              <p className="text-[8.5px] text-rose-600 font-extrabold leading-none mt-0.5 animate-pulse">⚠ Needs immediate action</p>
             </div>
           </div>
-          <span className="text-[9px] text-red-600 font-bold bg-rose-50 px-2 py-0.5 rounded-full border border-rose-100 animate-pulse">Critical</span>
+          <svg className="absolute bottom-0 left-0 right-0 h-5 w-full pointer-events-none overflow-hidden" viewBox="0 0 100 40" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="fu-sparkline-overdue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.2" />
+                <stop offset="100%" stopColor="#f43f5e" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path d="M 0 12 C 15 20 30 14 48 22 C 64 30 80 18 100 24" fill="none" stroke="#f43f5e" strokeWidth="2" />
+            <path d="M 0 12 C 15 20 30 14 48 22 C 64 30 80 18 100 24 L 100 40 L 0 40 Z" fill="url(#fu-sparkline-overdue)" />
+          </svg>
         </div>
 
       </div>
