@@ -258,11 +258,11 @@ const Documents = () => {
 
   // Patient sidebar state
   const [patientsList, setPatientsList] = useState([
-    { id: '#PT-1001', name: 'Amit Mehta',   age: 32, gender: 'Male',   phone: '98765 43210', avatar: 'AM' },
+    { id: '#PT-1001', name: 'Amit Mehta', age: 32, gender: 'Male', phone: '98765 43210', avatar: 'AM' },
     { id: '#PT-1039', name: 'Sunita Patel', age: 52, gender: 'Female', phone: '87654 32109', avatar: 'SP' },
-    { id: '#PT-1036', name: 'Rahul Kumar',  age: 28, gender: 'Male',   phone: '76543 21098', avatar: 'RK' },
-    { id: '#PT-1044', name: 'Priya Desai',  age: 41, gender: 'Female', phone: '65432 10987', avatar: 'PD' },
-    { id: '#PT-1019', name: 'Meera Shah',   age: 39, gender: 'Female', phone: '43210 98765', avatar: 'MS' },
+    { id: '#PT-1036', name: 'Rahul Kumar', age: 28, gender: 'Male', phone: '76543 21098', avatar: 'RK' },
+    { id: '#PT-1044', name: 'Priya Desai', age: 41, gender: 'Female', phone: '65432 10987', avatar: 'PD' },
+    { id: '#PT-1019', name: 'Meera Shah', age: 39, gender: 'Female', phone: '43210 98765', avatar: 'MS' },
   ]);
   const [selectedPatient, setSelectedPatient] = useState(null); // null = show all
   const [patientSearchQuery, setPatientSearchQuery] = useState('');
@@ -861,7 +861,7 @@ const Documents = () => {
 
       {/* ===== LEFT PATIENT SIDEBAR ===== */}
       <div className="w-64 flex-shrink-0 bg-white border-r border-slate-150 flex flex-col h-full shadow-sm">
-        
+
         {/* Sidebar Header */}
         <div className="px-4 pt-5 pb-3 flex items-center justify-between flex-shrink-0">
           <span className="text-[11px] font-black text-slate-800 uppercase tracking-wider">Patients</span>
@@ -893,15 +893,13 @@ const Documents = () => {
           {/* All Patients option */}
           <div
             onClick={() => { setSelectedPatient(null); setCurrentPage(1); }}
-            className={`px-3 py-2.5 rounded-xl cursor-pointer flex items-center gap-2.5 transition-all duration-150 ${
-              !selectedPatient
+            className={`px-3 py-2.5 rounded-xl cursor-pointer flex items-center gap-2.5 transition-all duration-150 ${!selectedPatient
                 ? 'bg-[#FAF5F0] border border-[#DCC3AA]/40 shadow-sm'
                 : 'hover:bg-slate-50'
-            }`}
+              }`}
           >
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-extrabold flex-shrink-0 ${
-              !selectedPatient ? 'bg-[#810B38] text-white' : 'bg-slate-100 text-slate-500'
-            }`}>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-extrabold flex-shrink-0 ${!selectedPatient ? 'bg-[#810B38] text-white' : 'bg-slate-100 text-slate-500'
+              }`}>
               <User size={14} />
             </div>
             <div className="min-w-0">
@@ -922,11 +920,10 @@ const Documents = () => {
               <div
                 key={pat.id}
                 onClick={() => { setSelectedPatient(pat); setCurrentPage(1); setSelectedDoc(null); setIsPreviewPanelOpen(false); }}
-                className={`px-3 py-2.5 rounded-xl cursor-pointer flex items-center justify-between gap-2 transition-all duration-150 ${
-                  isActive
+                className={`px-3 py-2.5 rounded-xl cursor-pointer flex items-center justify-between gap-2 transition-all duration-150 ${isActive
                     ? 'bg-[#FAF5F0] border border-[#DCC3AA]/40 shadow-sm scale-[1.01]'
                     : 'hover:bg-slate-50'
-                }`}
+                  }`}
               >
                 <div className="flex items-center gap-2.5 min-w-0">
                   <div className={`w-8 h-8 rounded-full ${isActive ? 'bg-[#810B38]' : color} text-white flex items-center justify-center text-[10px] font-extrabold flex-shrink-0 shadow-sm`}>
@@ -938,9 +935,8 @@ const Documents = () => {
                   </div>
                 </div>
                 {docCount > 0 && (
-                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[9.5px] font-extrabold flex-shrink-0 ${
-                    isActive ? 'bg-[#810B38] text-white' : 'bg-blue-50 text-blue-600'
-                  }`}>
+                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[9.5px] font-extrabold flex-shrink-0 ${isActive ? 'bg-[#810B38] text-white' : 'bg-blue-50 text-blue-600'
+                    }`}>
                     {docCount}
                   </span>
                 )}
@@ -991,25 +987,10 @@ const Documents = () => {
           </div>
         </div>
 
-        {/* Categories Grid - Premium Horizontal Flex Row */}
-        <div className="flex gap-4 overflow-x-auto flex-shrink-0 pb-5 pt-2 px-1 scrollbar-hide">
+        {/* Categories Grid - Horizontal Flex Row */}
+        <div className="flex gap-3 overflow-x-auto flex-shrink-0 pb-0.5">
           {folderCategories.map((folder, index) => {
             const isActive = selectedFolder === folder.folderKey;
-            
-            // Premium styling matrix based on folder color
-            const getFolderStyle = (color, active) => {
-              if (active) return 'bg-gradient-to-br from-[#810B38] to-[#9D174D] border-[#810B38] shadow-[0_8px_20px_-6px_rgba(129,11,56,0.4)] text-white scale-[1.02] -translate-y-1 ring-4 ring-[#810B38]/10 ring-offset-2';
-              
-              const styles = {
-                slate: 'bg-gradient-to-br from-slate-50 to-white hover:from-slate-100 hover:to-slate-50 border-slate-200 text-slate-800',
-                green: 'bg-gradient-to-br from-emerald-50/80 to-white hover:from-emerald-100/80 hover:to-emerald-50 border-emerald-100/80 text-slate-800',
-                orange: 'bg-gradient-to-br from-amber-50/80 to-white hover:from-amber-100/80 hover:to-amber-50 border-amber-100/80 text-slate-800',
-                blue: 'bg-gradient-to-br from-blue-50/80 to-white hover:from-blue-100/80 hover:to-blue-50 border-blue-100/80 text-slate-800',
-                purple: 'bg-gradient-to-br from-violet-50/80 to-white hover:from-violet-100/80 hover:to-violet-50 border-violet-100/80 text-slate-800'
-              };
-              return `${styles[color]} hover:shadow-xl hover:shadow-${color}-500/10 hover:-translate-y-1.5`;
-            };
-
             return (
               <div
                 key={index}
@@ -1020,39 +1001,31 @@ const Documents = () => {
                     showActionToast("📁 Expanding more document directory vault categories...");
                   }
                 }}
-                className={`relative flex flex-col justify-between p-4.5 rounded-3xl border cursor-pointer transition-all duration-300 group select-none min-w-[160px] flex-1 overflow-hidden ${getFolderStyle(folder.baseColor, isActive)}`}
+                className={`flex flex-col justify-between p-3.5 bg-white border rounded-2xl cursor-pointer transition-all duration-300 group select-none min-w-[130px] flex-1 ${isActive
+                  ? 'border-[#DCC3AA] bg-[#FAF5F0] shadow-md'
+                  : 'border-slate-200 hover:shadow-md hover:border-slate-300'
+                  }`}
               >
-                {/* Decorative background glow for active state */}
-                {isActive && <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none transition-opacity duration-500"></div>}
-
-                <div className="flex items-start justify-between relative z-10">
-                  <div className={`transition-transform duration-300 ${isActive ? 'scale-110 drop-shadow-md' : 'group-hover:scale-110 group-hover:drop-shadow-md'}`}>
-                    <PremiumFolderIcon baseColor={folder.baseColor} />
-                  </div>
-                  <span className={`text-[9.5px] font-extrabold px-2.5 py-1 rounded-full mt-0.5 shadow-sm backdrop-blur-md transition-colors ${
-                    isActive ? 'bg-white/20 text-white border border-white/20' : 'bg-white/80 text-slate-500 border border-slate-200/60'
-                  }`}>
+                <div className="flex items-start justify-between">
+                  <PremiumFolderIcon baseColor={folder.baseColor} />
+                  <span className="text-[10px] font-extrabold text-slate-400 bg-slate-100/80 px-2 py-0.5 rounded-full mt-0.5">
                     {folder.count} {folder.folderKey === 'More' ? '' : 'Files'}
                   </span>
                 </div>
-                <div className="mt-6 relative z-10">
-                  <p className={`text-xs font-extrabold leading-snug tracking-tight ${isActive ? 'text-white' : 'text-slate-800'}`}>
-                    {folder.name}
-                  </p>
+                <div className="mt-4">
+                  <p className="text-[11px] font-bold text-slate-700 leading-snug mt-1">{folder.name}</p>
                   {folder.folderKey === 'More' ? (
                     <button
-                      className={`text-[10px] font-bold mt-1.5 flex items-center gap-1 group-hover:gap-1.5 transition-all ${isActive ? 'text-white/90 hover:text-white' : 'text-[#810B38] hover:text-[#9D174D]'}`}
+                      className="text-[9.5px] text-[#810B38] font-bold mt-1.5 hover:underline"
                       onClick={(e) => {
                         e.stopPropagation();
                         showActionToast("🔍 Viewing all folders & custom clinical metadata tables...");
                       }}
                     >
-                      View All <ChevronRight size={12} strokeWidth={3} />
+                      View All
                     </button>
                   ) : (
-                    <p className={`text-[10px] font-bold mt-1.5 ${isActive ? 'text-white/80' : 'text-slate-400'}`}>
-                      {folder.size} Total Size
-                    </p>
+                    <p className="text-[9.5px] text-slate-400 font-bold mt-1.5">{folder.size} Total Size</p>
                   )}
                 </div>
               </div>
@@ -1060,35 +1033,25 @@ const Documents = () => {
           })}
         </div>
 
-        {/* Drag & Drop Upload - Premium Animated */}
+        {/* Drag & Drop Upload - Compact */}
         <div
-          className="relative py-4 px-6 border-2 border-dashed border-[#DCC3AA]/60 hover:border-[#810B38]/60 bg-gradient-to-r from-white to-slate-50/80 hover:from-[#FAF5F0]/60 hover:to-white rounded-2xl flex items-center justify-between gap-4 transition-all duration-300 cursor-pointer select-none flex-shrink-0 group overflow-hidden shadow-sm hover:shadow-md"
+          className="py-3 px-4 border border-dashed border-slate-200 hover:border-[#810B38]/40 hover:bg-[#FAF5F0]/20 bg-white rounded-xl flex items-center justify-between gap-4 transition-all duration-200 cursor-pointer select-none flex-shrink-0"
           onClick={() => setShowUploadModal(true)}
         >
-          {/* Animated Background Gradient on Hover */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#810B38]/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-
-          <div className="flex items-center gap-4.5 relative z-10">
-            <div className="relative w-12 h-12 rounded-xl bg-white flex items-center justify-center flex-shrink-0 border border-[#DCC3AA]/50 shadow-sm group-hover:scale-110 group-hover:shadow-md transition-all duration-300">
-              <div className="absolute inset-0 bg-[#810B38]/20 rounded-xl animate-ping opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ animationDuration: '2s' }}></div>
-              <Upload size={20} strokeWidth={2.5} className="text-[#810B38] relative z-10 group-hover:-translate-y-0.5 transition-transform duration-300" />
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center flex-shrink-0 border border-slate-200">
+              <Upload size={16} className="text-[#810B38]" />
             </div>
             <div>
-              <h3 className="text-[13px] font-extrabold text-slate-800 leading-tight group-hover:text-[#810B38] transition-colors">
-                Drag & drop files here to upload
-              </h3>
-              <p className="text-[11px] text-slate-500 mt-1 font-medium">
-                Reports, scans, invoices, or any medical records (PDF, JPG, PNG)
+              <h3 className="text-[11.5px] font-bold text-slate-700 leading-none">Drag &amp; drop files here to upload</h3>
+              <p className="text-[10.5px] text-slate-400 mt-0.5 font-medium">
+                Reports, scans, invoices or any medical documents
               </p>
             </div>
           </div>
           <button
-            className="px-5 py-2.5 bg-[#810B38] hover:bg-[#9D174D] text-white shadow-md hover:shadow-[0_4px_12px_rgba(129,11,56,0.3)] rounded-xl text-xs font-bold transition-all cursor-pointer flex-shrink-0 relative z-10 hover:-translate-y-0.5"
+            className="px-3.5 py-1.5 bg-white border border-slate-200 hover:border-[#810B38]/40 hover:bg-[#FAF5F0] text-slate-600 hover:text-[#810B38] rounded-lg text-[11px] font-semibold transition-all cursor-pointer flex-shrink-0"
             type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowUploadModal(true);
-            }}
           >
             Browse Files
           </button>
@@ -1097,13 +1060,13 @@ const Documents = () => {
         {/* Main List Vault Table section */}
         <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col flex-grow shadow-sm min-h-0">
 
-          {/* Premium Table Filters Header bar */}
-          <div className="p-5 border-b border-slate-100 flex items-center justify-between gap-4 bg-white flex-shrink-0 z-20 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] relative">
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+          {/* Table Filters Header bar */}
+          <div className="p-4 border-b border-slate-100 flex items-center justify-between gap-4 bg-slate-50/20 flex-shrink-0">
+            <div className="relative flex-1">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={15} />
               <input
                 type="text"
-                className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl pl-11 pr-10 py-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:border-[#810B38] focus:ring-4 focus:ring-[#810B38]/10 transition-all placeholder-slate-400 shadow-inner"
+                className="w-full bg-white border border-slate-250 rounded-xl pl-10 pr-10 py-2 text-xs text-slate-700 focus:outline-none focus:border-[#810B38] transition-all"
                 placeholder="Search by patient name, document name, or ID..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -1111,19 +1074,19 @@ const Documents = () => {
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 w-5 h-5 bg-slate-200 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-300 hover:text-slate-700 transition-colors"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-[10px] font-bold"
                 >
-                  <X size={12} strokeWidth={3} />
+                  Clear
                 </button>
               )}
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               {/* Category selector dropdown */}
-              <div className="flex items-center gap-2 bg-white border border-slate-200 hover:border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 shadow-sm transition-all focus-within:ring-4 focus-within:ring-[#810B38]/10 focus-within:border-[#810B38]">
-                <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider">Category:</span>
+              <div className="flex items-center gap-1.5 bg-white border border-slate-250 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-650">
+                <span className="text-[10px] text-slate-450 font-medium">Category:</span>
                 <select
-                  className="bg-transparent focus:outline-none cursor-pointer pr-1 text-slate-800 font-bold"
+                  className="bg-transparent focus:outline-none cursor-pointer pr-1 text-slate-700"
                   value={categoryFilter}
                   onChange={(e) => setCategoryFilter(e.target.value)}
                 >
@@ -1135,10 +1098,10 @@ const Documents = () => {
               </div>
 
               {/* Date selector dropdown */}
-              <div className="flex items-center gap-2 bg-white border border-slate-200 hover:border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 shadow-sm transition-all focus-within:ring-4 focus-within:ring-[#810B38]/10 focus-within:border-[#810B38]">
-                <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider">Date:</span>
+              <div className="flex items-center gap-1.5 bg-white border border-slate-250 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-650">
+                <span className="text-[10px] text-slate-450 font-medium">Date:</span>
                 <select
-                  className="bg-transparent focus:outline-none cursor-pointer pr-1 text-slate-800 font-bold"
+                  className="bg-transparent focus:outline-none cursor-pointer pr-1 text-slate-700"
                   value={dateFilter}
                   onChange={(e) => setDateFilter(e.target.value)}
                 >
@@ -1150,27 +1113,27 @@ const Documents = () => {
               {/* Advanced Filter button */}
               <button
                 onClick={() => showActionToast("⚙️ Opening advanced data filter queries...")}
-                className="flex items-center gap-2 bg-white border border-slate-200 hover:border-[#810B38] hover:text-[#810B38] rounded-xl px-4 py-2 text-xs font-bold text-slate-700 shadow-sm hover:shadow-md transition-all cursor-pointer group"
+                className="flex items-center gap-1.5 bg-white border border-slate-250 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-650 hover:bg-slate-50 shadow-xs cursor-pointer"
               >
-                <SlidersHorizontal size={14} className="text-slate-500 group-hover:text-[#810B38] transition-colors" />
+                <SlidersHorizontal size={13.5} className="text-slate-500" />
                 <span>Filters</span>
               </button>
             </div>
           </div>
 
           {/* Documents Scrollable Table */}
-          <div className="flex-1 overflow-y-auto min-h-0 bg-slate-50/30">
-            <table className="w-full text-left border-collapse min-w-[700px]">
+          <div className="flex-1 overflow-y-auto min-h-0">
+            <table className="w-full text-left border-collapse min-w-[560px]">
               <thead className="sticky top-0 z-10">
-                <tr className="bg-white/80 backdrop-blur-md border-b-2 border-slate-100 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
-                  <th className="py-4 px-6 font-extrabold">DOCUMENT NAME</th>
-                  <th className="py-4 px-4 font-extrabold">CATEGORY</th>
-                  <th className="py-4 px-4 font-extrabold">PATIENT</th>
-                  <th className="py-4 px-4 font-extrabold">DATE UPLOADED</th>
-                  <th className="py-4 px-6 text-right font-extrabold">ACTIONS</th>
+                <tr className="bg-white border-b-2 border-slate-100 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
+                  <th className="py-3 px-5">DOCUMENT NAME</th>
+                  <th className="py-3 px-4">CATEGORY</th>
+                  <th className="py-3 px-4">PATIENT</th>
+                  <th className="py-3 px-4">DATE UPLOADED</th>
+                  <th className="py-3 px-5 text-right">ACTIONS</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100/60 bg-white relative">
+              <tbody className="divide-y divide-slate-100">
                 {paginatedDocs.length > 0 ? (
                   paginatedDocs.map((item, idx) => {
                     const isSelected = selectedDoc && selectedDoc.name === item.name;
@@ -1181,110 +1144,107 @@ const Documents = () => {
                           setSelectedDoc(item);
                           setIsPreviewPanelOpen(true);
                         }}
-                        className={`text-xs text-slate-650 transition-all duration-300 cursor-pointer group relative ${isSelected ? 'bg-slate-50 shadow-[inset_4px_0_0_0_#810B38]' : 'hover:bg-slate-50/50 hover:shadow-[inset_4px_0_0_0_rgba(129,11,56,0.15)]'}`}
+                        className={`text-xs text-slate-650 transition-colors duration-150 cursor-pointer group hover:bg-slate-50/50 ${isSelected ? 'bg-slate-50/80 border-l-2 border-[#810B38]' : ''
+                          }`}
                       >
 
                         {/* Doc name & info */}
-                        <td className="py-4 px-6 font-bold text-slate-800">
-                          <div className="flex items-center gap-4">
-                            <div className={`transition-transform duration-300 ${isSelected ? 'scale-110 drop-shadow-sm' : 'group-hover:scale-105'}`}>
-                              <FileIconComponent filename={item.name} type={item.type} />
-                            </div>
+                        <td className="py-3.5 px-5 font-bold text-slate-800">
+                          <div className="flex items-center gap-3">
+                            <FileIconComponent filename={item.name} type={item.type} />
                             <div className="flex flex-col min-w-0">
-                              <span className="truncate max-w-[220px] text-[12px] group-hover:text-[#810B38] transition-colors duration-200" title={item.name}>{item.name}</span>
-                              <span className="text-[10px] text-slate-400 font-medium font-mono mt-0.5 tracking-wide">{item.docId}</span>
+                              <span className="truncate max-w-[200px]" title={item.name}>{item.name}</span>
+                              <span className="text-[10px] text-slate-400 font-medium font-mono mt-0.5">{item.docId}</span>
                             </div>
                           </div>
                         </td>
 
                         {/* Category badge */}
-                        <td className="py-4 px-4">
-                          <span className={`inline-flex items-center px-2.5 py-1 text-[8.5px] font-extrabold rounded-md uppercase tracking-wider whitespace-nowrap shadow-sm border ${
-                            item.category === 'Lab Reports' ? 'bg-emerald-50 text-emerald-700 border-emerald-200/60' :
-                            item.category === 'Invoices' ? 'bg-amber-50 text-amber-700 border-amber-200/60' :
-                            item.category === 'Consent Forms' ? 'bg-violet-50 text-violet-700 border-violet-200/60' :
-                            item.category === 'Scans & Images' ? 'bg-sky-50 text-sky-700 border-sky-200/60' :
-                            item.category === 'Discharge Summaries' ? 'bg-orange-50 text-orange-700 border-orange-200/60' :
-                            item.category === 'Prescriptions' ? 'bg-pink-50 text-pink-700 border-pink-200/60' :
-                            'bg-slate-50 text-slate-600 border-slate-200/60'
-                          }`}>
+                        <td className="py-3.5 px-4">
+                          <span className={`inline-flex items-center px-2 py-0.5 text-[8.5px] font-extrabold rounded-full uppercase tracking-wide whitespace-nowrap ${item.category === 'Lab Reports' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                              item.category === 'Invoices' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
+                                item.category === 'Consent Forms' ? 'bg-violet-50 text-violet-700 border border-violet-200' :
+                                  item.category === 'Scans & Images' ? 'bg-sky-50 text-sky-700 border border-sky-200' :
+                                    item.category === 'Discharge Summaries' ? 'bg-orange-50 text-orange-700 border border-orange-200' :
+                                      item.category === 'Prescriptions' ? 'bg-pink-50 text-pink-700 border border-pink-200' :
+                                        'bg-slate-100 text-slate-600 border border-slate-200'
+                            }`}>
                             {item.category}
                           </span>
                         </td>
 
                         {/* Patient info */}
-                        <td className="py-4 px-4 font-semibold text-slate-800">
+                        <td className="py-3.5 px-4 font-semibold text-slate-800">
                           <div className="flex flex-col">
-                            <span className="text-[11.5px]">{item.patientName}</span>
-                            <span className="text-[10px] text-slate-400 font-semibold font-mono mt-0.5">{item.patientId}</span>
+                            <span>{item.patientName}</span>
+                            <span className="text-[10px] text-slate-450 font-semibold font-mono mt-0.5">{item.patientId}</span>
                           </div>
                         </td>
 
                         {/* Date uploaded - two-line format */}
-                        <td className="py-4 px-4">
+                        <td className="py-3.5 px-4">
                           <div className="flex flex-col leading-tight">
-                            <span className="text-[11.5px] font-bold text-slate-700">{item.date.split(',')[0]}</span>
+                            <span className="text-[11.5px] font-semibold text-slate-700">{item.date.split(',')[0]}</span>
                             <span className="text-[9.5px] text-slate-400 font-medium mt-0.5">{item.date.split(',').slice(1).join(',').trim()}</span>
                           </div>
                         </td>
 
                         {/* Action buttons (Row specific) */}
-                        <td className="py-4 px-6 text-right relative" onClick={(e) => e.stopPropagation()}>
-                          <div className="flex items-center justify-end gap-1.5 opacity-90 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                        <td className="py-3.5 px-5 text-right relative" onClick={(e) => e.stopPropagation()}>
+                          <div className="flex items-center justify-end gap-1 opacity-90 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                             <button
                               onClick={() => {
                                 setSelectedDoc(item);
                                 setIsPreviewPanelOpen(true);
                               }}
-                              className="p-2 hover:bg-slate-100 hover:shadow-sm text-slate-500 hover:text-slate-800 rounded-lg cursor-pointer transition-all duration-200"
+                              className="p-1.5 hover:bg-slate-100 text-slate-500 hover:text-slate-800 rounded-lg cursor-pointer transition-colors"
                               title="Preview File"
                             >
-                              <Eye size={15} />
+                              <Eye size={14} />
                             </button>
                             <button
                               onClick={() => handleDownload(item.name)}
-                              className="p-2 hover:bg-emerald-50 hover:shadow-sm text-emerald-600 hover:text-emerald-700 rounded-lg cursor-pointer transition-all duration-200"
+                              className="p-1.5 hover:bg-emerald-50 text-emerald-600 hover:text-emerald-700 rounded-lg cursor-pointer transition-colors"
                               title="Download File"
                             >
-                              <Download size={15} />
+                              <Download size={14} />
                             </button>
                             <button
                               onClick={() => handleDelete(item.name)}
-                              className="p-2 hover:bg-rose-50 hover:shadow-sm text-red-500 hover:text-red-700 rounded-lg cursor-pointer transition-all duration-200"
+                              className="p-1.5 hover:bg-rose-50 text-red-500 hover:text-red-700 rounded-lg cursor-pointer transition-colors"
                               title="Delete File"
                             >
-                              <Trash2 size={15} />
+                              <Trash2 size={14} />
                             </button>
-                            <div className="w-px h-4 bg-slate-200 mx-1"></div>
                             <button
                               onClick={() => setShowActionDropdown(showActionDropdown === idx ? null : idx)}
-                              className={`p-2 rounded-lg cursor-pointer transition-all duration-200 ${showActionDropdown === idx ? 'bg-slate-100 shadow-sm text-slate-800' : 'hover:bg-slate-100 hover:shadow-sm text-slate-500 hover:text-slate-800'}`}
+                              className="p-1.5 hover:bg-slate-100 text-slate-550 hover:text-slate-800 rounded-lg cursor-pointer transition-colors"
                             >
-                              <MoreVertical size={15} />
+                              <MoreVertical size={14} />
                             </button>
                           </div>
 
                           {showActionDropdown === idx && (
-                            <div className="absolute right-6 top-12 w-40 bg-white border border-slate-150 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] z-30 py-1.5 text-left animate-fadeIn">
+                            <div className="absolute right-6 top-10 w-36 bg-white border border-slate-200 rounded-xl shadow-lg z-10 py-1 text-left animate-fadeIn">
                               <button
                                 onClick={() => { handleShare(item.name); setShowActionDropdown(null); }}
-                                className="w-full px-4 py-2 text-slate-700 hover:bg-[#FAF5F0] hover:text-[#810B38] flex items-center gap-2.5 text-[11px] font-bold transition-colors"
+                                className="w-full px-3.5 py-1.5 text-slate-700 hover:bg-slate-50 flex items-center gap-2 text-xs font-semibold"
                               >
-                                <Share2 size={13} />
+                                <Share2 size={12} className="text-[#810B38]" />
                                 <span>Share Doc</span>
                               </button>
                               <button
                                 onClick={() => { handlePrint(item.name); setShowActionDropdown(null); }}
-                                className="w-full px-4 py-2 text-slate-700 hover:bg-slate-50 flex items-center gap-2.5 text-[11px] font-bold transition-colors"
+                                className="w-full px-3.5 py-1.5 text-slate-700 hover:bg-slate-50 flex items-center gap-2 text-xs font-semibold"
                               >
-                                <Printer size={13} className="text-slate-500" />
+                                <Printer size={12} className="text-slate-500" />
                                 <span>Print Doc</span>
                               </button>
                               <button
                                 onClick={() => { handleMove(item.name); setShowActionDropdown(null); }}
-                                className="w-full px-4 py-2 text-slate-700 hover:bg-slate-50 flex items-center gap-2.5 text-[11px] font-bold transition-colors"
+                                className="w-full px-3.5 py-1.5 text-slate-700 hover:bg-slate-50 flex items-center gap-2 text-xs font-semibold"
                               >
-                                <FolderInput size={13} className="text-slate-500" />
+                                <FolderInput size={12} className="text-slate-500" />
                                 <span>Move to Folder</span>
                               </button>
                             </div>
@@ -1296,12 +1256,8 @@ const Documents = () => {
                   })
                 ) : (
                   <tr>
-                    <td colSpan="5" className="py-20 text-center">
-                      <div className="flex flex-col items-center justify-center">
-                        <Search size={32} className="text-slate-200 mb-3" />
-                        <p className="text-slate-500 text-xs font-bold">No documents found matching the search/filter parameters.</p>
-                        <button onClick={() => setSearchQuery('')} className="mt-4 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-bold transition-colors">Clear Filters</button>
-                      </div>
+                    <td colSpan="5" className="py-16 text-center text-slate-400 text-xs font-semibold">
+                      No documents found matching the search/filter parameters.
                     </td>
                   </tr>
                 )}
@@ -1329,11 +1285,10 @@ const Documents = () => {
                   <button
                     key={pg}
                     onClick={() => setCurrentPage(pg)}
-                    className={`w-6 h-6 rounded-lg flex items-center justify-center font-extrabold text-xs cursor-pointer ${
-                      safePage === pg
+                    className={`w-6 h-6 rounded-lg flex items-center justify-center font-extrabold text-xs cursor-pointer ${safePage === pg
                         ? 'bg-[#810B38] text-white shadow-xs'
                         : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
-                    }`}
+                      }`}
                   >
                     {pg}
                   </button>

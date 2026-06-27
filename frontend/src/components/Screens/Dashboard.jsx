@@ -316,20 +316,19 @@ const Dashboard = () => {
                         const isExpanded = expandedAppt === app.id;
                         const isExpandable = !!app.age; // only real patient rows
                         return (
-                          <div key={app.id}>
+                          <div 
+                            key={app.id} 
+                            className="relative"
+                            onMouseEnter={() => isExpandable && setExpandedAppt(app.id)}
+                            onMouseLeave={() => setExpandedAppt(null)}
+                          >
                             <div
                               className={`flex items-center justify-between px-2 py-1.5 -mx-2 rounded-xl transition-all cursor-pointer group hover:shadow-sm border ${
                                 isExpanded
                                   ? 'bg-[color-mix(in_srgb,var(--color-primary)_6%,transparent)] border-[color-mix(in_srgb,var(--color-primary)_15%,transparent)] shadow-sm'
                                   : 'border-transparent hover:bg-slate-50/80 hover:border-slate-100/60'
                               }`}
-                              onClick={() => {
-                                if (isExpandable) {
-                                  setExpandedAppt(isExpanded ? null : app.id);
-                                } else {
-                                  viewPatientDetails(app.id);
-                                }
-                              }}
+                              onClick={() => viewPatientDetails(app.id)}
                             >
                               <div className="flex items-center gap-3">
                                 <span className="font-bold text-xs w-16 flex-shrink-0" style={{ color: 'var(--color-primary)' }}>{app.time}</span>
@@ -363,9 +362,12 @@ const Dashboard = () => {
                               </div>
                             </div>
 
-                            {/* ── Inline expand panel ── */}
+                            {/* ── Hover expand panel (Tooltip) ── */}
                             {isExpanded && app.age && (
-                              <div className="mx-2 mt-1 mb-2 p-3 rounded-xl border animate-fade-up" style={{ background: 'color-mix(in srgb, var(--color-primary) 4%, #ffffff)', borderColor: 'color-mix(in srgb, var(--color-primary) 18%, transparent)' }}>
+                              <div 
+                                className="absolute left-10 md:left-24 top-full mt-1 z-50 w-64 p-3 rounded-xl border shadow-xl animate-fade-up bg-white/95 backdrop-blur-md" 
+                                style={{ borderColor: 'color-mix(in srgb, var(--color-primary) 20%, transparent)' }}
+                              >
                                 <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest mb-2">Patient Details</p>
                                 <div className="grid grid-cols-2 gap-1.5">
                                   {[
@@ -374,9 +376,9 @@ const Dashboard = () => {
                                     { label: 'Phone', value: app.phone },
                                     { label: 'Email', value: app.email },
                                   ].map(f => (
-                                    <div key={f.label} className="bg-white rounded-lg p-2 border border-slate-100">
+                                    <div key={f.label} className="bg-slate-50/80 rounded-lg p-2 border border-slate-100/60">
                                       <p className="text-[9px] text-slate-400 font-medium">{f.label}</p>
-                                      <p className="text-[10px] font-bold text-slate-700 truncate mt-0.5">{f.value}</p>
+                                      <p className="text-[10px] font-bold text-slate-700 truncate mt-0.5" title={f.value}>{f.value}</p>
                                     </div>
                                   ))}
                                 </div>
