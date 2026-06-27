@@ -757,7 +757,6 @@ const Login = () => {
             position: relative;
             height: auto;
             min-height: 100vh;
-            overflow-y: auto;
           }
           .login-left {
             display: none;
@@ -768,10 +767,15 @@ const Login = () => {
             min-height: 100vh;
             padding: 24px;
             padding-bottom: 40px; /* Extra padding for mobile keyboards */
+            overflow-y: auto;
+            align-items: flex-start; /* Fixes top/bottom crop on tall forms */
+          }
+          .login-wrapper {
+            margin: auto 0;
+            width: 100%;
           }
           .login-card {
             padding: 32px 24px;
-            margin: auto 0; /* Vertically centers the card within the scroll area */
           }
         }
 
