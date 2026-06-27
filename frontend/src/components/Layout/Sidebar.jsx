@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 
 const Sidebar = () => {
-  const { currentScreen, showScreen, isSidebarCollapsed } = useApp();
+  const { currentScreen, showScreen, isSidebarCollapsed, setIsSidebarCollapsed } = useApp();
   const { currentUser, logout, canAccess } = useAuth();
 
   const allNavItems = [
