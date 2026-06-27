@@ -67,7 +67,7 @@ export const canAccess = (role, screen) => {
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(() => {
     try {
-      const stored = localStorage.getItem('cms-auth-user');
+      const stored = sessionStorage.getItem('cms-auth-user');
       return stored ? JSON.parse(stored) : null;
     } catch {
       return null;
@@ -82,13 +82,13 @@ export const AuthProvider = ({ children }) => {
       throw new Error('Invalid username or password. Please try again.');
     }
     const { password: _pwd, ...safeUser } = user;
-    localStorage.setItem('cms-auth-user', JSON.stringify(safeUser));
+    sessionStorage.setItem('cms-auth-user', JSON.stringify(safeUser));
     setCurrentUser(safeUser);
     return safeUser;
   }, []);
 
   const logout = useCallback(() => {
-    localStorage.removeItem('cms-auth-user');
+    sessionStorage.removeItem('cms-auth-user');
     setCurrentUser(null);
   }, []);
 
