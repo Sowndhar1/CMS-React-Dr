@@ -52,7 +52,8 @@ const MedicalRecords = () => {
   };
 
   return (
-    <div className="screen-fade h-full overflow-hidden p-4.5 flex flex-col gap-4 bg-slate-50/50">
+    <div className="screen-fade h-full overflow-hidden p-2 bg-transparent">
+      <div className="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 flex flex-col gap-4 h-full min-h-full overflow-hidden min-h-0">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 flex-shrink-0">
         <div className="flex items-center gap-2">
@@ -63,8 +64,8 @@ const MedicalRecords = () => {
             <ArrowLeft size={16} />
           </button>
           <div>
-            <h1 className="text-base font-extrabold text-slate-800 tracking-tight">Medical Records</h1>
-            <p className="text-[10.5px] text-slate-400 font-semibold mt-0.5">Centralized patient document repository</p>
+            <h1 className="text-base font-bold text-slate-800">Medical Records</h1>
+
           </div>
         </div>
 
@@ -78,97 +79,97 @@ const MedicalRecords = () => {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 flex-shrink-0">
 
         {/* Total Records */}
-        <div className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-xs h-[105px] group hover:border-blue-400 hover:-translate-y-0.5 transition-all duration-300">
+        <div className="relative overflow-hidden bg-white ring-1 ring-slate-200 ring-inset border-0 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-md hover:shadow-lg h-[105px] group hover:ring-cyan-400 hover:-translate-y-0.5 transition-all duration-300">
           <div className="flex items-start gap-2.5">
-            <div className="w-8.5 h-8.5 rounded-xl bg-blue-50/80 flex items-center justify-center text-blue-600 flex-shrink-0 mt-0.5">
+            <div className="w-8.5 h-8.5 rounded-xl bg-cyan-50/80 flex items-center justify-center text-cyan-600 flex-shrink-0 mt-0.5">
               <FolderHeart size={15} />
             </div>
             <div className="min-w-0 leading-none">
               <p className="text-2xl font-black text-slate-800 leading-none">4,820</p>
               <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Total Records</p>
-              <p className="text-[8.5px] text-blue-500 font-extrabold leading-none mt-0.5">+248 this month</p>
+              <p className="text-[8.5px] text-cyan-600 font-extrabold leading-none mt-0.5">+248 this month</p>
             </div>
           </div>
           <svg className="absolute bottom-0 left-0 right-0 h-5 w-full pointer-events-none overflow-hidden" viewBox="0 0 100 40" preserveAspectRatio="none">
             <defs>
               <linearGradient id="mr-sparkline-total" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.18" />
-                <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+                <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#06b6d4" stopOpacity="0" />
               </linearGradient>
             </defs>
-            <path d="M 0 28 C 15 22 30 30 45 18 C 60 8 75 20 90 12 L 100 10" fill="none" stroke="#3b82f6" strokeWidth="2" />
+            <path d="M 0 28 C 15 22 30 30 45 18 C 60 8 75 20 90 12 L 100 10" fill="none" stroke="#06b6d4" strokeWidth="2" />
             <path d="M 0 28 C 15 22 30 30 45 18 C 60 8 75 20 90 12 L 100 10 L 100 40 L 0 40 Z" fill="url(#mr-sparkline-total)" />
           </svg>
         </div>
 
         {/* Added Today */}
-        <div className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-xs h-[105px] group hover:border-emerald-400 hover:-translate-y-0.5 transition-all duration-300">
+        <div className="relative overflow-hidden bg-white ring-1 ring-slate-200 ring-inset border-0 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-md hover:shadow-lg h-[105px] group hover:ring-teal-400 hover:-translate-y-0.5 transition-all duration-300">
           <div className="flex items-start gap-2.5">
-            <div className="w-8.5 h-8.5 rounded-xl bg-emerald-50/80 flex items-center justify-center text-emerald-600 flex-shrink-0 mt-0.5">
+            <div className="w-8.5 h-8.5 rounded-xl bg-teal-50/80 flex items-center justify-center text-teal-600 flex-shrink-0 mt-0.5">
               <FileText size={15} />
             </div>
             <div className="min-w-0 leading-none">
               <p className="text-2xl font-black text-slate-800 leading-none">18</p>
               <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Added Today</p>
-              <p className="text-[8.5px] text-emerald-600 font-extrabold leading-none mt-0.5">↑ vs 14 yesterday</p>
+              <p className="text-[8.5px] text-teal-600 font-extrabold leading-none mt-0.5">↑ vs 14 yesterday</p>
             </div>
           </div>
           <svg className="absolute bottom-0 left-0 right-0 h-5 w-full pointer-events-none overflow-hidden" viewBox="0 0 100 40" preserveAspectRatio="none">
             <defs>
               <linearGradient id="mr-sparkline-today" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#10b981" stopOpacity="0.18" />
-                <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+                <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#14b8a6" stopOpacity="0" />
               </linearGradient>
             </defs>
-            <path d="M 0 30 C 20 28 35 18 50 22 C 65 26 80 10 100 8" fill="none" stroke="#10b981" strokeWidth="2" />
+            <path d="M 0 30 C 20 28 35 18 50 22 C 65 26 80 10 100 8" fill="none" stroke="#14b8a6" strokeWidth="2" />
             <path d="M 0 30 C 20 28 35 18 50 22 C 65 26 80 10 100 8 L 100 40 L 0 40 Z" fill="url(#mr-sparkline-today)" />
           </svg>
         </div>
 
         {/* Imaging & Scans */}
-        <div className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-xs h-[105px] group hover:border-purple-400 hover:-translate-y-0.5 transition-all duration-300">
+        <div className="relative overflow-hidden bg-white ring-1 ring-slate-200 ring-inset border-0 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-md hover:shadow-lg h-[105px] group hover:ring-indigo-400 hover:-translate-y-0.5 transition-all duration-300">
           <div className="flex items-start gap-2.5">
-            <div className="w-8.5 h-8.5 rounded-xl bg-purple-50/80 flex items-center justify-center text-purple-600 flex-shrink-0 mt-0.5">
+            <div className="w-8.5 h-8.5 rounded-xl bg-indigo-50/80 flex items-center justify-center text-indigo-600 flex-shrink-0 mt-0.5">
               <ScanLine size={15} />
             </div>
             <div className="min-w-0 leading-none">
               <p className="text-2xl font-black text-slate-800 leading-none">1,142</p>
               <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Imaging & Scans</p>
-              <p className="text-[8.5px] text-purple-600 font-extrabold leading-none mt-0.5">23.7% of total</p>
+              <p className="text-[8.5px] text-indigo-600 font-extrabold leading-none mt-0.5">23.7% of total</p>
             </div>
           </div>
           <svg className="absolute bottom-0 left-0 right-0 h-5 w-full pointer-events-none overflow-hidden" viewBox="0 0 100 40" preserveAspectRatio="none">
             <defs>
               <linearGradient id="mr-sparkline-imaging" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.18" />
-                <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
+                <stop offset="0%" stopColor="#6366f1" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
               </linearGradient>
             </defs>
-            <path d="M 0 22 C 18 30 35 12 55 20 C 72 28 85 14 100 16" fill="none" stroke="#8b5cf6" strokeWidth="2" />
+            <path d="M 0 22 C 18 30 35 12 55 20 C 72 28 85 14 100 16" fill="none" stroke="#6366f1" strokeWidth="2" />
             <path d="M 0 22 C 18 30 35 12 55 20 C 72 28 85 14 100 16 L 100 40 L 0 40 Z" fill="url(#mr-sparkline-imaging)" />
           </svg>
         </div>
 
         {/* Pending Review */}
-        <div className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-xs h-[105px] group hover:border-amber-400 hover:-translate-y-0.5 transition-all duration-300">
+        <div className="relative overflow-hidden bg-white ring-1 ring-slate-200 ring-inset border-0 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-md hover:shadow-lg h-[105px] group hover:ring-orange-400 hover:-translate-y-0.5 transition-all duration-300">
           <div className="flex items-start gap-2.5">
-            <div className="w-8.5 h-8.5 rounded-xl bg-amber-50/80 flex items-center justify-center text-amber-600 flex-shrink-0 mt-0.5">
+            <div className="w-8.5 h-8.5 rounded-xl bg-orange-50/80 flex items-center justify-center text-orange-600 flex-shrink-0 mt-0.5">
               <Clock size={15} />
             </div>
             <div className="min-w-0 leading-none">
-              <p className="text-2xl font-black text-amber-600 leading-none">7</p>
+              <p className="text-2xl font-black text-orange-600 leading-none">7</p>
               <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Pending Review</p>
-              <p className="text-[8.5px] text-amber-600 font-extrabold leading-none mt-0.5 animate-pulse">Needs attention</p>
+              <p className="text-[8.5px] text-orange-600 font-extrabold leading-none mt-0.5 animate-pulse">Needs attention</p>
             </div>
           </div>
           <svg className="absolute bottom-0 left-0 right-0 h-5 w-full pointer-events-none overflow-hidden" viewBox="0 0 100 40" preserveAspectRatio="none">
             <defs>
               <linearGradient id="mr-sparkline-pending" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.2" />
-                <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
+                <stop offset="0%" stopColor="#f97316" stopOpacity="0.2" />
+                <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
               </linearGradient>
             </defs>
-            <path d="M 0 15 C 20 25 40 10 60 20 C 78 30 88 18 100 22" fill="none" stroke="#f59e0b" strokeWidth="2" />
+            <path d="M 0 15 C 20 25 40 10 60 20 C 78 30 88 18 100 22" fill="none" stroke="#f97316" strokeWidth="2" />
             <path d="M 0 15 C 20 25 40 10 60 20 C 78 30 88 18 100 22 L 100 40 L 0 40 Z" fill="url(#mr-sparkline-pending)" />
           </svg>
         </div>
@@ -207,7 +208,7 @@ const MedicalRecords = () => {
       </div>
 
       {/* Records Table Card */}
-      <div className="section-card flex-1 flex flex-col overflow-hidden bg-white rounded-2xl border border-slate-200 shadow-xs min-h-0">
+      <div className="section-card flex-1 flex flex-col overflow-hidden bg-white rounded-2xl ring-1 ring-slate-200 ring-inset border-0 shadow-md hover:shadow-lg min-h-0">
         <div className="overflow-x-auto flex-grow flex flex-col min-w-full">
           <div className="min-w-[850px] flex flex-col flex-1">
             <div className="table-head text-[10.5px] items-center flex-shrink-0" style={{ gridTemplateColumns: '1.2fr 2fr 1.2fr 1.2fr 1.2fr 1fr 1fr' }}>
@@ -279,6 +280,7 @@ const MedicalRecords = () => {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

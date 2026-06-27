@@ -144,7 +144,8 @@ const FollowUps = () => {
   });
 
   return (
-    <div className="screen-fade h-full overflow-y-auto p-5 flex flex-col gap-5 bg-slate-50/70">
+    <div className="screen-fade h-full overflow-y-auto p-2 bg-transparent">
+      <div className="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 flex flex-col gap-5 min-h-full">
 
       {/* Action Simulation Toast Notification */}
       {actionMessage && (
@@ -165,7 +166,7 @@ const FollowUps = () => {
           </button>
           <div>
             <h1 className="text-base font-bold text-slate-800">Patient Follow Ups</h1>
-            <p className="text-[11px] text-slate-400 mt-0.5">Post-consultation tracking</p>
+
           </div>
         </div>
 
@@ -182,7 +183,7 @@ const FollowUps = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 flex-shrink-0">
 
         {/* Total Active */}
-        <div className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-xs h-[105px] group hover:border-slate-400 hover:-translate-y-0.5 transition-all duration-300">
+        <div className="relative overflow-hidden bg-white ring-1 ring-slate-200 ring-inset border-0 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-md hover:shadow-lg h-[105px] group hover:ring-slate-400 hover:-translate-y-0.5 transition-all duration-300">
           <div className="flex items-start gap-2.5">
             <div className="w-8.5 h-8.5 rounded-xl bg-slate-100/80 flex items-center justify-center text-slate-600 flex-shrink-0 mt-0.5">
               <Clock size={15} />
@@ -206,15 +207,15 @@ const FollowUps = () => {
         </div>
 
         {/* Completed */}
-        <div className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-xs h-[105px] group hover:border-emerald-400 hover:-translate-y-0.5 transition-all duration-300">
+        <div className="relative overflow-hidden bg-white ring-1 ring-slate-200 ring-inset border-0 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-md hover:shadow-lg h-[105px] group hover:ring-lime-400 hover:-translate-y-0.5 transition-all duration-300">
           <div className="flex items-start gap-2.5">
-            <div className="w-8.5 h-8.5 rounded-xl bg-emerald-50/80 flex items-center justify-center text-emerald-600 flex-shrink-0 mt-0.5">
+            <div className="w-8.5 h-8.5 rounded-xl bg-lime-50/80 flex items-center justify-center text-lime-600 flex-shrink-0 mt-0.5">
               <CheckCircle size={15} />
             </div>
             <div className="min-w-0 leading-none">
               <p className="text-2xl font-black text-slate-800 leading-none">{completedCount}</p>
               <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Completed</p>
-              <p className="text-[8.5px] text-emerald-600 font-extrabold leading-none mt-0.5">
+              <p className="text-[8.5px] text-lime-600 font-extrabold leading-none mt-0.5">
                 {totalCount ? Math.round((completedCount / totalCount) * 100) : 0}% completion rate
               </p>
             </div>
@@ -222,41 +223,41 @@ const FollowUps = () => {
           <svg className="absolute bottom-0 left-0 right-0 h-5 w-full pointer-events-none overflow-hidden" viewBox="0 0 100 40" preserveAspectRatio="none">
             <defs>
               <linearGradient id="fu-sparkline-completed" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#10b981" stopOpacity="0.18" />
-                <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+                <stop offset="0%" stopColor="#84cc16" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#84cc16" stopOpacity="0" />
               </linearGradient>
             </defs>
-            <path d="M 0 28 C 22 24 40 16 58 20 C 74 24 88 12 100 10" fill="none" stroke="#10b981" strokeWidth="2" />
+            <path d="M 0 28 C 22 24 40 16 58 20 C 74 24 88 12 100 10" fill="none" stroke="#84cc16" strokeWidth="2" />
             <path d="M 0 28 C 22 24 40 16 58 20 C 74 24 88 12 100 10 L 100 40 L 0 40 Z" fill="url(#fu-sparkline-completed)" />
           </svg>
         </div>
 
         {/* Pending */}
-        <div className="relative overflow-hidden bg-white border border-slate-200 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-xs h-[105px] group hover:border-amber-400 hover:-translate-y-0.5 transition-all duration-300">
+        <div className="relative overflow-hidden bg-white ring-1 ring-slate-200 ring-inset border-0 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-md hover:shadow-lg h-[105px] group hover:ring-yellow-400 hover:-translate-y-0.5 transition-all duration-300">
           <div className="flex items-start gap-2.5">
-            <div className="w-8.5 h-8.5 rounded-xl bg-amber-50/80 flex items-center justify-center text-amber-600 flex-shrink-0 mt-0.5">
+            <div className="w-8.5 h-8.5 rounded-xl bg-yellow-50/80 flex items-center justify-center text-yellow-600 flex-shrink-0 mt-0.5">
               <Calendar size={15} />
             </div>
             <div className="min-w-0 leading-none">
               <p className="text-2xl font-black text-slate-800 leading-none">{pendingCount}</p>
               <p className="text-[10.5px] font-bold text-slate-500 mt-1 select-none leading-tight">Pending</p>
-              <p className="text-[8.5px] text-amber-600 font-extrabold leading-none mt-0.5">Needs call / reminder</p>
+              <p className="text-[8.5px] text-yellow-600 font-extrabold leading-none mt-0.5">Needs call / reminder</p>
             </div>
           </div>
           <svg className="absolute bottom-0 left-0 right-0 h-5 w-full pointer-events-none overflow-hidden" viewBox="0 0 100 40" preserveAspectRatio="none">
             <defs>
               <linearGradient id="fu-sparkline-pending" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.18" />
-                <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
+                <stop offset="0%" stopColor="#eab308" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#eab308" stopOpacity="0" />
               </linearGradient>
             </defs>
-            <path d="M 0 18 C 20 24 38 16 55 22 C 72 28 86 18 100 20" fill="none" stroke="#f59e0b" strokeWidth="2" />
+            <path d="M 0 18 C 20 24 38 16 55 22 C 72 28 86 18 100 20" fill="none" stroke="#eab308" strokeWidth="2" />
             <path d="M 0 18 C 20 24 38 16 55 22 C 72 28 86 18 100 20 L 100 40 L 0 40 Z" fill="url(#fu-sparkline-pending)" />
           </svg>
         </div>
 
         {/* Overdue */}
-        <div className="relative overflow-hidden bg-white border border-rose-200 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-xs h-[105px] group hover:border-rose-400 hover:-translate-y-0.5 transition-all duration-300">
+        <div className="relative overflow-hidden bg-white border border-rose-200 rounded-2xl pt-3 px-3.5 pb-1 flex flex-col justify-between shadow-md hover:shadow-lg h-[105px] group hover:ring-rose-400 hover:-translate-y-0.5 transition-all duration-300">
           <div className="flex items-start gap-2.5">
             <div className="w-8.5 h-8.5 rounded-xl bg-rose-50/80 flex items-center justify-center text-rose-600 flex-shrink-0 mt-0.5">
               <AlertCircle size={15} />
@@ -282,7 +283,7 @@ const FollowUps = () => {
       </div>
 
       {/* Main Table Container */}
-      <div className="section-card bg-white flex flex-col flex-1 overflow-hidden rounded-2xl border border-slate-200 shadow-sm min-h-0">
+      <div className="section-card bg-white flex flex-col flex-1 overflow-hidden rounded-2xl ring-1 ring-slate-200 ring-inset border-0 shadow-sm min-h-0">
 
         {/* Table Filters Bar */}
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-50/30 flex-shrink-0">
@@ -294,7 +295,7 @@ const FollowUps = () => {
             </span>
             <input
               type="text"
-              className="form-input text-slate-700 bg-white font-semibold border-slate-200 hover:border-slate-300 transition text-xs py-2 shadow-sm rounded-lg"
+              className="form-input text-slate-700 bg-white font-semibold border-slate-200 hover:ring-slate-300 transition text-xs py-2 shadow-sm rounded-lg"
               style={{ paddingLeft: '32px' }}
               placeholder="Search by Patient name, ID, or condition..."
               value={searchQuery}
@@ -317,7 +318,7 @@ const FollowUps = () => {
                 key={tab}
                 onClick={() => setStatusFilter(tab)}
                 className={`text-xs py-1.5 px-3 rounded-md font-semibold transition flex-shrink-0 cursor-pointer ${statusFilter === tab
-                    ? 'bg-white text-primary-700 shadow-xs'
+                    ? 'bg-white text-primary-700 shadow-md hover:shadow-lg'
                     : 'text-slate-500 hover:text-slate-700'
                   }`}
               >
@@ -353,7 +354,7 @@ const FollowUps = () => {
                       {/* Patient profile column */}
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 text-[#810B38] font-bold flex items-center justify-center text-[10px]">
+                          <div className="w-8 h-8 rounded-full bg-slate-100 ring-1 ring-slate-200 ring-inset border-0 text-[#810B38] font-bold flex items-center justify-center text-[10px]">
                             {item.name.split(' ').map(n => n[0]).join('')}
                           </div>
                           <div>
@@ -407,7 +408,7 @@ const FollowUps = () => {
                           {/* Call Button */}
                           <button
                             onClick={() => handleCall(item.name, item.phone)}
-                            className="p-1.5 hover:bg-emerald-50 text-emerald-600 hover:text-emerald-700 rounded-lg cursor-pointer"
+                            className="p-1.5 hover:bg-emerald-50 text-lime-600 hover:text-emerald-700 rounded-lg cursor-pointer"
                             title="Call Patient"
                           >
                             <Phone size={13.5} />
@@ -607,6 +608,7 @@ const FollowUps = () => {
         </div>
       )}
 
+      </div>
     </div>
   );
 };

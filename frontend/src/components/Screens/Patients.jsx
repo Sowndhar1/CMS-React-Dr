@@ -240,7 +240,8 @@ const Patients = () => {
   const tableColWidths = { gridTemplateColumns: '40px 80px 2.2fr 0.7fr 1.4fr 1.4fr 2.2fr 1.6fr 1fr 1fr 1fr' };
 
   return (
-    <div className="screen-fade h-full overflow-hidden p-4 flex flex-col gap-4 bg-slate-50/50 min-h-0">
+    <div className="screen-fade h-full overflow-hidden p-2 bg-transparent min-h-0">
+      <div className="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 flex flex-col gap-4 h-full min-h-full overflow-hidden min-h-0">
       
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 flex-shrink-0">
@@ -983,6 +984,7 @@ const Patients = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

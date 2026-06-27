@@ -62,7 +62,8 @@ const Settings = () => {
   };
 
   return (
-    <div className="screen-fade h-full overflow-y-auto lg:overflow-hidden p-6 flex flex-col gap-6 bg-slate-50/50 min-h-0 relative select-none">
+    <div className="screen-fade h-full overflow-y-auto lg:overflow-hidden p-2 bg-transparent min-h-0 relative select-none">
+      <div className="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 flex flex-col gap-6 min-h-full lg:h-full lg:overflow-hidden lg:min-h-0">
       
       {/* Toast alert widget */}
       {showToast && (
@@ -82,7 +83,7 @@ const Settings = () => {
         </button>
         <div>
           <h1 className="text-base font-bold text-slate-800">Settings</h1>
-          <p className="text-[11px] text-slate-400 mt-0.5">Manage your medical clinic profile, parameters, and portal integrations</p>
+
         </div>
       </div>
 
@@ -307,6 +308,7 @@ const Settings = () => {
 
       </div>
 
+      </div>
     </div>
   );
 };

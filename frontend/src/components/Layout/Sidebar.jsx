@@ -1,5 +1,6 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
+import { useAuth } from '../../context/AuthContext';
 import {
   LayoutDashboard,
   Users,
@@ -15,13 +16,15 @@ import {
   HelpCircle,
   Headphones,
   ChevronRight,
-  QrCode
+  QrCode,
+  LogOut
 } from 'lucide-react';
 
 const Sidebar = () => {
   const { currentScreen, showScreen, isSidebarCollapsed } = useApp();
+  const { currentUser, logout, canAccess } = useAuth();
 
-  const navItems = [
+  const allNavItems = [
     { id: 'dashboard', name: 'Dashboard', icon: LayoutDashboard },
     { id: 'patients', name: 'Patients', icon: Users },
     { id: 'doctors', name: 'Doctors', icon: UserCircle },
@@ -35,6 +38,9 @@ const Sidebar = () => {
     { id: 'settings', name: 'Settings', icon: Settings }
   ];
 
+  // Filter nav items based on current user's role permissions
+  const navItems = allNavItems.filter((item) => canAccess(item.id));
+
   return (
     <aside 
       className={`fixed md:static inset-y-0 left-0 z-50 transition-all duration-300 ease-in-out ${
@@ -47,7 +53,8 @@ const Sidebar = () => {
         <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center flex-shrink-0 shadow-md">
           {/* White Cross Shield Icon */}
           <svg className="w-6 h-6 text-[#810B38]" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 h-2v-3H8v-2h3V8h2v3h3v2h-3v3z" />
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+            <path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7z" fill="white" />
           </svg>
         </div>
         {!isSidebarCollapsed && (
@@ -106,27 +113,41 @@ const Sidebar = () => {
         </div>
       )}
 
-      {/* Admin profile card */}
+      {/* User profile card + Logout */}
       <div className="p-3 border-t border-white/10 bg-[#541A1A]/40">
-        <div className={`flex items-center ${isSidebarCollapsed ? 'justify-center sidebar-tooltip' : 'gap-2.5 p-0.5'} rounded-xl hover:bg-white/10 cursor-pointer`}
-             data-tip={isSidebarCollapsed ? "Admin (System Admin)" : undefined}>
+        <div className={`flex items-center ${isSidebarCollapsed ? 'justify-center sidebar-tooltip' : 'gap-2.5 p-0.5'} rounded-xl`}
+             data-tip={isSidebarCollapsed ? `${currentUser?.name} (${currentUser?.specialty})` : undefined}>
           <img 
-            src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&h=150&q=80" 
-            alt="Admin" 
+            src={currentUser?.avatar || 'https://api.dicebear.com/7.x/notionists/svg?seed=User&backgroundColor=f1f5f9'}
+            alt={currentUser?.name}
             className="w-9 h-9 rounded-full border border-white/20 object-cover flex-shrink-0"
           />
           {!isSidebarCollapsed && (
             <>
               <div className="flex-1 min-w-0 animate-fadeIn text-left">
-                <div className="text-xs font-bold text-white leading-tight">Admin</div>
-                <div className="text-[10px] text-[#F1E2D1]/75 truncate mt-0.5">System Admin</div>
+                <div className="text-xs font-bold text-white leading-tight truncate">{currentUser?.name}</div>
+                <div className="text-[10px] text-[#F1E2D1]/75 truncate mt-0.5">{currentUser?.specialty}</div>
               </div>
-              <svg className="w-3.5 h-3.5 text-[#F1E2D1]/60 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-              </svg>
+              <button
+                onClick={logout}
+                title="Sign out"
+                className="flex-shrink-0 p-1.5 rounded-lg hover:bg-white/15 text-[#F1E2D1]/70 hover:text-white transition-all duration-150 cursor-pointer"
+              >
+                <LogOut size={13} />
+              </button>
             </>
           )}
         </div>
+        {/* Logout icon when collapsed */}
+        {isSidebarCollapsed && (
+          <button
+            onClick={logout}
+            title="Sign out"
+            className="mt-2 w-full flex items-center justify-center p-2 rounded-lg hover:bg-white/15 text-[#F1E2D1]/70 hover:text-white transition-all duration-150 cursor-pointer"
+          >
+            <LogOut size={13} />
+          </button>
+        )}
       </div>
     </aside>
   );

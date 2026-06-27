@@ -3,16 +3,12 @@ import { useApp } from '../../context/AppContext';
 import {
   FileText,
   Calendar,
-  Lock,
-  Download,
   ChevronRight,
   ClipboardList,
-  FlaskConical,
   Receipt,
   User,
   Activity,
   CheckCircle,
-  QrCode,
   Shield,
   Smartphone,
   Wifi,
@@ -70,8 +66,6 @@ const PatientPortal = () => {
   const patient = selectedPatient || patients[0];
 
   // State Variables
-  const [simulatorTab, setSimulatorTab] = useState('whatsapp'); // 'whatsapp', 'mobile', 'qr'
-  const [portalTab, setPortalTab] = useState('appointments'); // 'appointments', 'labs', 'billing'
   const [selectedTemplateId, setSelectedTemplateId] = useState('portal_access');
   const [userEditedText, setUserEditedText] = useState(null);
   const [customSentMessages, setCustomSentMessages] = useState([]);
@@ -154,10 +148,10 @@ const PatientPortal = () => {
 
   // Auto-scroll chat to bottom when custom message is added
   useEffect(() => {
-    if (simulatorTab === 'whatsapp' && chatContainerRef.current) {
+    if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
-  }, [customSentMessages, simulatorTab]);
+  }, [customSentMessages]);
 
   // Toast notifier helper
   const triggerToast = (msg) => {
@@ -235,7 +229,6 @@ const PatientPortal = () => {
   const selectTemplate = (templateId) => {
     setSelectedTemplateId(templateId);
     setUserEditedText(null); // Reset user edits to load the chosen template
-    setSimulatorTab('whatsapp'); // Switch simulator to WhatsApp to preview the template
   };
 
   const handleTextareaChange = (e) => {
@@ -246,7 +239,8 @@ const PatientPortal = () => {
   const patientAppointments = appointments.filter(a => a.patientId === patient.id);
 
   return (
-    <div className="screen-fade h-full p-4 md:p-6 flex flex-col gap-6 bg-slate-50/50 min-h-0 relative select-none portal-screen-container">
+    <div className="screen-fade h-full p-2 bg-transparent min-h-0 relative select-none portal-screen-container">
+      <div className="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 flex flex-col gap-6 min-h-full overflow-y-auto">
       
       {/* Toast alert widget */}
       {toastMessage && (
@@ -379,20 +373,13 @@ const PatientPortal = () => {
               </button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button 
                 onClick={handleCopyLink}
                 className="py-2.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-650 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
               >
                 <Copy size={13} />
                 <span>Copy Link</span>
-              </button>
-              <button 
-                onClick={() => setSimulatorTab('qr')}
-                className="py-2.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-650 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-              >
-                <QrCode size={13} />
-                <span>Generate QR</span>
               </button>
               <button 
                 onClick={handleSendWhatsApp}
@@ -404,171 +391,64 @@ const PatientPortal = () => {
             </div>
           </div>
 
-          {/* Sub-grid: QR Access and WhatsApp Composer */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 flex-shrink-0">
-            
-            {/* Box 1: QR Code Access */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 flex flex-col items-center text-center gap-4.5">
-              <div className="w-full flex items-center gap-2 text-left self-start">
-                <QrCode size={15} className="text-slate-450" />
-                <span className="text-[10px] font-bold text-slate-800 uppercase tracking-wider">QR Code Access</span>
-              </div>
-              
-              {/* Premium drawn QR Code vector representation */}
-              <div className="p-3 bg-white border border-slate-200 rounded-2xl shadow-inner flex items-center justify-center w-fit select-none">
-                <svg viewBox="0 0 100 100" className="w-28 h-28 text-slate-800">
-                  {/* Position detection corners */}
-                  <rect x="0" y="0" width="30" height="30" fill="currentColor" rx="2" />
-                  <rect x="5" y="5" width="20" height="20" fill="white" rx="1" />
-                  <rect x="10" y="10" width="10" height="10" fill="currentColor" rx="1" />
-                  
-                  <rect x="70" y="0" width="30" height="30" fill="currentColor" rx="2" />
-                  <rect x="75" y="5" width="20" height="20" fill="white" rx="1" />
-                  <rect x="80" y="10" width="10" height="10" fill="currentColor" rx="1" />
-                  
-                  <rect x="0" y="70" width="30" height="30" fill="currentColor" rx="2" />
-                  <rect x="5" y="75" width="20" height="20" fill="white" rx="1" />
-                  <rect x="10" y="80" width="10" height="10" fill="currentColor" rx="1" />
-
-                  <rect x="75" y="75" width="10" height="10" fill="currentColor" rx="1" />
-                  <rect x="78" y="78" width="4" height="4" fill="white" />
-                  
-                  {/* Styled QR Blocks */}
-                  <rect x="35" y="0" width="5" height="5" fill="currentColor" />
-                  <rect x="45" y="0" width="10" height="5" fill="currentColor" />
-                  <rect x="60" y="5" width="5" height="10" fill="currentColor" />
-                  <rect x="35" y="15" width="15" height="5" fill="currentColor" />
-                  <rect x="55" y="15" width="5" height="5" fill="currentColor" />
-                  <rect x="35" y="25" width="5" height="10" fill="currentColor" />
-                  <rect x="45" y="25" width="15" height="5" fill="currentColor" />
-                  
-                  <rect x="0" y="35" width="5" height="15" fill="currentColor" />
-                  <rect x="10" y="35" width="10" height="5" fill="currentColor" />
-                  <rect x="25" y="35" width="15" height="10" fill="currentColor" />
-                  <rect x="45" y="35" width="5" height="5" fill="currentColor" />
-                  <rect x="55" y="30" width="10" height="10" fill="currentColor" />
-                  <rect x="70" y="35" width="15" height="5" fill="currentColor" />
-                  <rect x="90" y="35" width="10" height="15" fill="currentColor" />
-                  
-                  <rect x="5" y="55" width="15" height="5" fill="currentColor" />
-                  <rect x="25" y="50" width="5" height="15" fill="currentColor" />
-                  <rect x="35" y="50" width="20" height="5" fill="currentColor" />
-                  <rect x="60" y="50" width="5" height="5" fill="currentColor" />
-                  <rect x="70" y="45" width="10" height="15" fill="currentColor" />
-                  
-                  <rect x="35" y="60" width="5" height="20" fill="currentColor" />
-                  <rect x="45" y="65" width="15" height="5" fill="currentColor" />
-                  <rect x="55" y="60" width="10" height="15" fill="currentColor" />
-                  <rect x="75" y="60" width="5" height="5" fill="currentColor" />
-                  <rect x="85" y="55" width="15" height="10" fill="currentColor" />
-                  
-                  <rect x="90" y="70" width="5" height="15" fill="currentColor" />
-                  <rect x="45" y="80" width="20" height="5" fill="currentColor" />
-                  <rect x="70" y="85" width="5" height="10" fill="currentColor" />
-                  <rect x="80" y="80" width="10" height="5" fill="currentColor" />
-                  <rect x="35" y="90" width="25" height="5" fill="currentColor" />
-                </svg>
-              </div>
-
-              <button 
-                onClick={handleDownloadQR}
-                className="w-full py-2.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-650 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-              >
-                <Download size={13} />
-                <span>Download QR Code</span>
-              </button>
+          {/* WhatsApp Message Composer */}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <MessageSquare size={15} className="text-[#810B38]" />
+              <span className="text-[10px] font-bold text-slate-800 uppercase tracking-wider">WhatsApp Message</span>
             </div>
 
-            {/* Box 2: WhatsApp Composer */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 flex flex-col gap-3">
-              <div className="flex items-center gap-2">
-                <MessageSquare size={15} className="text-[#810B38]" />
-                <span className="text-[10px] font-bold text-slate-800 uppercase tracking-wider">WhatsApp Message</span>
-              </div>
-
-              <div>
-                <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Select Message Type</label>
-                <select
-                  value={selectedTemplateId}
-                  onChange={(e) => selectTemplate(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-700 font-bold focus:outline-none focus:border-[#810B38] focus:bg-white transition-all cursor-pointer"
-                >
-                  <option value="portal_access">Portal Access Link</option>
-                  <option value="appointment">Appointment Confirm</option>
-                  <option value="followup">Follow-up Reminder</option>
-                  <option value="report">Lab Report Ready</option>
-                  <option value="payment">Payment Invoice Alert</option>
-                  <option value="custom">Custom Text Message</option>
-                </select>
-              </div>
-
-              <div className="flex-1 flex flex-col min-h-[120px]">
-                <textarea
-                  value={messageText}
-                  onChange={handleTextareaChange}
-                  placeholder="Enter message text here..."
-                  className="w-full flex-grow bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-650 focus:outline-none focus:border-[#810B38] focus:bg-white leading-relaxed resize-none h-[120px] scrollbar-thin"
-                />
-              </div>
-
-              <button
-                onClick={handleSendWhatsApp}
-                disabled={isSending}
-                className="w-full py-2.5 bg-[#810B38] hover:bg-[#6b092e] text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs disabled:opacity-50 disabled:cursor-not-allowed"
+            <div>
+              <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Select Message Type</label>
+              <select
+                value={selectedTemplateId}
+                onChange={(e) => selectTemplate(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-700 font-bold focus:outline-none focus:border-[#810B38] focus:bg-white transition-all cursor-pointer"
               >
-                <Send size={12} className={isSending ? 'animate-bounce' : ''} />
-                <span>{isSending ? 'Sending message...' : 'Send via WhatsApp'}</span>
-              </button>
+                <option value="portal_access">Portal Access Link</option>
+                <option value="appointment">Appointment Confirm</option>
+                <option value="followup">Follow-up Reminder</option>
+                <option value="report">Lab Report Ready</option>
+                <option value="payment">Payment Invoice Alert</option>
+                <option value="custom">Custom Text Message</option>
+              </select>
             </div>
 
+            <div className="flex-grow flex flex-col min-h-[140px]">
+              <textarea
+                value={messageText}
+                onChange={handleTextareaChange}
+                placeholder="Enter message text here..."
+                className="w-full flex-grow bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-650 focus:outline-none focus:border-[#810B38] focus:bg-white leading-relaxed resize-none h-[140px] scrollbar-thin"
+              />
+            </div>
+
+            <button
+              onClick={handleSendWhatsApp}
+              disabled={isSending}
+              className="w-full py-2.5 bg-[#810B38] hover:bg-[#6b092e] text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Send size={12} className={isSending ? 'animate-bounce' : ''} />
+              <span>{isSending ? 'Sending message...' : 'Send via WhatsApp'}</span>
+            </button>
           </div>
 
         </div>
 
         {/* Center Area: Smart Device Simulator (4 cols) */}
-        <div className="lg:col-span-4 flex flex-col items-center bg-slate-100 rounded-3xl border border-slate-200 shadow-inner p-4 relative min-h-[550px] justify-between">
+        <div className="lg:col-span-4 flex flex-col bg-white rounded-3xl border border-slate-200 shadow-xs p-5 min-h-[550px]">
           
-          {/* Header Tab Bar */}
-          <div className="flex items-center bg-white border border-slate-200 rounded-xl p-1 shadow-xs w-full max-w-[290px] flex-shrink-0 z-10">
-            <button 
-              onClick={() => setSimulatorTab('mobile')}
-              className={`flex-1 py-1.5 px-2.5 rounded-lg text-[10px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer ${
-                simulatorTab === 'mobile' 
-                  ? 'bg-[#FAF5F0] text-[#810B38] shadow-xs' 
-                  : 'text-slate-500 hover:text-slate-800'
-              }`}
-            >
-              <Smartphone size={11} />
-              <span>Mobile Portal</span>
-            </button>
-            
-            <button 
-              onClick={() => setSimulatorTab('whatsapp')}
-              className={`flex-1 py-1.5 px-2.5 rounded-lg text-[10px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer ${
-                simulatorTab === 'whatsapp' 
-                  ? 'bg-[#FAF5F0] text-[#810B38] shadow-xs' 
-                  : 'text-slate-500 hover:text-slate-800'
-              }`}
-            >
-              <MessageSquare size={11} />
-              <span>WhatsApp</span>
-            </button>
-
-            <button 
-              onClick={() => setSimulatorTab('qr')}
-              className={`flex-1 py-1.5 px-2.5 rounded-lg text-[10px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer ${
-                simulatorTab === 'qr' 
-                  ? 'bg-[#FAF5F0] text-[#810B38] shadow-xs' 
-                  : 'text-slate-500 hover:text-slate-800'
-              }`}
-            >
-              <QrCode size={11} />
-              <span>QR View</span>
-            </button>
+          {/* Header */}
+          <div className="w-full flex items-center justify-between border-b border-slate-100 pb-3 mb-4 flex-shrink-0">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="text-[10px] font-extrabold text-slate-800 uppercase tracking-wider">WhatsApp Live Preview</span>
+            </div>
+            <span className="text-[9px] bg-slate-100 text-slate-500 font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">Live Preview</span>
           </div>
 
           {/* Smartphone Container Mockup */}
-          <div className="relative w-[300px] h-[550px] bg-slate-950 rounded-[44px] shadow-2xl border-[10px] border-slate-900 flex flex-col overflow-hidden ring-[4px] ring-slate-800 ring-offset-4 ring-offset-slate-100 flex-shrink-0 mt-4 mb-2">
+          <div className="mx-auto relative w-[280px] sm:w-[300px] h-[500px] bg-slate-950 rounded-[44px] shadow-2xl border-[10px] border-slate-900 flex flex-col overflow-hidden ring-[4px] ring-slate-800 ring-offset-4 ring-offset-slate-100 flex-shrink-0">
             
             {/* Dynamic Island */}
             <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-24 h-5 bg-black rounded-full z-50 flex items-center justify-center">
@@ -588,363 +468,108 @@ const PatientPortal = () => {
             {/* Simulated Display Screen Container */}
             <div className="flex-grow bg-slate-50 flex flex-col overflow-hidden relative">
               
-              {/* TAB 1: WhatsApp Screen */}
-              {simulatorTab === 'whatsapp' && (
-                <div className="flex flex-col h-full bg-[#efeae2]">
-                  {/* WhatsApp Chat Header */}
-                  <div className="bg-[#075e54] text-white py-2 px-3 flex items-center gap-2 flex-shrink-0 shadow-sm pt-2">
-                    <span className="text-[10px] opacity-75">◀</span>
-                    
-                    {/* Clinic Avatar */}
-                    <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-[#075e54] font-black text-xs shadow-inner flex-shrink-0">
-                      CMS
-                    </div>
-                    
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-1">
-                        <span className="text-[10px] font-black leading-none truncate">CMS Clinic</span>
-                        {/* Verified badge */}
-                        <div className="w-3 h-3 bg-emerald-500 rounded-full flex items-center justify-center text-white scale-[0.75]">
-                          <Check size={9} strokeWidth={4} />
-                        </div>
+              <div className="flex flex-col h-full bg-[#efeae2]">
+                {/* WhatsApp Chat Header */}
+                <div className="bg-[#075e54] text-white py-2 px-3 flex items-center gap-2 flex-shrink-0 shadow-sm pt-2">
+                  <span className="text-[10px] opacity-75">◀</span>
+                  
+                  {/* Clinic Avatar */}
+                  <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-[#075e54] font-black text-xs shadow-inner flex-shrink-0">
+                    CMS
+                  </div>
+                  
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1">
+                      <span className="text-[10px] font-black leading-none truncate">CMS Clinic</span>
+                      {/* Verified badge */}
+                      <div className="w-3 h-3 bg-emerald-500 rounded-full flex items-center justify-center text-white scale-[0.75]">
+                        <Check size={9} strokeWidth={4} />
                       </div>
-                      <p className="text-[8px] opacity-75 mt-0.5 leading-none">online</p>
                     </div>
+                    <p className="text-[8px] opacity-75 mt-0.5 leading-none">online</p>
+                  </div>
 
-                    <div className="flex items-center gap-3 text-white/90">
-                      <span className="text-[10px] cursor-pointer">📞</span>
-                      <span className="text-[10px] cursor-pointer">⋮</span>
+                  <div className="flex items-center gap-3 text-white/90">
+                    <span className="text-[10px] cursor-pointer">📞</span>
+                    <span className="text-[10px] cursor-pointer">⋮</span>
+                  </div>
+                </div>
+
+                {/* Scrollable WhatsApp Chat logs container */}
+                <div 
+                  ref={chatContainerRef}
+                  className="flex-grow overflow-y-auto p-3 space-y-3 relative"
+                  style={{
+                    backgroundImage: `url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')`,
+                    backgroundSize: 'cover',
+                  }}
+                >
+                  <div className="flex justify-center select-none">
+                    <span className="bg-white/80 backdrop-blur-xs text-slate-500 text-[8px] font-black px-2 py-0.5 rounded shadow-xs uppercase tracking-wider">Today</span>
+                  </div>
+
+                  {/* Sent Template Message bubble */}
+                  <div className="flex justify-start animate-fadeIn">
+                    <div className="bg-white text-slate-800 text-[10px] rounded-xl rounded-tl-none p-2.5 max-w-[85%] shadow-xs relative leading-relaxed whitespace-pre-wrap animate-fadeIn">
+                      {messageText}
+                      <div className="text-right text-[7.5px] text-slate-400 mt-1 select-none">10:24 AM</div>
                     </div>
                   </div>
 
-                  {/* Scrollable WhatsApp Chat logs container */}
-                  <div 
-                    ref={chatContainerRef}
-                    className="flex-grow overflow-y-auto p-3 space-y-3 relative"
-                    style={{
-                      backgroundImage: `url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')`,
-                      backgroundSize: 'cover',
-                    }}
-                  >
-                    <div className="flex justify-center select-none">
-                      <span className="bg-white/80 backdrop-blur-xs text-slate-500 text-[8px] font-black px-2 py-0.5 rounded shadow-xs uppercase tracking-wider">Today</span>
-                    </div>
-
-                    {/* Sent Template Message bubble */}
-                    <div className="flex justify-start animate-fadeIn">
-                      <div className="bg-white text-slate-800 text-[10px] rounded-xl rounded-tl-none p-2.5 max-w-[85%] shadow-xs relative leading-relaxed whitespace-pre-wrap">
-                        {messageText}
-                        <div className="text-right text-[7.5px] text-slate-400 mt-1 select-none">10:24 AM</div>
+                  {/* Patient Reply bubble */}
+                  <div className="flex justify-end">
+                    <div className="bg-[#d9fdd3] text-slate-800 text-[10px] rounded-xl rounded-tr-none p-2.5 max-w-[85%] shadow-xs relative leading-relaxed">
+                      Hi, Thank you!
+                      <div className="text-right text-[7.5px] text-slate-400 mt-1 flex items-center justify-end gap-0.5 select-none">
+                        <span>10:25 AM</span>
+                        <CheckCheck size={10} className="text-[#53bdeb]" />
                       </div>
                     </div>
+                  </div>
 
-                    {/* Patient Reply bubble */}
-                    <div className="flex justify-end">
-                      <div className="bg-[#d9fdd3] text-slate-800 text-[10px] rounded-xl rounded-tr-none p-2.5 max-w-[85%] shadow-xs relative leading-relaxed">
-                        Hi, Thank you!
+                  {/* Secondary system follow up */}
+                  <div className="flex justify-start">
+                    <div className="bg-white text-slate-800 text-[10px] rounded-xl rounded-tl-none p-2.5 max-w-[85%] shadow-xs relative leading-relaxed">
+                      Your appointment is confirmed for <span className="font-bold">16 July 2026 at 10:30 AM</span> with Dr. Rajan. See you soon!
+                      <div className="text-right text-[7.5px] text-slate-400 mt-1 select-none">10:26 AM</div>
+                    </div>
+                  </div>
+
+                  {/* Custom appends */}
+                  {customSentMessages.map((msg, idx) => (
+                    <div key={idx} className="flex justify-start animate-fadeIn">
+                      <div className="bg-white text-slate-800 text-[10px] rounded-xl rounded-tl-none p-2.5 max-w-[85%] shadow-xs relative leading-relaxed whitespace-pre-wrap">
+                        {msg.text}
                         <div className="text-right text-[7.5px] text-slate-400 mt-1 flex items-center justify-end gap-0.5 select-none">
-                          <span>10:25 AM</span>
+                          <span>{msg.time}</span>
                           <CheckCheck size={10} className="text-[#53bdeb]" />
                         </div>
                       </div>
                     </div>
-
-                    {/* Secondary system follow up */}
-                    <div className="flex justify-start">
-                      <div className="bg-white text-slate-800 text-[10px] rounded-xl rounded-tl-none p-2.5 max-w-[85%] shadow-xs relative leading-relaxed">
-                        Your appointment is confirmed for <span className="font-bold">16 July 2026 at 10:30 AM</span> with Dr. Rajan. See you soon!
-                        <div className="text-right text-[7.5px] text-slate-400 mt-1 select-none">10:26 AM</div>
-                      </div>
-                    </div>
-
-                    {/* Custom appends */}
-                    {customSentMessages.map((msg, idx) => (
-                      <div key={idx} className="flex justify-start animate-fadeIn">
-                        <div className="bg-white text-slate-800 text-[10px] rounded-xl rounded-tl-none p-2.5 max-w-[85%] shadow-xs relative leading-relaxed whitespace-pre-wrap">
-                          {msg.text}
-                          <div className="text-right text-[7.5px] text-slate-400 mt-1 flex items-center justify-end gap-0.5 select-none">
-                            <span>{msg.time}</span>
-                            <CheckCheck size={10} className="text-[#53bdeb]" />
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* WhatsApp input bar */}
-                  <div className="bg-[#f0f2f5] p-2 flex items-center gap-2 flex-shrink-0">
-                    <div className="flex-1 bg-white rounded-full flex items-center px-3.5 py-1.5 shadow-xs gap-2 min-w-0">
-                      <span className="text-[10px] text-slate-400">😊</span>
-                      <input 
-                        type="text" 
-                        placeholder="Type a message" 
-                        readOnly
-                        className="w-full text-[9.5px] text-slate-700 bg-transparent outline-none pointer-events-none select-none"
-                      />
-                      <Paperclip size={10} className="text-slate-400 flex-shrink-0" />
-                      <Camera size={10} className="text-slate-400 flex-shrink-0" />
-                    </div>
-                    <button 
-                      onClick={handleSendWhatsApp}
-                      className="w-8 h-8 rounded-full bg-[#00a884] hover:bg-[#008f72] text-white flex items-center justify-center flex-shrink-0 shadow-xs cursor-pointer"
-                    >
-                      <Send size={11} className="ml-0.5" />
-                    </button>
-                  </div>
+                  ))}
                 </div>
-              )}
 
-              {/* TAB 2: Mobile Patient Portal Web Simulator */}
-              {simulatorTab === 'mobile' && (
-                <div className="flex flex-col h-full bg-slate-50 overflow-y-auto pb-6">
-                  
-                  {/* Redesigned Portal App Header */}
-                  <div className="bg-[#810B38] text-white p-4 pt-3 flex flex-col gap-3.5 flex-shrink-0">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5">
-                        <Lock size={10} className="text-[#FAF5F0]/80" />
-                        <span className="text-[8px] font-black tracking-widest text-[#FAF5F0]/80 uppercase">Secure Patient Link</span>
-                      </div>
-                      <span className="text-[8px] bg-white/15 px-2 py-0.5 rounded-full font-bold text-[#FAF5F0]">v1.2.4</span>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center font-bold text-xs shadow-inner">
-                        {patient.name ? patient.name.split(' ').map(n => n[0]).join('') : 'P'}
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-bold text-white leading-tight truncate max-w-[180px]">{patient.name}</h4>
-                        <p className="text-[9px] text-[#FAF5F0]/80 mt-1 font-semibold">ID: {patient.id} · Blood: {patient.bloodGroup}</p>
-                      </div>
-                    </div>
+                {/* WhatsApp input bar */}
+                <div className="bg-[#f0f2f5] p-2 flex items-center gap-2 flex-shrink-0">
+                  <div className="flex-1 bg-white rounded-full flex items-center px-3.5 py-1.5 shadow-xs gap-2 min-w-0">
+                    <span className="text-[10px] text-slate-400">😊</span>
+                    <input 
+                      type="text" 
+                      placeholder="Type a message" 
+                      readOnly
+                      className="w-full text-[9.5px] text-slate-700 bg-transparent outline-none pointer-events-none select-none"
+                    />
+                    <Paperclip size={10} className="text-slate-400 flex-shrink-0" />
+                    <Camera size={10} className="text-slate-400 flex-shrink-0" />
                   </div>
-
-                  {/* Navigation Sub-Tabs */}
-                  <div className="flex bg-white border-b border-slate-200 flex-shrink-0">
-                    <button 
-                      onClick={() => setPortalTab('appointments')}
-                      className={`flex-1 py-2.5 flex flex-col items-center gap-0.5 border-b-2 text-[9px] font-black transition-all cursor-pointer ${
-                        portalTab === 'appointments' 
-                          ? 'border-[#810B38] text-[#810B38] bg-[#FAF5F0]/20' 
-                          : 'border-transparent text-slate-400 hover:text-slate-700'
-                      }`}
-                    >
-                      <Calendar size={11} />
-                      <span>Visits</span>
-                    </button>
-                    
-                    <button 
-                      onClick={() => setPortalTab('labs')}
-                      className={`flex-1 py-2.5 flex flex-col items-center gap-0.5 border-b-2 text-[9px] font-black transition-all cursor-pointer ${
-                        portalTab === 'labs' 
-                          ? 'border-[#810B38] text-[#810B38] bg-[#FAF5F0]/20' 
-                          : 'border-transparent text-slate-400 hover:text-slate-700'
-                      }`}
-                    >
-                      <FlaskConical size={11} />
-                      <span>Lab Reports</span>
-                    </button>
-
-                    <button 
-                      onClick={() => setPortalTab('billing')}
-                      className={`flex-1 py-2.5 flex flex-col items-center gap-0.5 border-b-2 text-[9px] font-black transition-all cursor-pointer ${
-                        portalTab === 'billing' 
-                          ? 'border-[#810B38] text-[#810B38] bg-[#FAF5F0]/20' 
-                          : 'border-transparent text-slate-400 hover:text-slate-700'
-                      }`}
-                    >
-                      <Receipt size={11} />
-                      <span>Billing</span>
-                    </button>
-                  </div>
-
-                  {/* Portal Tab Details */}
-                  <div className="p-3.5 flex-1 min-h-0">
-                    
-                    {/* Portal: Visits */}
-                    {portalTab === 'appointments' && (
-                      <div className="space-y-3">
-                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Upcoming Appointment</span>
-                        
-                        <div className="bg-white rounded-xl border border-[#DCC3AA]/50 p-3 shadow-xs flex items-center justify-between gap-3">
-                          <div className="min-w-0">
-                            <span className="text-[7.5px] font-bold uppercase text-[#810B38] bg-[#FAF5F0] border border-[#DCC3AA]/20 px-2 py-0.5 rounded-full">Confirmed</span>
-                            <h5 className="text-[10px] font-black text-slate-800 mt-2 truncate">General Consultation</h5>
-                            <p className="text-[8.5px] text-slate-400 mt-0.5 font-semibold">Dr. Rajan Kumar</p>
-                            <p className="text-[8px] text-slate-400 mt-0.5 truncate">OPD-2, Kolkata Clinic</p>
-                          </div>
-                          
-                          <div className="text-center bg-[#810B38] text-white rounded-lg p-1.5 min-w-[50px] shadow-sm flex-shrink-0 flex flex-col justify-center select-none">
-                            <p className="text-[7.5px] font-bold uppercase leading-none">July</p>
-                            <p className="text-xs font-black mt-0.5 leading-none">16</p>
-                            <p className="text-[7px] font-bold mt-0.5 leading-none opacity-85">10:30 AM</p>
-                          </div>
-                        </div>
-
-                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block pt-2">Visit History</span>
-                        
-                        <div className="bg-white rounded-xl border border-slate-200/50 p-3 shadow-xs space-y-2">
-                          {patientAppointments.length > 0 ? (
-                            patientAppointments.map((apt) => (
-                              <div key={apt.id} className="flex items-center justify-between text-[9px] py-1 border-b border-slate-50 last:border-0 last:pb-0">
-                                <div>
-                                  <p className="font-bold text-slate-700">{apt.reason}</p>
-                                  <p className="text-[8px] text-slate-400">{apt.doctor} · {apt.date}</p>
-                                </div>
-                                <span className={`badge ${
-                                  apt.status === 'Completed' ? 'badge-green' : 'badge-amber'
-                                } text-[7.5px] py-0.2 px-1.5`}>
-                                  {apt.status}
-                                </span>
-                              </div>
-                            ))
-                          ) : (
-                            <div className="text-center py-2 text-[8.5px] text-slate-400 font-semibold">No past records available.</div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Portal: Labs */}
-                    {portalTab === 'labs' && (
-                      <div className="space-y-2.5">
-                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Lab Records</span>
-                        {patient.labs && patient.labs.length > 0 ? (
-                          patient.labs.map((lab, index) => (
-                            <div key={index} className="bg-white rounded-xl border border-slate-200/50 p-2.5 shadow-xs flex items-center justify-between gap-3">
-                              <div className="flex items-center gap-2 min-w-0">
-                                <div className="w-8 h-8 rounded-lg bg-rose-50 border border-rose-100 flex items-center justify-center text-[#810B38] flex-shrink-0">
-                                  <FlaskConical size={13} />
-                                </div>
-                                <div className="min-w-0">
-                                  <p className="text-[9.5px] font-bold text-slate-700 truncate">{lab.name}</p>
-                                  <p className="text-[7.5px] text-slate-400 font-semibold mt-0.5">
-                                    Date: {lab.received} · <span className="text-emerald-600 font-bold">{lab.status}</span>
-                                  </p>
-                                </div>
-                              </div>
-                              <button 
-                                onClick={() => triggerToast(`Downloading report: ${lab.name}`)}
-                                className="w-7 h-7 rounded-lg bg-[#FAF5F0] border border-[#DCC3AA]/30 text-[#810B38] flex items-center justify-center hover:bg-[#F1E2D1] flex-shrink-0 cursor-pointer"
-                              >
-                                <Download size={10} />
-                              </button>
-                            </div>
-                          ))
-                        ) : (
-                          <div className="text-center py-12 bg-white rounded-xl border border-slate-200/50 text-[9px] text-slate-400 font-bold">
-                            No lab documents released.
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Portal: Billing */}
-                    {portalTab === 'billing' && (
-                      <div className="space-y-2.5">
-                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Payment Accounts</span>
-                        {patient.billingHistory && patient.billingHistory.length > 0 ? (
-                          patient.billingHistory.map((bill, index) => (
-                            <div key={index} className="bg-white rounded-xl border border-slate-200/50 p-2.5 shadow-xs flex flex-col gap-2">
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-1.5">
-                                  <span className="text-[9.5px] font-bold text-slate-700">{bill.id}</span>
-                                  <span className="text-[7px] bg-emerald-50 text-emerald-600 border border-emerald-200 px-1 py-0.2 rounded-full font-bold">Paid</span>
-                                </div>
-                                <span className="text-[10px] font-black text-slate-800">₹{bill.amount}</span>
-                              </div>
-                              <div className="flex justify-between items-center border-t border-slate-50 pt-1.5 text-[8px] text-slate-400 font-semibold">
-                                <span>Date: {bill.date}</span>
-                                <button 
-                                  onClick={() => triggerToast(`Showing printable receipt for ${bill.id}`)}
-                                  className="text-[8px] font-bold text-[#810B38] hover:underline cursor-pointer"
-                                >
-                                  Receipt
-                                </button>
-                              </div>
-                            </div>
-                          ))
-                        ) : (
-                          <div className="text-center py-12 bg-white rounded-xl border border-slate-200/50 text-[9px] text-slate-400 font-bold">
-                            No billing invoice statements.
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                  </div>
-
+                  <button 
+                    onClick={handleSendWhatsApp}
+                    className="w-8 h-8 rounded-full bg-[#00a884] hover:bg-[#008f72] text-white flex items-center justify-center flex-shrink-0 shadow-xs cursor-pointer"
+                  >
+                    <Send size={11} className="ml-0.5" />
+                  </button>
                 </div>
-              )}
-
-              {/* TAB 3: QR Code Simulator View */}
-              {simulatorTab === 'qr' && (
-                <div className="flex flex-col h-full bg-white items-center justify-center p-6 text-center gap-5">
-                  <span className="text-[10px] font-black text-[#810B38] bg-rose-50 border border-rose-100 rounded-full px-3 py-1 uppercase tracking-wider">QR Mobile Gateway</span>
-                  
-                  <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl shadow-inner flex items-center justify-center select-none animate-pulse">
-                    <svg viewBox="0 0 100 100" className="w-40 h-40 text-slate-800">
-                      {/* Detailed QR vectors */}
-                      <rect x="0" y="0" width="30" height="30" fill="currentColor" rx="2" />
-                      <rect x="5" y="5" width="20" height="20" fill="white" rx="1" />
-                      <rect x="10" y="10" width="10" height="10" fill="currentColor" rx="1" />
-                      
-                      <rect x="70" y="0" width="30" height="30" fill="currentColor" rx="2" />
-                      <rect x="75" y="5" width="20" height="20" fill="white" rx="1" />
-                      <rect x="80" y="10" width="10" height="10" fill="currentColor" rx="1" />
-                      
-                      <rect x="0" y="70" width="30" height="30" fill="currentColor" rx="2" />
-                      <rect x="5" y="75" width="20" height="20" fill="white" rx="1" />
-                      <rect x="10" y="80" width="10" height="10" fill="currentColor" rx="1" />
-
-                      <rect x="75" y="75" width="10" height="10" fill="currentColor" rx="1" />
-                      <rect x="78" y="78" width="4" height="4" fill="white" />
-                      
-                      <rect x="35" y="0" width="5" height="5" fill="currentColor" />
-                      <rect x="45" y="0" width="10" height="5" fill="currentColor" />
-                      <rect x="60" y="5" width="5" height="10" fill="currentColor" />
-                      <rect x="35" y="15" width="15" height="5" fill="currentColor" />
-                      <rect x="55" y="15" width="5" height="5" fill="currentColor" />
-                      <rect x="35" y="25" width="5" height="10" fill="currentColor" />
-                      <rect x="45" y="25" width="15" height="5" fill="currentColor" />
-                      
-                      <rect x="0" y="35" width="5" height="15" fill="currentColor" />
-                      <rect x="10" y="35" width="10" height="5" fill="currentColor" />
-                      <rect x="25" y="35" width="15" height="10" fill="currentColor" />
-                      <rect x="45" y="35" width="5" height="5" fill="currentColor" />
-                      <rect x="55" y="30" width="10" height="10" fill="currentColor" />
-                      <rect x="70" y="35" width="15" height="5" fill="currentColor" />
-                      <rect x="90" y="35" width="10" height="15" fill="currentColor" />
-                      
-                      <rect x="5" y="55" width="15" height="5" fill="currentColor" />
-                      <rect x="25" y="50" width="5" height="15" fill="currentColor" />
-                      <rect x="35" y="50" width="20" height="5" fill="currentColor" />
-                      <rect x="60" y="50" width="5" height="5" fill="currentColor" />
-                      <rect x="70" y="45" width="10" height="15" fill="currentColor" />
-                      
-                      <rect x="35" y="60" width="5" height="20" fill="currentColor" />
-                      <rect x="45" y="65" width="15" height="5" fill="currentColor" />
-                      <rect x="55" y="60" width="10" height="15" fill="currentColor" />
-                      <rect x="75" y="60" width="5" height="5" fill="currentColor" />
-                      <rect x="85" y="55" width="15" height="10" fill="currentColor" />
-                      
-                      <rect x="90" y="70" width="5" height="15" fill="currentColor" />
-                      <rect x="45" y="80" width="20" height="5" fill="currentColor" />
-                      <rect x="70" y="85" width="5" height="10" fill="currentColor" />
-                      <rect x="80" y="80" width="10" height="5" fill="currentColor" />
-                      <rect x="35" y="90" width="25" height="5" fill="currentColor" />
-                    </svg>
-                  </div>
-
-                  <p className="text-[10px] text-slate-450 leading-relaxed max-w-[200px]">
-                    Scan this QR code using a smartphone camera to securely login to {patient.name}'s secure panel.
-                  </p>
-
-                  <span className="text-[9.5px] font-black text-slate-650 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 select-all">
-                    {getPortalLink(patient)}
-                  </span>
-                </div>
-              )}
+              </div>
 
               {/* Secure Home Indicator notch bar */}
               <div className="absolute bottom-1 left-0 right-0 h-4 flex items-center justify-center z-50 pointer-events-none select-none flex-shrink-0">
@@ -955,7 +580,7 @@ const PatientPortal = () => {
 
           </div>
 
-          <p className="text-[10.5px] text-slate-450 font-bold mt-2">Active Simulator Preview</p>
+          <p className="text-[10.5px] text-slate-400 text-center font-semibold mt-3.5">Active Simulator Preview</p>
         </div>
 
         {/* Right Area: Templates List (3 cols) */}
@@ -1130,6 +755,7 @@ const PatientPortal = () => {
         </div>
       )}
 
+      </div>
     </div>
   );
 };

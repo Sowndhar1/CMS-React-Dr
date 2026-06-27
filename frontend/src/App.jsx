@@ -1,8 +1,10 @@
 import React from 'react';
 import { AppProvider, useApp } from './context/AppContext';
+import { AuthProvider } from './context/AuthContext';
 import { Analytics } from '@vercel/analytics/react';
 import Sidebar from './components/Layout/Sidebar';
 import Header from './components/Layout/Header';
+import ProtectedRoute from './components/Auth/ProtectedRoute';
 import Dashboard from './components/Screens/Dashboard';
 import Patients from './components/Screens/Patients';
 import PatientDetail from './components/Screens/PatientDetail';
@@ -24,33 +26,33 @@ const MainLayout = () => {
   const renderScreen = () => {
     switch (currentScreen) {
       case 'dashboard':
-        return <Dashboard />;
+        return <ProtectedRoute screen="dashboard"><Dashboard /></ProtectedRoute>;
       case 'patients':
-        return <Patients />;
+        return <ProtectedRoute screen="patients"><Patients /></ProtectedRoute>;
       case 'patientdetail':
-        return <PatientDetail />;
+        return <ProtectedRoute screen="patientdetail"><PatientDetail /></ProtectedRoute>;
       case 'appointments':
-        return <Appointments />;
+        return <ProtectedRoute screen="appointments"><Appointments /></ProtectedRoute>;
       case 'billing':
-        return <Billing />;
+        return <ProtectedRoute screen="billing"><Billing /></ProtectedRoute>;
       case 'medical-records':
-        return <MedicalRecords />;
+        return <ProtectedRoute screen="medical-records"><MedicalRecords /></ProtectedRoute>;
       case 'labs':
-        return <LabReports />;
+        return <ProtectedRoute screen="labs"><LabReports /></ProtectedRoute>;
       case 'reports':
-        return <Reports />;
+        return <ProtectedRoute screen="reports"><Reports /></ProtectedRoute>;
       case 'doctors':
-        return <Doctors />;
+        return <ProtectedRoute screen="doctors"><Doctors /></ProtectedRoute>;
       case 'portal':
-        return <PatientPortal />;
+        return <ProtectedRoute screen="portal"><PatientPortal /></ProtectedRoute>;
       case 'documents':
-        return <Documents />;
+        return <ProtectedRoute screen="documents"><Documents /></ProtectedRoute>;
       case 'follow-ups':
-        return <FollowUps />;
+        return <ProtectedRoute screen="follow-ups"><FollowUps /></ProtectedRoute>;
       case 'settings':
-        return <Settings />;
+        return <ProtectedRoute screen="settings"><Settings /></ProtectedRoute>;
       default:
-        return <Dashboard />;
+        return <ProtectedRoute screen="dashboard"><Dashboard /></ProtectedRoute>;
     }
   };
 
@@ -58,7 +60,7 @@ const MainLayout = () => {
     <div className="flex h-screen overflow-hidden font-sans relative">
       {/* Backdrop overlay for mobile when sidebar is open */}
       {!isSidebarCollapsed && (
-        <div 
+        <div
           className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 md:hidden transition-opacity duration-300"
           onClick={() => setIsSidebarCollapsed(true)}
         />
@@ -83,10 +85,14 @@ const MainLayout = () => {
 
 const App = () => {
   return (
-    <AppProvider>
-      <MainLayout />
-      <Analytics />
-    </AppProvider>
+    <AuthProvider>
+      <ProtectedRoute>
+        <AppProvider>
+          <MainLayout />
+          <Analytics />
+        </AppProvider>
+      </ProtectedRoute>
+    </AuthProvider>
   );
 };
 

@@ -128,25 +128,26 @@ const Doctors = () => {
     }
   };
 
-  const tableColWidths = { gridTemplateColumns: '1fr 2.2fr 1.6fr 1.6fr 1fr 1.5fr 1.2fr 1fr' };
+  const tableColWidths = { gridTemplateColumns: '2.5fr 1.5fr 1.5fr 1fr 1.2fr 1.5fr 1fr' };
 
   return (
-    <div className="screen-fade h-full overflow-hidden p-4 flex flex-col gap-4 bg-slate-50/50 min-h-0">
+    <div className="screen-fade h-full overflow-hidden p-2 bg-transparent min-h-0">
+      <div className="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 flex flex-col gap-5 h-full min-h-full overflow-hidden min-h-0">
       
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 flex-shrink-0">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 flex-shrink-0">
+        <div className="flex items-center gap-2.5">
           <button
-            className="btn-ghost p-1 rounded-lg text-slate-500 hover:text-slate-800 cursor-pointer"
+            className="btn-ghost p-1.5 rounded-xl text-slate-400 hover:text-slate-800 hover:bg-slate-100 cursor-pointer transition-all"
             onClick={goBack}
           >
-            <ArrowLeft size={16} />
+            <ArrowLeft size={18} />
           </button>
-          <h1 className="text-base font-bold text-slate-800">Doctors</h1>
+          <h1 className="text-base font-bold text-slate-800">Doctors Directory</h1>
         </div>
 
-        <button className="btn-primary text-xs flex items-center gap-1.5 py-2 cursor-pointer font-bold">
-          <Plus size={14} />
+        <button className="btn-primary px-4.5 py-2.5 rounded-xl text-xs font-bold shadow-md transition-all duration-200 cursor-pointer flex items-center gap-2">
+          <Plus size={16} />
           <span>Add Doctor</span>
         </button>
       </div>
@@ -154,97 +155,57 @@ const Doctors = () => {
       {/* Row 2: Search and Select Filters Toolbar */}
       <div className="flex flex-wrap items-center gap-2 flex-shrink-0">
         {/* Search */}
-        <div className="relative flex-1 min-w-[150px] max-w-[200px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={13} style={{ pointerEvents: 'none' }} />
+        <div className="relative flex-1 min-w-[200px] max-w-[280px] group">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#810B38] transition-colors" size={15} style={{ pointerEvents: 'none' }} />
           <input
             type="text"
             placeholder="Search doctors..."
-            className="form-input text-slate-700 bg-white font-semibold border-slate-200 hover:border-slate-300 transition text-xs py-2 shadow-sm rounded-lg"
-            style={{ paddingLeft: '32px' }}
+            className="w-full text-slate-700 bg-white font-semibold border border-slate-200 hover:border-slate-300 focus:border-[#810B38] focus:ring-2 focus:ring-[#810B38]/20 transition-all text-xs py-2.5 shadow-sm rounded-xl outline-none"
+            style={{ paddingLeft: '36px' }}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         
-        {/* Departments */}
-        <select
-          className="form-input form-select text-slate-700 bg-white font-semibold border-slate-200 hover:border-slate-300 transition text-xs py-2 shadow-sm rounded-lg"
-          style={{ width: '150px' }}
-          value={deptFilter}
-          onChange={(e) => setDeptFilter(e.target.value)}
-        >
-          <option value="All">All Departments</option>
-          <option value="General Medicine">General Medicine</option>
-          <option value="Cardiology">Cardiology</option>
-          <option value="Neurology">Neurology</option>
-          <option value="Pediatrics">Pediatrics</option>
-          <option value="Orthopedics">Orthopedics</option>
-          <option value="Dermatology">Dermatology</option>
-          <option value="Radiology">Radiology</option>
-          <option value="Gynecology">Gynecology</option>
-        </select>
-
-        {/* Specialization */}
-        <select
-          className="form-input form-select text-slate-700 bg-white font-semibold border-slate-200 hover:border-slate-300 transition text-xs py-2 shadow-sm rounded-lg"
-          style={{ width: '165px' }}
-          value={specFilter}
-          onChange={(e) => setSpecFilter(e.target.value)}
-        >
-          <option value="All">All Specializations</option>
-          <option value="General Physician">General Physician</option>
-          <option value="Cardiologist">Cardiologist</option>
-          <option value="Neurologist">Neurologist</option>
-          <option value="Pediatrician">Pediatrician</option>
-          <option value="Orthopedic Surgeon">Orthopedic Surgeon</option>
-          <option value="Dermatologist">Dermatologist</option>
-          <option value="Radiologist">Radiologist</option>
-          <option value="Gynecologist">Gynecologist</option>
-        </select>
-
-        {/* Status */}
-        <select
-          className="form-input form-select text-slate-700 bg-white font-semibold border-slate-200 hover:border-slate-300 transition text-xs py-2 shadow-sm rounded-lg"
-          style={{ width: '120px' }}
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-        >
-          <option value="All">All Status</option>
-          <option value="Available">Available</option>
-          <option value="In Consultation">In Consultation</option>
-          <option value="On Break">On Break</option>
-          <option value="Off Duty">Off Duty</option>
-        </select>
-
-        {/* Availability */}
-        <select
-          className="form-input form-select text-slate-700 bg-white font-semibold border-slate-200 hover:border-slate-300 transition text-xs py-2 shadow-sm rounded-lg"
-          style={{ width: '145px' }}
-          value={availFilter}
-          onChange={(e) => setAvailFilter(e.target.value)}
-        >
-          <option value="All">All Availability</option>
-          <option value="Available">Available Now</option>
-        </select>
+        {/* Filters */}
+        {[
+          { value: deptFilter, setter: setDeptFilter, defaultText: "All Departments", options: ["General Medicine", "Cardiology", "Neurology", "Pediatrics", "Orthopedics", "Dermatology", "Radiology", "Gynecology"], width: '155px' },
+          { value: specFilter, setter: setSpecFilter, defaultText: "All Specializations", options: ["General Physician", "Cardiologist", "Neurologist", "Pediatrician", "Orthopedic Surgeon", "Dermatologist", "Radiologist", "Gynecologist"], width: '170px' },
+          { value: statusFilter, setter: setStatusFilter, defaultText: "All Status", options: ["Available", "In Consultation", "On Break", "Off Duty"], width: '135px' },
+          { value: availFilter, setter: setAvailFilter, defaultText: "All Availability", options: ["Available"], width: '150px' }
+        ].map((filter, idx) => (
+          <div key={idx} className="relative group">
+            <select
+              className="appearance-none w-full text-slate-700 bg-white font-semibold border border-slate-200 hover:border-slate-300 focus:border-[#810B38] focus:ring-2 focus:ring-[#810B38]/20 transition-all text-xs py-2.5 pl-3.5 pr-8 shadow-sm rounded-xl outline-none cursor-pointer"
+              style={{ width: filter.width }}
+              value={filter.value}
+              onChange={(e) => filter.setter(e.target.value)}
+            >
+              <option value="All">{filter.defaultText}</option>
+              {filter.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+            </select>
+            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-hover:text-slate-600" />
+          </div>
+        ))}
 
         {/* View toggles segment */}
-        <div className="bg-slate-200/60 p-0.5 rounded-lg flex gap-0.5 flex-shrink-0">
+        <div className="ml-auto bg-slate-200/50 p-1 rounded-xl flex gap-1 flex-shrink-0 border border-slate-200/50 shadow-inner">
           <button 
-            className={`text-xs py-1.5 px-3 rounded-md font-semibold transition flex-shrink-0 flex items-center gap-1.5 cursor-pointer ${
-              viewMode === 'table' ? 'bg-white text-primary-700 shadow-xs' : 'text-slate-500 hover:text-slate-700'
+            className={`text-[11px] py-1.5 px-3.5 rounded-lg font-bold transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
+              viewMode === 'table' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/60'
             }`}
             onClick={() => setViewMode('table')}
           >
-            <Table size={13} />
+            <Table size={13} className={viewMode === 'table' ? 'text-[#810B38]' : ''} />
             <span>Table View</span>
           </button>
           <button 
-            className={`text-xs py-1.5 px-3 rounded-md font-semibold transition flex-shrink-0 flex items-center gap-1.5 cursor-pointer ${
-              viewMode === 'card' ? 'bg-white text-primary-700 shadow-xs' : 'text-slate-500 hover:text-slate-700'
+            className={`text-[11px] py-1.5 px-3.5 rounded-lg font-bold transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
+              viewMode === 'card' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/60'
             }`}
             onClick={() => setViewMode('card')}
           >
-            <LayoutGrid size={13} />
+            <LayoutGrid size={13} className={viewMode === 'card' ? 'text-[#810B38]' : ''} />
             <span>Card View</span>
           </button>
         </div>
@@ -254,176 +215,223 @@ const Doctors = () => {
       {viewMode === 'card' ? (
         // Card Grid View
         <>
-          <div className="flex-grow overflow-y-auto pr-1 min-h-0">
+          <div className="flex-grow overflow-y-auto pr-2 min-h-0 pb-4">
             {filteredDoctors.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pb-2">
-                {filteredDoctors.map((doc, idx) => (
-                  <div key={doc.id} className="section-card bg-white p-5 flex flex-col items-center hover:border-slate-300 hover:shadow-md transition-all relative">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                {filteredDoctors.map((doc, idx) => {
+                  const patientsCount = parseInt(doc.patients) || 0;
+                  const maxPatients = 30; // Assuming 30 is a very busy day
+                  const loadPercentage = Math.min((patientsCount / maxPatients) * 100, 100);
+                  let loadColor = "bg-emerald-400";
+                  if (patientsCount > 15) loadColor = "bg-amber-400";
+                  if (patientsCount > 25) loadColor = "bg-red-500";
+
+                  return (
+                  <div key={doc.id} className="bg-white rounded-2xl p-5 flex flex-col items-center border border-slate-200 hover:border-[#810B38]/30 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative group overflow-hidden">
                     
+                    {/* Top Accent Gradient Line */}
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-slate-200 to-transparent group-hover:via-[#810B38]/50 transition-colors duration-300"></div>
+
                     {/* Top-Right Ellipsis Option */}
-                    <button className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 btn-ghost p-1 rounded">
-                      <MoreVertical size={14} />
+                    <button className="absolute top-3 right-3 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 p-1.5 rounded-full transition-colors">
+                      <MoreVertical size={16} />
                     </button>
 
                     {/* Circle Avatar & Status Indicator Overlay */}
-                    <div className="relative">
+                    <div className="relative mt-2 mb-4 transform group-hover:scale-105 transition-transform duration-300">
                       <DoctorAvatar name={doc.name} specialty={doc.specialty} index={idx} />
                       <span 
-                        className="absolute bottom-1 right-1 w-3.5 h-3.5 rounded-full border-2 border-white shadow-sm"
+                        className="absolute bottom-1 right-1 w-4 h-4 rounded-full border-2 border-white shadow-sm flex items-center justify-center"
                         style={{ backgroundColor: getStatusColor(doc.status) }}
-                      ></span>
+                      >
+                        {/* Inner dot pulse for 'Available' */}
+                        {doc.status === 'Available' && <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>}
+                      </span>
                     </div>
 
                     {/* Name and Titles */}
-                    <h3 className="font-bold text-slate-800 text-sm mt-3">{doc.name}</h3>
-                    <span className="text-[11.5px] text-primary-500 font-semibold mt-1">{doc.specialty}</span>
-                    <span className="text-[10px] text-slate-400 font-medium mt-0.5">{doc.dept}</span>
+                    <h3 className="font-extrabold text-slate-900 text-base">{doc.name}</h3>
+                    <span className="text-[11px] text-[#810B38] bg-rose-50 px-2.5 py-0.5 rounded-md font-bold mt-2 uppercase tracking-wide">{doc.specialty}</span>
+                    <span className="text-[11px] text-slate-500 font-semibold mt-1.5">{doc.dept}</span>
 
                     {/* Stars Rating */}
-                    <div className="flex items-center gap-1 mt-2 text-amber-400">
+                    <div className="flex items-center gap-1.5 mt-3 text-amber-400 bg-amber-50/50 px-3 py-1 rounded-full border border-amber-100">
                       <div className="flex items-center">
                         {[...Array(5)].map((_, i) => (
-                          <Star key={i} size={11} fill={i < 5 ? '#f59e0b' : 'transparent'} stroke="#f59e0b" />
+                          <Star key={i} size={11} fill={i < Math.round(parseFloat(doc.rating)) ? '#f59e0b' : 'transparent'} stroke="#f59e0b" />
                         ))}
                       </div>
-                      <span className="text-[10px] font-bold text-slate-500 mt-0.5">{doc.rating} ({doc.ratingsCount})</span>
+                      <span className="text-[10px] font-extrabold text-amber-700">{doc.rating} <span className="text-amber-500/70">({doc.ratingsCount})</span></span>
                     </div>
 
                     {/* Bordered Stats Panel */}
-                    <div className="w-full grid grid-cols-3 border border-slate-100 rounded-xl mt-4 py-2 px-1 text-center bg-slate-50/30 items-center justify-center">
+                    <div className="w-full grid grid-cols-3 border border-slate-100 rounded-xl mt-5 py-3 px-1 text-center bg-slate-50 items-center justify-center shadow-inner">
                       <div>
-                        <span className="text-xs font-bold text-slate-800 block">{doc.exp}</span>
-                        <span className="text-[9px] font-medium text-slate-400 uppercase tracking-wider block mt-0.5">Years Exp.</span>
+                        <span className="text-sm font-black text-slate-800 block">{doc.exp}</span>
+                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mt-1">Exp Yrs</span>
                       </div>
-                      <div className="border-x border-slate-100 px-1">
-                        <span className={`badge border ${getStatusBg(doc.status)} text-[8.5px] px-1 py-0.5 font-bold inline-block truncate w-full text-center`}>
-                          {doc.status === 'In Consultation' ? 'Consulting' : doc.status}
+                      <div className="border-x border-slate-200 px-1 flex flex-col items-center justify-center h-full">
+                        <span className={`w-2 h-2 rounded-full mb-1`} style={{ backgroundColor: getStatusColor(doc.status) }}></span>
+                        <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest block text-center leading-tight">
+                          {doc.status === 'In Consultation' ? 'Consult' : doc.status}
                         </span>
-                        <span className="text-[9px] font-medium text-slate-400 uppercase tracking-wider block mt-1">Status</span>
                       </div>
-                      <div>
-                        <span className="text-xs font-bold text-slate-800 block">{doc.patients}</span>
-                        <span className="text-[9px] font-medium text-slate-400 uppercase tracking-wider block mt-0.5">Patients Today</span>
+                      <div className="flex flex-col items-center">
+                        <span className="text-sm font-black text-slate-800 block">{doc.patients}</span>
+                        <div className="w-8 h-1.5 bg-slate-200 rounded-full mt-1.5 overflow-hidden">
+                           <div className={`h-full ${loadColor} transition-all duration-500`} style={{ width: `${loadPercentage}%`}}></div>
+                        </div>
                       </div>
                     </div>
 
                     {/* Bottom Actions Row */}
-                    <div className="w-full flex items-center justify-between border-t border-slate-100 mt-4 pt-3 text-[10.5px] text-slate-500 font-semibold px-2">
-                      <button className="flex items-center gap-1 text-slate-500 hover:text-primary-600 transition-colors cursor-pointer">
-                        <Eye size={12} />
-                        <span>View</span>
+                    <div className="w-full grid grid-cols-2 gap-2 mt-5">
+                      <button className="flex items-center justify-center gap-1.5 text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-800 hover:border-slate-300 py-2 rounded-xl transition-all cursor-pointer font-bold text-[11px] shadow-sm">
+                        <Eye size={13} />
+                        <span>Profile</span>
                       </button>
-                      <button className="flex items-center gap-1 text-slate-500 hover:text-primary-600 transition-colors cursor-pointer">
-                        <Calendar size={12} />
+                      <button className="flex items-center justify-center gap-1.5 text-white bg-slate-800 hover:bg-slate-900 py-2 rounded-xl transition-all cursor-pointer font-bold text-[11px] shadow-md">
+                        <Calendar size={13} />
                         <span>Schedule</span>
-                      </button>
-                      <button className="flex items-center gap-1 text-slate-500 hover:text-primary-600 transition-colors cursor-pointer">
-                        <Edit size={12} />
-                        <span>Edit</span>
                       </button>
                     </div>
 
                   </div>
-                ))}
+                )})}
               </div>
             ) : (
-              <div className="p-8 text-center text-slate-400 text-xs bg-white border border-slate-200 rounded-xl">No doctors match the filter criteria.</div>
+              <div className="p-12 flex flex-col items-center justify-center text-slate-400 text-sm font-medium bg-white rounded-2xl border border-slate-200 h-full">
+                <UserCircle size={64} className="text-slate-200 mb-4" />
+                No doctors match the filter criteria.
+              </div>
             )}
           </div>
           
           {/* Card View Pagination Footer */}
-          <div className="p-4 border border-slate-200 bg-white rounded-2xl flex items-center justify-between text-[11px] text-slate-400 font-extrabold flex-shrink-0 shadow-xs">
-            <span>Showing 1 to {filteredDoctors.length} of 128 doctors</span>
-            <div className="flex items-center gap-1 bg-white border border-slate-200 rounded-xl p-1 shadow-xs">
-              <button className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer">
-                <ChevronLeft size={14} />
+          <div className="p-4 border border-slate-200 bg-white rounded-2xl flex items-center justify-between text-[11px] text-slate-500 font-bold flex-shrink-0 shadow-sm mt-1">
+            <span>Showing <span className="text-slate-800">{filteredDoctors.length > 0 ? 1 : 0}</span> to <span className="text-slate-800">{filteredDoctors.length}</span> of 128 doctors</span>
+            <div className="flex items-center gap-1">
+              <button className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer transition-colors border border-transparent hover:border-slate-200">
+                <ChevronLeft size={15} />
               </button>
-              <button className="w-6 h-6 bg-[#810B38] text-white rounded-lg flex items-center justify-center font-bold text-xs">1</button>
-              <button className="w-6 h-6 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg flex items-center justify-center font-bold text-xs">2</button>
-              <button className="w-6 h-6 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg flex items-center justify-center font-bold text-xs">3</button>
-              <span className="px-1 text-slate-350">...</span>
-              <button className="w-6 h-6 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg flex items-center justify-center font-bold text-xs">16</button>
-              <button className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer">
-                <ChevronRight size={14} />
+              <div className="flex items-center gap-1 mx-1">
+                <button className="w-7 h-7 bg-gradient-to-br from-[#810B38] to-[#6B082D] text-white rounded-lg flex items-center justify-center font-black text-xs shadow-md shadow-[#810B38]/20">1</button>
+                <button className="w-7 h-7 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg flex items-center justify-center font-bold text-xs transition-colors border border-transparent hover:border-slate-200">2</button>
+                <button className="w-7 h-7 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg flex items-center justify-center font-bold text-xs transition-colors border border-transparent hover:border-slate-200">3</button>
+                <span className="px-1 text-slate-300">...</span>
+                <button className="w-7 h-7 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg flex items-center justify-center font-bold text-xs transition-colors border border-transparent hover:border-slate-200">16</button>
+              </div>
+              <button className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer transition-colors border border-transparent hover:border-slate-200">
+                <ChevronRight size={15} />
               </button>
             </div>
           </div>
         </>
       ) : (
         // Table View
-        <div className="section-card flex-grow flex flex-col overflow-hidden bg-white min-h-0">
+        <div className="section-card flex-grow flex flex-col overflow-hidden bg-white min-h-0 border border-slate-100 rounded-2xl shadow-sm">
           <div className="overflow-x-auto flex-grow flex flex-col min-w-full">
-            <div className="min-w-[900px] flex flex-col flex-1">
-              <div className="table-head text-[10.5px] items-center flex-shrink-0" style={tableColWidths}>
-                <span>Avatar</span>
-                <span>Name</span>
+            <div className="min-w-[950px] flex flex-col flex-1">
+              {/* Modern Table Head */}
+              <div className="grid items-center bg-slate-50/80 border-b border-slate-100 px-4 py-3.5 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider sticky top-0 z-10 flex-shrink-0" style={tableColWidths}>
+                <span>Doctor</span>
                 <span>Department</span>
                 <span>Specialization</span>
                 <span>Experience</span>
-                <span>Availability Status</span>
-                <span>Patients Today</span>
-                <span className="text-right pr-4">Actions</span>
+                <span>Status</span>
+                <span>Daily Load</span>
+                <span className="text-right pr-2">Actions</span>
               </div>
-              <div className="divide-y divide-slate-50 overflow-y-auto flex-grow scrollbar-hide min-h-0">
+              <div className="divide-y divide-slate-100 overflow-y-auto flex-grow min-h-0 bg-white">
                 {filteredDoctors.length > 0 ? (
-                  filteredDoctors.map((doc, idx) => (
+                  filteredDoctors.map((doc, idx) => {
+                    const patientsCount = parseInt(doc.patients) || 0;
+                    const maxPatients = 30; // Assuming 30 is a very busy day
+                    const loadPercentage = Math.min((patientsCount / maxPatients) * 100, 100);
+                    let loadColor = "bg-emerald-400";
+                    if (patientsCount > 15) loadColor = "bg-amber-400";
+                    if (patientsCount > 25) loadColor = "bg-red-500";
+
+                    return (
                     <div
                       key={doc.id}
-                      className="table-row items-center py-3 hover:bg-slate-50/50"
+                      className="grid items-center px-4 py-3 hover:bg-slate-50/80 transition-all duration-200 group cursor-default"
                       style={tableColWidths}
                     >
-                      <div className="flex items-center">
-                        <div className="scale-75 origin-left">
+                      <div className="flex items-center gap-2">
+                        <div className="scale-[0.6] origin-left group-hover:scale-[0.65] transition-transform duration-300 w-12 flex-shrink-0">
                           <DoctorAvatar name={doc.name} specialty={doc.specialty} index={idx} />
                         </div>
+                        <div className="flex flex-col -ml-1">
+                          <span className="text-slate-900 text-[13px] font-extrabold group-hover:text-[#810B38] transition-colors">{doc.name}</span>
+                          <span className="text-slate-400 text-[10px] font-semibold mt-0.5">{doc.id}</span>
+                        </div>
                       </div>
-                      <span className="text-slate-800 text-xs font-bold">{doc.name}</span>
-                      <span className="text-slate-500 text-xs">{doc.dept}</span>
-                      <span className="text-primary-600 text-xs font-semibold">{doc.specialty}</span>
-                      <span className="text-slate-600 text-xs">{doc.exp} Years</span>
+                      <span className="text-slate-500 text-xs font-semibold">{doc.dept}</span>
+                      <span className="text-slate-700 bg-slate-100/80 border border-slate-200/60 px-2.5 py-1 rounded-lg text-[11px] font-bold w-fit shadow-xs">{doc.specialty}</span>
+                      <span className="text-slate-700 text-[13px] font-extrabold">{doc.exp} <span className="text-slate-400 font-semibold text-[10px]">Yrs</span></span>
                       <div>
-                        <span className={`badge border ${getStatusBg(doc.status)} text-[9px] font-semibold w-fit`}>
+                        {/* Rich Status Badge */}
+                        <span className={`flex items-center gap-1.5 w-fit border ${getStatusBg(doc.status)} px-2.5 py-1.5 rounded-full text-[10px] font-bold tracking-wide uppercase shadow-xs`}>
+                          <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: getStatusColor(doc.status) }}></span>
                           {doc.status}
                         </span>
                       </div>
-                      <span className="text-slate-700 text-xs font-bold">{doc.patients} Patients</span>
-                      <div className="flex items-center justify-end gap-1.5 pr-2">
-                        <button className="btn-ghost p-1 text-slate-400 hover:text-slate-700 cursor-pointer" title="View Profile">
-                          <Eye size={13} />
+                      <div className="flex flex-col gap-1.5 pr-6">
+                        <div className="flex justify-between items-center">
+                          <span className="text-slate-800 text-xs font-extrabold">{doc.patients} <span className="text-[9.5px] text-slate-400 font-semibold">/ 30 pts</span></span>
+                        </div>
+                        {/* Load Progress Bar */}
+                        <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden shadow-inner">
+                          <div className={`h-full rounded-full ${loadColor} transition-all duration-500`} style={{ width: `${loadPercentage}%` }}></div>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-end gap-1.5 pr-2 opacity-60 group-hover:opacity-100 transition-opacity">
+                        <button className="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors cursor-pointer" title="View Profile">
+                          <Eye size={15} />
                         </button>
-                        <button className="btn-ghost p-1 text-slate-400 hover:text-slate-700 cursor-pointer" title="Schedule">
-                          <Calendar size={13} />
+                        <button className="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors cursor-pointer" title="Schedule">
+                          <Calendar size={15} />
+                        </button>
+                        <button className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer" title="More Options">
+                          <MoreVertical size={15} />
                         </button>
                       </div>
                     </div>
-                  ))
+                  )})
                 ) : (
-                  <div className="p-8 text-center text-slate-400 text-xs">No doctors match the filter criteria.</div>
+                  <div className="p-12 flex flex-col items-center justify-center text-slate-400 text-sm font-medium">
+                    <UserCircle size={48} className="text-slate-200 mb-3" />
+                    No doctors match the filter criteria.
+                  </div>
                 )}
               </div>
             </div>
           </div>
           
-          {/* Table pagination footer controls */}
-          <div className="p-4 border-t border-slate-100 bg-slate-50/20 flex items-center justify-between text-[11px] text-slate-400 font-extrabold flex-shrink-0">
-            <span>Showing 1 to {filteredDoctors.length} of 128 doctors</span>
-            <div className="flex items-center gap-1 bg-white border border-slate-200 rounded-xl p-1 shadow-xs">
-              <button className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer">
-                <ChevronLeft size={14} />
+          {/* Table pagination footer */}
+          <div className="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between text-[11px] text-slate-500 font-bold flex-shrink-0">
+            <span>Showing <span className="text-slate-800">{filteredDoctors.length > 0 ? 1 : 0}</span> to <span className="text-slate-800">{filteredDoctors.length}</span> of 128 doctors</span>
+            <div className="flex items-center gap-1">
+              <button className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-white cursor-pointer transition-colors border border-transparent hover:border-slate-200 hover:shadow-sm">
+                <ChevronLeft size={15} />
               </button>
-              <button className="w-6 h-6 bg-[#810B38] text-white rounded-lg flex items-center justify-center font-bold text-xs">1</button>
-              <button className="w-6 h-6 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg flex items-center justify-center font-bold text-xs">2</button>
-              <button className="w-6 h-6 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg flex items-center justify-center font-bold text-xs">3</button>
-              <span className="px-1 text-slate-350">...</span>
-              <button className="w-6 h-6 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg flex items-center justify-center font-bold text-xs">16</button>
-              <button className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer">
-                <ChevronRight size={14} />
+              <div className="flex items-center gap-1 mx-1">
+                <button className="w-7 h-7 bg-gradient-to-br from-[#810B38] to-[#6B082D] text-white rounded-lg flex items-center justify-center font-black text-xs shadow-md shadow-[#810B38]/20">1</button>
+                <button className="w-7 h-7 text-slate-600 hover:text-slate-900 hover:bg-white rounded-lg flex items-center justify-center font-bold text-xs transition-all border border-transparent hover:border-slate-200 hover:shadow-sm">2</button>
+                <button className="w-7 h-7 text-slate-600 hover:text-slate-900 hover:bg-white rounded-lg flex items-center justify-center font-bold text-xs transition-all border border-transparent hover:border-slate-200 hover:shadow-sm">3</button>
+                <span className="px-1 text-slate-300">...</span>
+                <button className="w-7 h-7 text-slate-600 hover:text-slate-900 hover:bg-white rounded-lg flex items-center justify-center font-bold text-xs transition-all border border-transparent hover:border-slate-200 hover:shadow-sm">16</button>
+              </div>
+              <button className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-white cursor-pointer transition-colors border border-transparent hover:border-slate-200 hover:shadow-sm">
+                <ChevronRight size={15} />
               </button>
             </div>
           </div>
         </div>
       )}
 
+      </div>
     </div>
   );
 };

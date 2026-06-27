@@ -26,7 +26,8 @@ import {
   ZoomOut,
   ChevronLeft,
   ChevronRight,
-  ShieldAlert
+  ShieldAlert,
+  User
 } from 'lucide-react';
 
 // Premium SVG Layered 3D Folder Component
@@ -141,7 +142,7 @@ const FileIconComponent = ({ filename, type }) => {
 };
 
 const Documents = () => {
-  const { goBack } = useApp();
+  const { goBack, showScreen } = useApp();
 
   // Local Database of Documents (synced with screenshot details)
   const [documents, setDocuments] = useState([
@@ -253,6 +254,20 @@ const Documents = () => {
   const [previewZoom, setPreviewZoom] = useState(100);
   const [previewPage, setPreviewPage] = useState(1);
   const [showActionDropdown, setShowActionDropdown] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Patient sidebar state
+  const [patientsList, setPatientsList] = useState([
+    { id: '#PT-1001', name: 'Amit Mehta',   age: 32, gender: 'Male',   phone: '98765 43210', avatar: 'AM' },
+    { id: '#PT-1039', name: 'Sunita Patel', age: 52, gender: 'Female', phone: '87654 32109', avatar: 'SP' },
+    { id: '#PT-1036', name: 'Rahul Kumar',  age: 28, gender: 'Male',   phone: '76543 21098', avatar: 'RK' },
+    { id: '#PT-1044', name: 'Priya Desai',  age: 41, gender: 'Female', phone: '65432 10987', avatar: 'PD' },
+    { id: '#PT-1019', name: 'Meera Shah',   age: 39, gender: 'Female', phone: '43210 98765', avatar: 'MS' },
+  ]);
+  const [selectedPatient, setSelectedPatient] = useState(null); // null = show all
+  const [patientSearchQuery, setPatientSearchQuery] = useState('');
+  const [showAddPatientModal, setShowAddPatientModal] = useState(false);
+  const [newPatient, setNewPatient] = useState({ name: '', age: '', gender: 'Male', phone: '' });
 
   // Listen for Global Header Trigger Event
   useEffect(() => {
@@ -373,13 +388,26 @@ const Documents = () => {
     }, 1500);
   };
 
+  // Patient doc count helper
+  const getPatientDocCount = (patientId) => documents.filter(d => d.patientId === patientId).length;
+
+  // Filtered patients for sidebar search
+  const filteredPatients = patientsList.filter(p =>
+    p.name.toLowerCase().includes(patientSearchQuery.toLowerCase()) ||
+    p.id.toLowerCase().includes(patientSearchQuery.toLowerCase())
+  );
+
   // Filter & Search Logic
   const filteredDocs = documents.filter(item => {
     const searchLower = searchQuery.toLowerCase();
-    const matchesSearch = item.name.toLowerCase().includes(searchLower) ||
+    const matchesSearch = !searchLower ||
+      item.name.toLowerCase().includes(searchLower) ||
       item.patientName.toLowerCase().includes(searchLower) ||
       item.patientId.toLowerCase().includes(searchLower) ||
       item.docId.toLowerCase().includes(searchLower);
+
+    // Patient sidebar selection filter
+    const matchesPatient = !selectedPatient || item.patientId === selectedPatient.id;
 
     // Folder category filter
     const matchesFolder = selectedFolder === 'All' || item.category === selectedFolder;
@@ -387,21 +415,44 @@ const Documents = () => {
     // Category dropdown filter
     const matchesCategoryFilter = categoryFilter === 'All' || item.category === categoryFilter;
 
-    return matchesSearch && matchesFolder && matchesCategoryFilter;
+    return matchesSearch && matchesPatient && matchesFolder && matchesCategoryFilter;
   });
 
   // Sort Logic
   const sortedDocs = [...filteredDocs].sort((a, b) => {
-    // Treat "Latest" as descending timestamp and "Oldest" as ascending
     const timeA = new Date(a.date.split(',')[0]).getTime() || 0;
     const timeB = new Date(b.date.split(',')[0]).getTime() || 0;
-
-    if (dateFilter === 'Latest') {
-      return timeB - timeA;
-    } else {
-      return timeA - timeB;
-    }
+    return dateFilter === 'Latest' ? timeB - timeA : timeA - timeB;
   });
+
+  // Pagination
+  const ITEMS_PER_PAGE = 5;
+  const totalPages = Math.max(1, Math.ceil(sortedDocs.length / ITEMS_PER_PAGE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedDocs = sortedDocs.slice((safePage - 1) * ITEMS_PER_PAGE, safePage * ITEMS_PER_PAGE);
+
+  // Add Patient handler
+  const handleAddPatientSubmit = (e) => {
+    e.preventDefault();
+    if (!newPatient.name || !newPatient.age || !newPatient.phone) {
+      alert('Please fill out all patient fields.');
+      return;
+    }
+    const initials = newPatient.name.split(' ').map(n => n[0]).join('').toUpperCase();
+    const created = {
+      id: `#PT-${Math.floor(1000 + Math.random() * 9000)}`,
+      name: newPatient.name,
+      age: parseInt(newPatient.age),
+      gender: newPatient.gender,
+      phone: newPatient.phone,
+      avatar: initials,
+    };
+    setPatientsList(prev => [...prev, created]);
+    setSelectedPatient(created);
+    setShowAddPatientModal(false);
+    setNewPatient({ name: '', age: '', gender: 'Male', phone: '' });
+    showActionToast(`✅ Patient profile created: ${newPatient.name}`);
+  };
 
   // Render bespoke previews depending on the selected file type/name
   const renderDocumentPreview = (doc) => {
@@ -808,7 +859,111 @@ const Documents = () => {
   return (
     <div className="screen-fade flex flex-row h-full overflow-hidden bg-slate-50/70 select-none">
 
-      {/* Main Left Section Container */}
+      {/* ===== LEFT PATIENT SIDEBAR ===== */}
+      <div className="w-64 flex-shrink-0 bg-white border-r border-slate-150 flex flex-col h-full shadow-sm">
+        
+        {/* Sidebar Header */}
+        <div className="px-4 pt-5 pb-3 flex items-center justify-between flex-shrink-0">
+          <span className="text-[11px] font-black text-slate-800 uppercase tracking-wider">Patients</span>
+          <button
+            onClick={() => setShowAddPatientModal(true)}
+            className="flex items-center gap-0.5 text-[10.5px] font-extrabold text-[#810B38] hover:text-[#6B082D] hover:underline cursor-pointer"
+          >
+            <Plus size={11} strokeWidth={2.8} />
+            <span>Add Patient</span>
+          </button>
+        </div>
+
+        {/* Patient Search */}
+        <div className="px-3 pb-3 flex-shrink-0">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={13} />
+            <input
+              type="text"
+              placeholder="Search patient by name or ID..."
+              value={patientSearchQuery}
+              onChange={(e) => setPatientSearchQuery(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-3 py-2 text-[11px] text-slate-700 focus:outline-none focus:border-[#810B38] transition-all"
+            />
+          </div>
+        </div>
+
+        {/* Patient List */}
+        <div className="flex-1 overflow-y-auto px-2 space-y-1 pb-3">
+          {/* All Patients option */}
+          <div
+            onClick={() => { setSelectedPatient(null); setCurrentPage(1); }}
+            className={`px-3 py-2.5 rounded-xl cursor-pointer flex items-center gap-2.5 transition-all duration-150 ${
+              !selectedPatient
+                ? 'bg-[#FAF5F0] border border-[#DCC3AA]/40 shadow-sm'
+                : 'hover:bg-slate-50'
+            }`}
+          >
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-extrabold flex-shrink-0 ${
+              !selectedPatient ? 'bg-[#810B38] text-white' : 'bg-slate-100 text-slate-500'
+            }`}>
+              <User size={14} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold text-slate-800 truncate">All Patients</p>
+              <p className="text-[9.5px] text-slate-400 font-medium">{documents.length} documents</p>
+            </div>
+          </div>
+
+          {filteredPatients.length > 0 ? filteredPatients.map((pat) => {
+            const isActive = selectedPatient?.id === pat.id;
+            const docCount = getPatientDocCount(pat.id);
+            const avatarColors = {
+              AM: 'bg-blue-600', SP: 'bg-rose-500', RK: 'bg-emerald-600',
+              PD: 'bg-violet-600', MS: 'bg-amber-500'
+            };
+            const color = avatarColors[pat.avatar] || 'bg-slate-600';
+            return (
+              <div
+                key={pat.id}
+                onClick={() => { setSelectedPatient(pat); setCurrentPage(1); setSelectedDoc(null); setIsPreviewPanelOpen(false); }}
+                className={`px-3 py-2.5 rounded-xl cursor-pointer flex items-center justify-between gap-2 transition-all duration-150 ${
+                  isActive
+                    ? 'bg-[#FAF5F0] border border-[#DCC3AA]/40 shadow-sm scale-[1.01]'
+                    : 'hover:bg-slate-50'
+                }`}
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className={`w-8 h-8 rounded-full ${isActive ? 'bg-[#810B38]' : color} text-white flex items-center justify-center text-[10px] font-extrabold flex-shrink-0 shadow-sm`}>
+                    {pat.avatar}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-bold text-slate-800 truncate">{pat.name}</p>
+                    <p className="text-[9.5px] text-slate-400 font-medium">{pat.id} · {pat.age} Yrs, {pat.gender}</p>
+                  </div>
+                </div>
+                {docCount > 0 && (
+                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[9.5px] font-extrabold flex-shrink-0 ${
+                    isActive ? 'bg-[#810B38] text-white' : 'bg-blue-50 text-blue-600'
+                  }`}>
+                    {docCount}
+                  </span>
+                )}
+              </div>
+            );
+          }) : (
+            <p className="text-center text-[11px] text-slate-400 py-6">No patients found.</p>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="border-t border-slate-100 px-4 py-3 flex-shrink-0">
+          <button
+            onClick={() => showScreen('patients')}
+            className="w-full flex items-center justify-between text-[11px] font-bold text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+          >
+            <span>View All Patients</span>
+            <span>→</span>
+          </button>
+        </div>
+      </div>
+
+      {/* ===== MAIN CONTENT CONTAINER ===== */}
       <div className="flex-1 flex flex-col gap-4 overflow-y-auto h-full p-6 min-w-0 pr-4">
 
         {/* Toast Notification Widget */}
@@ -832,12 +987,12 @@ const Documents = () => {
               <h1 className="text-base font-bold text-slate-800">Documents Vault</h1>
               <ShieldAlert size={15} className="text-[#810B38]" />
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">Secure storage for all clinical and administrative documents</p>
+
           </div>
         </div>
 
-        {/* Categories Grid (Gradients styled) */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 flex-shrink-0">
+        {/* Categories Grid - Horizontal Flex Row */}
+        <div className="flex gap-3 overflow-x-auto flex-shrink-0 pb-0.5">
           {folderCategories.map((folder, index) => {
             const isActive = selectedFolder === folder.folderKey;
             return (
@@ -850,9 +1005,9 @@ const Documents = () => {
                     showActionToast("📁 Expanding more document directory vault categories...");
                   }
                 }}
-                className={`flex flex-col justify-between p-4 bg-white border rounded-2xl cursor-pointer transition-all duration-300 group select-none ${isActive
-                    ? 'border-[#DCC3AA] bg-[#FAF5F0] shadow-md scale-[1.03]'
-                    : 'border-slate-200 hover:shadow-md hover:scale-[1.01] hover:border-slate-350'
+                className={`flex flex-col justify-between p-3.5 bg-white border rounded-2xl cursor-pointer transition-all duration-300 group select-none min-w-[130px] flex-1 ${isActive
+                  ? 'border-[#DCC3AA] bg-[#FAF5F0] shadow-md'
+                  : 'border-slate-200 hover:shadow-md hover:border-slate-300'
                   }`}
               >
                 <div className="flex items-start justify-between">
@@ -862,7 +1017,7 @@ const Documents = () => {
                   </span>
                 </div>
                 <div className="mt-4">
-                  <p className="text-xs font-black text-slate-800 truncate leading-none">{folder.name}</p>
+                  <p className="text-[11px] font-bold text-slate-700 leading-snug mt-1">{folder.name}</p>
                   {folder.folderKey === 'More' ? (
                     <button
                       className="text-[9.5px] text-[#810B38] font-bold mt-1.5 hover:underline"
@@ -882,27 +1037,27 @@ const Documents = () => {
           })}
         </div>
 
-        {/* Drag & Drop Upload Widget */}
+        {/* Drag & Drop Upload - Compact */}
         <div
-          className="p-5 border border-dashed border-slate-200 hover:border-[#810B38]/30 hover:bg-[#FAF5F0]/10 bg-white rounded-2xl flex items-center justify-between gap-4 transition-all duration-200 cursor-pointer select-none flex-shrink-0 shadow-sm"
+          className="py-3 px-4 border border-dashed border-slate-200 hover:border-[#810B38]/40 hover:bg-[#FAF5F0]/20 bg-white rounded-xl flex items-center justify-between gap-4 transition-all duration-200 cursor-pointer select-none flex-shrink-0"
           onClick={() => setShowUploadModal(true)}
         >
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-[#FAF5F0] text-[#810B38] flex items-center justify-center flex-shrink-0 border border-[#DCC3AA]/20 shadow-inner">
-              <Upload size={20} className="animate-bounce text-[#810B38]" />
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center flex-shrink-0 border border-slate-200">
+              <Upload size={16} className="text-[#810B38]" />
             </div>
             <div>
-              <h3 className="text-xs font-black text-slate-800 tracking-tight leading-none">Drag & drop files here to upload</h3>
-              <p className="text-[11px] text-slate-400 mt-1.5">
-                You can upload reports, medical images, or any documents
+              <h3 className="text-[11.5px] font-bold text-slate-700 leading-none">Drag &amp; drop files here to upload</h3>
+              <p className="text-[10.5px] text-slate-400 mt-0.5 font-medium">
+                Reports, scans, invoices or any medical documents
               </p>
             </div>
           </div>
           <button
-            className="flex items-center gap-1.5 px-4.5 py-2.5 bg-transparent border border-[#810B38]/20 hover:border-[#810B38]/50 text-[#810B38] hover:bg-[#FAF5F0] rounded-xl text-xs font-black shadow-xs transition-all duration-200 cursor-pointer flex-shrink-0"
+            className="px-3.5 py-1.5 bg-white border border-slate-200 hover:border-[#810B38]/40 hover:bg-[#FAF5F0] text-slate-600 hover:text-[#810B38] rounded-lg text-[11px] font-semibold transition-all cursor-pointer flex-shrink-0"
             type="button"
           >
-            <span>Browse Files</span>
+            Browse Files
           </button>
         </div>
 
@@ -911,7 +1066,7 @@ const Documents = () => {
 
           {/* Table Filters Header bar */}
           <div className="p-4 border-b border-slate-100 flex items-center justify-between gap-4 bg-slate-50/20 flex-shrink-0">
-            <div className="relative max-w-sm w-full">
+            <div className="relative flex-1">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={15} />
               <input
                 type="text"
@@ -939,10 +1094,10 @@ const Documents = () => {
                   value={categoryFilter}
                   onChange={(e) => setCategoryFilter(e.target.value)}
                 >
-                  <option value="All">All</option>
-                  <option value="Lab Reports">Lab Reports</option>
-                  <option value="Invoices">Invoices</option>
-                  <option value="Consent Forms">Consent Forms</option>
+                  <option value="All">All Categories</option>
+                  {Array.from(new Set(documents.map(d => d.category))).map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
                 </select>
               </div>
 
@@ -972,21 +1127,19 @@ const Documents = () => {
 
           {/* Documents Scrollable Table */}
           <div className="flex-1 overflow-y-auto min-h-0">
-            <table className="w-full text-left border-collapse min-w-[700px]">
-              <thead>
-                <tr className="bg-slate-50/50 border-b border-slate-100 text-[10px] font-black text-slate-400 uppercase tracking-wider">
+            <table className="w-full text-left border-collapse min-w-[560px]">
+              <thead className="sticky top-0 z-10">
+                <tr className="bg-white border-b-2 border-slate-100 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
                   <th className="py-3 px-5">DOCUMENT NAME</th>
                   <th className="py-3 px-4">CATEGORY</th>
                   <th className="py-3 px-4">PATIENT</th>
-                  <th className="py-3 px-4">FILE SIZE</th>
-                  <th className="py-3 px-4">UPLOADED ON</th>
-                  <th className="py-3 px-4">UPLOADED BY</th>
+                  <th className="py-3 px-4">DATE UPLOADED</th>
                   <th className="py-3 px-5 text-right">ACTIONS</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {sortedDocs.length > 0 ? (
-                  sortedDocs.map((item, idx) => {
+                {paginatedDocs.length > 0 ? (
+                  paginatedDocs.map((item, idx) => {
                     const isSelected = selectedDoc && selectedDoc.name === item.name;
                     return (
                       <tr
@@ -1012,10 +1165,15 @@ const Documents = () => {
 
                         {/* Category badge */}
                         <td className="py-3.5 px-4">
-                          <span className={`px-2.5 py-0.5 text-[9px] font-black rounded-full uppercase tracking-wider ${item.category === 'Lab Reports' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100/50' :
-                              item.category === 'Invoices' ? 'bg-amber-50 text-amber-700 border border-amber-100/50' :
-                                'bg-blue-50 text-blue-700 border border-blue-100/50'
-                            }`}>
+                          <span className={`inline-flex items-center px-2 py-0.5 text-[8.5px] font-extrabold rounded-full uppercase tracking-wide whitespace-nowrap ${
+                            item.category === 'Lab Reports' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                            item.category === 'Invoices' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
+                            item.category === 'Consent Forms' ? 'bg-violet-50 text-violet-700 border border-violet-200' :
+                            item.category === 'Scans & Images' ? 'bg-sky-50 text-sky-700 border border-sky-200' :
+                            item.category === 'Discharge Summaries' ? 'bg-orange-50 text-orange-700 border border-orange-200' :
+                            item.category === 'Prescriptions' ? 'bg-pink-50 text-pink-700 border border-pink-200' :
+                            'bg-slate-100 text-slate-600 border border-slate-200'
+                          }`}>
                             {item.category}
                           </span>
                         </td>
@@ -1028,19 +1186,12 @@ const Documents = () => {
                           </div>
                         </td>
 
-                        {/* File size */}
-                        <td className="py-3.5 px-4 font-medium text-slate-600">
-                          {item.size}
-                        </td>
-
-                        {/* Date uploaded */}
-                        <td className="py-3.5 px-4 font-semibold text-slate-600">
-                          {item.date}
-                        </td>
-
-                        {/* Uploaded by member */}
-                        <td className="py-3.5 px-4 font-medium text-slate-550">
-                          {item.uploadedBy}
+                        {/* Date uploaded - two-line format */}
+                        <td className="py-3.5 px-4">
+                          <div className="flex flex-col leading-tight">
+                            <span className="text-[11.5px] font-semibold text-slate-700">{item.date.split(',')[0]}</span>
+                            <span className="text-[9.5px] text-slate-400 font-medium mt-0.5">{item.date.split(',').slice(1).join(',').trim()}</span>
+                          </div>
                         </td>
 
                         {/* Action buttons (Row specific) */}
@@ -1110,7 +1261,7 @@ const Documents = () => {
                   })
                 ) : (
                   <tr>
-                    <td colSpan="7" className="py-16 text-center text-slate-400 text-xs font-semibold">
+                    <td colSpan="5" className="py-16 text-center text-slate-400 text-xs font-semibold">
                       No documents found matching the search/filter parameters.
                     </td>
                   </tr>
@@ -1120,30 +1271,44 @@ const Documents = () => {
           </div>
 
           {/* Table pagination footer controls */}
-          <div className="p-4 border-t border-slate-100 bg-slate-50/20 flex items-center justify-between text-[11px] text-slate-400 font-extrabold flex-shrink-0">
-            <span>Showing 1 to {sortedDocs.length} of {documents.length} documents</span>
+          <div className="px-5 py-3.5 border-t border-slate-100 bg-slate-50/20 flex items-center justify-between text-[11px] text-slate-400 font-bold flex-shrink-0">
+            <span>
+              Showing {sortedDocs.length === 0 ? 0 : (safePage - 1) * ITEMS_PER_PAGE + 1} to {Math.min(safePage * ITEMS_PER_PAGE, sortedDocs.length)} of {sortedDocs.length} document{sortedDocs.length !== 1 ? 's' : ''}
+            </span>
 
-            <div className="flex items-center gap-1 bg-white border border-slate-200 rounded-xl p-1 shadow-xs">
-              <button
-                onClick={() => showActionToast("⏮️ Navigating to previous documents page...")}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
-              >
-                <ChevronLeft size={14} />
-              </button>
+            {totalPages > 1 && (
+              <div className="flex items-center gap-1 bg-white border border-slate-200 rounded-xl p-1 shadow-xs">
+                <button
+                  disabled={safePage === 1}
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  <ChevronLeft size={14} />
+                </button>
 
-              <button className="w-6 h-6 bg-[#810B38] text-white rounded-lg flex items-center justify-center font-bold text-xs">1</button>
-              <button onClick={() => showActionToast("Navigating to page 2...")} className="w-6 h-6 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg flex items-center justify-center font-bold text-xs">2</button>
-              <button onClick={() => showActionToast("Navigating to page 3...")} className="w-6 h-6 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg flex items-center justify-center font-bold text-xs">3</button>
-              <span className="px-1 text-slate-350">...</span>
-              <button onClick={() => showActionToast("Navigating to final page...")} className="w-6 h-6 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg flex items-center justify-center font-bold text-xs">34</button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(pg => (
+                  <button
+                    key={pg}
+                    onClick={() => setCurrentPage(pg)}
+                    className={`w-6 h-6 rounded-lg flex items-center justify-center font-extrabold text-xs cursor-pointer ${
+                      safePage === pg
+                        ? 'bg-[#810B38] text-white shadow-xs'
+                        : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                    }`}
+                  >
+                    {pg}
+                  </button>
+                ))}
 
-              <button
-                onClick={() => showActionToast("⏭️ Navigating to next documents page...")}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
-              >
-                <ChevronRight size={14} />
-              </button>
-            </div>
+                <button
+                  disabled={safePage === totalPages}
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  <ChevronRight size={14} />
+                </button>
+              </div>
+            )}
           </div>
 
         </div>
@@ -1174,16 +1339,24 @@ const Documents = () => {
           <div className="flex-1 overflow-y-auto p-5 space-y-5">
 
             {/* Patient quick details card */}
-            <div className="flex items-center gap-3.5 bg-slate-50 border border-slate-200/50 p-3.5 rounded-2xl shadow-sm">
-              <div className="w-10 h-10 rounded-full bg-[#FAF5F0] border-2 border-[#DCC3AA]/30 text-[#810B38] flex items-center justify-center font-black text-xs shadow-inner">
-                {selectedDoc.patientName.split(' ').map(n => n[0]).join('')}
+            <div className="flex items-center justify-between bg-slate-50 border border-slate-200/50 p-3.5 rounded-2xl shadow-sm">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#FAF5F0] border-2 border-[#DCC3AA]/30 text-[#810B38] flex items-center justify-center font-black text-xs shadow-inner flex-shrink-0">
+                  {selectedDoc.patientName.split(' ').map(n => n[0]).join('')}
+                </div>
+                <div className="text-left min-w-0">
+                  <h4 className="text-xs font-black text-slate-800 truncate max-w-[120px]">{selectedDoc.patientName}</h4>
+                  <p className="text-[10px] text-slate-450 font-semibold mt-0.5">
+                    {selectedDoc.patientId} · {selectedDoc.age} Yrs, {selectedDoc.gender}
+                  </p>
+                </div>
               </div>
-              <div className="text-left">
-                <h4 className="text-xs font-black text-slate-800">{selectedDoc.patientName}</h4>
-                <p className="text-[10px] text-slate-450 font-bold tracking-wide mt-1">
-                  {selectedDoc.patientId} • {selectedDoc.age} Years, {selectedDoc.gender}
-                </p>
-              </div>
+              <button
+                onClick={() => showScreen('patientdetail')}
+                className="px-2.5 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-700 cursor-pointer transition-all shadow-xs flex-shrink-0"
+              >
+                View Profile
+              </button>
             </div>
 
             {/* Document metadata parameters list */}
@@ -1379,16 +1552,24 @@ const Documents = () => {
                 </div>
                 <div>
                   <label className="form-label">Category / Folder *</label>
-                  <select
-                    className="form-input form-select text-xs cursor-pointer"
+                  <input
+                    list="category-options"
+                    className="form-input text-xs"
                     disabled={uploadingState}
+                    placeholder="Select or type category..."
                     value={newDoc.category}
                     onChange={(e) => setNewDoc({ ...newDoc, category: e.target.value })}
-                  >
-                    <option value="Lab Reports">Lab Reports</option>
-                    <option value="Invoices">Invoices</option>
-                    <option value="Consent Forms">Consent Forms</option>
-                  </select>
+                  />
+                  <datalist id="category-options">
+                    <option value="Lab Reports" />
+                    <option value="Blood Reports" />
+                    <option value="Scans & Imaging" />
+                    <option value="Prescriptions" />
+                    <option value="Invoices" />
+                    <option value="Consent Forms" />
+                    <option value="Discharge Summaries" />
+                    <option value="Insurance Documents" />
+                  </datalist>
                 </div>
               </div>
 
@@ -1450,6 +1631,61 @@ const Documents = () => {
                 </button>
               </div>
 
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Add Patient Modal */}
+      {showAddPatientModal && (
+        <div className="fixed inset-0 bg-slate-900/40 flex items-center justify-center p-4 z-50 animate-fadeIn backdrop-blur-[4px]">
+          <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden flex flex-col border border-slate-100">
+            <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-blue-600 text-white">
+              <div className="flex items-center gap-2">
+                <User size={16} className="text-blue-200 animate-pulse" />
+                <h3 className="text-sm font-extrabold tracking-tight">Add New Patient</h3>
+              </div>
+              <button onClick={() => setShowAddPatientModal(false)} className="text-white/80 hover:text-white hover:bg-white/10 p-1.5 rounded-lg cursor-pointer">
+                <X size={15} />
+              </button>
+            </div>
+
+            <form onSubmit={handleAddPatientSubmit} className="p-5 flex flex-col gap-3.5">
+              <div>
+                <label className="form-label">Full Name *</label>
+                <input type="text" required placeholder="e.g. Ramesh Chandra"
+                  value={newPatient.name} onChange={e => setNewPatient({ ...newPatient, name: e.target.value })}
+                  className="form-input text-xs" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="form-label">Age *</label>
+                  <input type="number" required placeholder="e.g. 42"
+                    value={newPatient.age} onChange={e => setNewPatient({ ...newPatient, age: e.target.value })}
+                    className="form-input text-xs" />
+                </div>
+                <div>
+                  <label className="form-label">Gender *</label>
+                  <select value={newPatient.gender} onChange={e => setNewPatient({ ...newPatient, gender: e.target.value })}
+                    className="form-input form-select text-xs cursor-pointer">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="form-label">Phone Number *</label>
+                <input type="text" required placeholder="e.g. 98765 12345"
+                  value={newPatient.phone} onChange={e => setNewPatient({ ...newPatient, phone: e.target.value })}
+                  className="form-input text-xs" />
+              </div>
+              <div className="flex justify-end gap-2 border-t border-slate-100 pt-3.5 mt-1">
+                <button type="button" onClick={() => setShowAddPatientModal(false)}
+                  className="btn-secondary text-xs py-2 px-4 cursor-pointer font-bold">Cancel</button>
+                <button type="submit"
+                  className="px-4.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black shadow-sm cursor-pointer">Save Profile</button>
+              </div>
             </form>
           </div>
         </div>

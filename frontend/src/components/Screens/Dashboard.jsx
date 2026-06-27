@@ -21,10 +21,30 @@ import {
   Grid
 } from 'lucide-react';
 
+// Patient demographics mock data (sourced from friend's dashboard pattern)
+const demographics = {
+  genderSplit: { male: 58, female: 36, other: 6 },
+  totalPatients: 100,
+  ageGroups: { children: 12, adults: 68, senior: 20 }
+};
+
+// Weekly appointment bar chart mock data
+const weeklyData = [
+  { day: 'Mon', total: 22, completed: 18 },
+  { day: 'Tue', total: 28, completed: 24 },
+  { day: 'Wed', total: 20, completed: 15 },
+  { day: 'Thu', total: 32, completed: 29 },
+  { day: 'Fri', total: 26, completed: 22 },
+  { day: 'Sat', total: 14, completed: 12 },
+  { day: 'Sun', total: 8, completed: 8 },
+];
+const maxBar = Math.max(...weeklyData.map(d => d.total));
+
 const Dashboard = () => {
   const { showScreen, setSelectedPatientId, patients } = useApp();
   const [filterTime, setFilterTime] = useState('Today');
   const [activeTab, setActiveTab] = useState('appointments');
+  const [expandedAppt, setExpandedAppt] = useState(null);
 
   // Quick helper to select a patient and view details
   const viewPatientDetails = (id) => {
@@ -33,11 +53,12 @@ const Dashboard = () => {
   };
 
   const appointmentsList = [
-    { id: '#1042', time: '09:00 AM', name: 'Amit Mehta', reason: 'Headache · Follow Up', room: 'OPD - 2', status: 'In Progress', statusColor: 'bg-[#810B38] text-white' },
-    { id: '#1039', time: '09:30 AM', name: 'Sunita Patel', reason: 'BP Checkup', room: 'OPD - 2', status: 'Waiting', statusColor: 'bg-[#FAF5F0] text-[#D0693B] border border-[#F3D9C9]' },
-    { id: '#1035', time: '10:00 AM', name: 'Rahul Kumar', reason: 'Diabetes Checkup', room: 'OPD - 2', status: 'Waiting', statusColor: 'bg-[#FAF5F0] text-[#D0693B] border border-[#F3D9C9]' },
-    { id: '#1048', time: '10:30 AM', name: 'Priya Desai', reason: 'Thyroid Consultation', room: 'OPD - 2', status: 'Upcoming', statusColor: 'bg-[#EBF3FC] text-[#2F80ED] border border-[#D0E3FA]' },
-    { id: '#1021', time: '11:00 AM', name: 'Vijay Nair', reason: 'Chest Pain', room: 'OPD - 2', status: 'Upcoming', statusColor: 'bg-[#EBF3FC] text-[#2F80ED] border border-[#D0E3FA]' }
+    { id: '#1042', time: '09:00 AM', name: 'Amit Mehta', reason: 'Headache · Follow Up', room: 'OPD - 2', status: 'In Progress', statusColor: 'bg-[#810B38] text-white', age: '42', gender: 'Male', phone: '+91 98765 43210', email: 'amit.mehta@email.com' },
+    { id: '#1039', time: '09:30 AM', name: 'Sunita Patel', reason: 'BP Checkup', room: 'OPD - 2', status: 'Waiting', statusColor: 'bg-[#FAF5F0] text-[#D0693B] border border-[#F3D9C9]', age: '55', gender: 'Female', phone: '+91 97654 32109', email: 'sunita.patel@email.com' },
+    { id: '#1035', time: '10:00 AM', name: 'Rahul Kumar', reason: 'Diabetes Checkup', room: 'OPD - 2', status: 'Waiting', statusColor: 'bg-[#FAF5F0] text-[#D0693B] border border-[#F3D9C9]', age: '38', gender: 'Male', phone: '+91 96543 21098', email: 'rahul.kumar@email.com' },
+    { id: '#1048', time: '10:30 AM', name: 'Priya Desai', reason: 'Thyroid Consultation', room: 'OPD - 2', status: 'Upcoming', statusColor: 'bg-[#EBF3FC] text-[#2F80ED] border border-[#D0E3FA]', age: '29', gender: 'Female', phone: '+91 95432 10987', email: 'priya.desai@email.com' },
+    { id: 'lunch-12', time: '12:00 PM', name: 'Lunch Break', reason: '12:00 PM - 01:00 PM', room: '', status: 'Lunch', statusColor: 'bg-orange-50 text-orange-700 border border-orange-100' },
+    { id: 'slot-2', time: '02:00 PM', name: 'Available Slot', reason: '02:00 PM - 02:30 PM', room: '', status: 'Available', statusColor: 'bg-emerald-50 text-emerald-700 border border-emerald-100' }
   ];
 
   const doctorsList = [
@@ -61,7 +82,8 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="flex-1 overflow-y-auto p-5 pb-4 bg-[#FCFBFB] flex flex-col gap-5 font-sans">
+    <div className="flex-1 overflow-y-auto p-2 bg-transparent font-sans">
+      <div className="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 flex flex-col gap-4 min-h-full">
 
       {/* Row 1: Greeting & KPI Cards Grid */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 flex-shrink-0">
@@ -69,8 +91,8 @@ const Dashboard = () => {
         {/* Greeting Card */}
         <div className="xl:col-span-5 bg-white p-5 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden flex items-center justify-between min-h-[130px] hover:shadow-md transition-shadow duration-300">
           <div className="z-10 max-w-[62%]">
-            <h1 className="text-lg font-extrabold text-slate-800 flex items-center gap-1.5">
-              Good Morning, Admin <span className="animate-bounce">👋</span>
+            <h1 className="text-base font-bold text-slate-800 flex items-center gap-1.5">
+              Good Morning, Sowndhar <span className="animate-bounce">👋</span>
             </h1>
             <p className="text-slate-400 text-xs mt-1 font-medium leading-relaxed">
               Here's what's happening in your clinic today.
@@ -280,58 +302,101 @@ const Dashboard = () => {
                     {/* Tabs */}
                     <div className="flex gap-4 border-b border-slate-100 pb-2 mb-3.5 select-none">
                       <button
-                        className={`text-xs font-extrabold pb-1.5 transition-all cursor-pointer ${activeTab === 'appointments'
-                            ? 'text-[#810B38] border-b-2 border-[#810B38]'
-                            : 'text-slate-400 hover:text-slate-600'
-                          }`}
-                        onClick={() => setActiveTab('appointments')}
-                      >
-                        Appointments
-                      </button>
-                      <button
-                        className={`text-xs font-extrabold pb-1.5 transition-all cursor-pointer ${activeTab === 'schedule'
-                            ? 'text-[#810B38] border-b-2 border-[#810B38]'
-                            : 'text-slate-400 hover:text-slate-600'
-                          }`}
-                        onClick={() => setActiveTab('schedule')}
+                        className="text-xs font-extrabold pb-1.5 transition-all cursor-default border-b-2"
+                        style={{ color: 'var(--color-primary)', borderColor: 'var(--color-primary)' }}
                       >
                         Schedule
                       </button>
                     </div>
 
                     {/* Appointments List */}
-                    <div className="flex flex-col gap-2.5">
-                      {appointmentsList.map((app) => (
-                        <div
-                          key={app.id}
-                          className="flex items-center justify-between hover:bg-slate-50/50 p-1 rounded-xl transition-all cursor-pointer group"
-                          onClick={() => viewPatientDetails(app.id)}
-                        >
-                          <div className="flex items-center gap-3">
-                            <span className="text-[#810B38] font-bold text-xs w-16 flex-shrink-0">{app.time}</span>
-                            <div className="w-1 h-7 bg-slate-100 group-hover:bg-[#810B38]/30 rounded-full transition-colors"></div>
-                            <div>
-                              <p className="text-xs font-bold text-slate-800">{app.name}</p>
-                              <p className="text-[10px] text-slate-400 mt-0.5 font-medium">{app.reason}</p>
-                            </div>
-                          </div>
+                    <div className="flex flex-col gap-1">
+                      {appointmentsList.map((app) => {
+                        const isExpanded = expandedAppt === app.id;
+                        const isExpandable = !!app.age; // only real patient rows
+                        return (
+                          <div key={app.id}>
+                            <div
+                              className={`flex items-center justify-between px-2 py-1.5 -mx-2 rounded-xl transition-all cursor-pointer group hover:shadow-sm border ${
+                                isExpanded
+                                  ? 'bg-[color-mix(in_srgb,var(--color-primary)_6%,transparent)] border-[color-mix(in_srgb,var(--color-primary)_15%,transparent)] shadow-sm'
+                                  : 'border-transparent hover:bg-slate-50/80 hover:border-slate-100/60'
+                              }`}
+                              onClick={() => {
+                                if (isExpandable) {
+                                  setExpandedAppt(isExpanded ? null : app.id);
+                                } else {
+                                  viewPatientDetails(app.id);
+                                }
+                              }}
+                            >
+                              <div className="flex items-center gap-3">
+                                <span className="font-bold text-xs w-16 flex-shrink-0" style={{ color: 'var(--color-primary)' }}>{app.time}</span>
+                                <div className={`w-1 h-7 rounded-full transition-colors ${isExpanded ? '' : 'bg-slate-100'}`} style={isExpanded ? { background: 'var(--color-primary)' } : {}} onMouseEnter={e => { if (!isExpanded) e.currentTarget.style.background = 'var(--color-primary-light)'; }} onMouseLeave={e => { if (!isExpanded) e.currentTarget.style.background = ''; }}></div>
+                                <div>
+                                  <p className={`text-xs font-bold ${app.id.startsWith('empty') ? 'text-slate-400 italic' : 'text-slate-800'}`}>{app.name}</p>
+                                  {app.reason && <p className="text-[10px] text-slate-400 mt-0.5 font-medium">{app.reason}</p>}
+                                </div>
+                              </div>
 
-                          <div className="flex items-center gap-2">
-                            <span className="text-[9px] text-slate-400 font-bold hidden sm:inline">{app.room}</span>
-                            <span className={`px-2 py-0.5 text-[9px] font-black rounded-full shadow-sm leading-tight ${app.statusColor}`}>
-                              {app.status}
-                            </span>
-                            <button className="text-slate-400 hover:text-slate-700 p-0.5" onClick={(e) => { e.stopPropagation(); alert('Appointment actions.'); }}>
-                              <MoreVertical size={13} />
-                            </button>
+                              <div className="flex items-center gap-2">
+                                {app.room ? (
+                                  <span className="text-[9px] text-slate-400 font-bold hidden sm:inline">{app.room}</span>
+                                ) : (
+                                  <span className="text-[9px] text-transparent font-bold hidden sm:inline select-none pointer-events-none">OPD - 2</span>
+                                )}
+                                {app.status && (
+                                  <span className={`px-2 py-0.5 text-[9px] font-black rounded-full shadow-sm leading-tight text-center ${app.statusColor}`} style={{ minWidth: '60px' }}>
+                                    {app.status}
+                                  </span>
+                                )}
+                                {app.room ? (
+                                  <button className="text-slate-400 hover:text-slate-700 p-0.5" onClick={(e) => { e.stopPropagation(); alert('Appointment actions.'); }}>
+                                    <MoreVertical size={13} />
+                                  </button>
+                                ) : (
+                                  <div className="p-0.5 opacity-0 pointer-events-none">
+                                    <MoreVertical size={13} />
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* ── Inline expand panel ── */}
+                            {isExpanded && app.age && (
+                              <div className="mx-2 mt-1 mb-2 p-3 rounded-xl border animate-fade-up" style={{ background: 'color-mix(in srgb, var(--color-primary) 4%, #ffffff)', borderColor: 'color-mix(in srgb, var(--color-primary) 18%, transparent)' }}>
+                                <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest mb-2">Patient Details</p>
+                                <div className="grid grid-cols-2 gap-1.5">
+                                  {[
+                                    { label: 'Age', value: `${app.age} yrs` },
+                                    { label: 'Gender', value: app.gender },
+                                    { label: 'Phone', value: app.phone },
+                                    { label: 'Email', value: app.email },
+                                  ].map(f => (
+                                    <div key={f.label} className="bg-white rounded-lg p-2 border border-slate-100">
+                                      <p className="text-[9px] text-slate-400 font-medium">{f.label}</p>
+                                      <p className="text-[10px] font-bold text-slate-700 truncate mt-0.5">{f.value}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                                <button
+                                  className="mt-2 w-full text-[9px] font-extrabold py-1.5 rounded-lg transition-all cursor-pointer hover:opacity-80"
+                                  style={{ background: 'color-mix(in srgb, var(--color-primary) 12%, transparent)', color: 'var(--color-primary)' }}
+                                  onClick={(e) => { e.stopPropagation(); viewPatientDetails(app.id); }}
+                                >
+                                  View Full Record →
+                                </button>
+                              </div>
+                            )}
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
 
                   <button
-                    className="flex items-center justify-center gap-1.5 text-xs font-extrabold text-[#810B38] hover:underline mt-4 pt-3 border-t border-slate-50 cursor-pointer self-center md:self-start"
+                    className="flex items-center justify-center gap-1.5 text-xs font-extrabold hover:underline mt-4 pt-3 border-t border-slate-50 cursor-pointer self-center md:self-start"
+                    style={{ color: 'var(--color-primary)' }}
                     onClick={() => showScreen('appointments')}
                   >
                     <span>View All Appointments</span>
@@ -343,36 +408,30 @@ const Dashboard = () => {
                 <div className="md:col-span-6 flex flex-col justify-between md:pl-2">
                   <div>
                     <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-50">
-                      <span className="text-xs font-extrabold text-slate-700">Timeline</span>
+                      <span className="text-xs font-extrabold" style={{ color: 'var(--color-primary)' }}>Timeline</span>
                       <span className="text-[9px] font-bold text-slate-400">08:00 - 14:00</span>
                     </div>
 
                     {/* Vertical Timeline axis list */}
-                    <div className="relative flex flex-col gap-3.5 scrollbar-hide max-h-[280px] overflow-y-auto">
+                    <div className="relative flex flex-col gap-3.5">
                       <div className="absolute left-[70px] top-2 bottom-2 w-0.5 bg-slate-100"></div>
 
                       {/* 08:00 */}
-                      <div className="flex gap-3 items-center">
-                        <span className="w-12 text-[10px] text-slate-400 font-bold text-right flex-shrink-0">08:00</span>
-                        <div className="relative flex items-center justify-center w-5 flex-shrink-0">
-                          <div className="w-2 h-2 rounded-full bg-slate-200 border border-white z-10 shadow-sm"></div>
-                        </div>
-                        <span className="text-[10.5px] text-slate-400 italic font-medium flex-1">No scheduled events</span>
-                      </div>
+                      {/* Removed no scheduled events */}
 
                       {/* 09:00 */}
                       <div className="flex gap-3 items-center">
                         <span className="w-12 text-[10px] text-slate-800 font-extrabold text-right flex-shrink-0">09:00</span>
                         <div className="relative flex items-center justify-center w-5 flex-shrink-0">
-                          <div className="w-2.5 h-2.5 rounded-full bg-[#810B38] border border-white z-10 shadow-sm animate-pulse"></div>
+                          <div className="w-2.5 h-2.5 rounded-full border border-white z-10 shadow-sm animate-pulse" style={{ background: 'var(--color-primary)' }}></div>
                         </div>
                         <div className="flex-grow pl-1">
-                          <div className="px-3 py-1.5 bg-[#810B38]/5 border-l-4 border-[#810B38] rounded-xl flex items-center justify-between shadow-sm">
+                          <div className="px-3 py-1.5 rounded-xl flex items-center justify-between shadow-sm" style={{ background: 'color-mix(in srgb, var(--color-primary) 8%, transparent)', borderLeft: '4px solid var(--color-primary)' }}>
                             <div>
                               <p className="text-xs font-extrabold text-slate-800 leading-tight">Amit Mehta</p>
                               <p className="text-[9.5px] text-slate-500 mt-0.5">09:00 AM - 09:30 AM</p>
                             </div>
-                            <span className="px-2 py-0.5 text-[8.5px] font-bold text-[#810B38] bg-white rounded-full border border-[#810B38]/20 shadow-sm">In Progress</span>
+                            <span className="px-2 py-0.5 text-[8.5px] font-bold bg-white rounded-full shadow-sm" style={{ color: 'var(--color-primary)', border: '1px solid color-mix(in srgb, var(--color-primary) 20%, transparent)' }}>In Progress</span>
                           </div>
                         </div>
                       </div>
@@ -402,18 +461,18 @@ const Dashboard = () => {
                       </div>
 
                       {/* 11:00 */}
-                      <div className="flex gap-3 items-center">
-                        <span className="w-12 text-[10px] text-slate-400 font-bold text-right flex-shrink-0">11:00</span>
-                        <div className="relative flex items-center justify-center w-5 flex-shrink-0">
+                      <div className="flex gap-3 items-start">
+                        <span className="w-12 text-[10px] text-slate-400 font-bold text-right flex-shrink-0 mt-2">11:00</span>
+                        <div className="relative flex items-center justify-center w-5 flex-shrink-0 mt-2.5">
                           <div className="w-2 h-2 rounded-full bg-blue-500 border border-white z-10 shadow-sm"></div>
                         </div>
-                        <div className="flex-grow pl-1">
-                          <div className="px-3 py-1.5 bg-[#EBF3FC]/40 border-l-3 border-[#2F80ED] rounded-xl flex items-center justify-between shadow-sm">
+                        <div className="flex-grow pl-1 flex flex-col gap-1.5">
+                          <div className="px-3 py-1 bg-[#EBF3FC]/40 border-l-3 border-[#2F80ED] rounded-xl flex items-center justify-between shadow-sm">
                             <div>
                               <p className="text-xs font-bold text-slate-700">Priya Desai</p>
                               <p className="text-[9px] text-slate-400 mt-0.5">10:30 AM - 11:00 AM</p>
                             </div>
-                            <span className="px-2 py-0.5 text-[8.5px] font-bold text-blue-600 bg-white rounded-full border border-blue-50 shadow-sm">Upcoming</span>
+                            <span className="px-1.5 py-0.2 text-[8.5px] font-bold text-blue-600 bg-white rounded-full border border-blue-50 shadow-sm">Upcoming</span>
                           </div>
                         </div>
                       </div>
@@ -440,7 +499,7 @@ const Dashboard = () => {
                         <div className="flex-grow pl-1">
                           <div className="py-1.5 px-3 border border-dashed border-slate-200 bg-white rounded-xl flex items-center justify-between text-slate-450 font-bold text-[11px] shadow-sm">
                             <span>Available Slot (02:00 PM - 02:30 PM)</span>
-                            <button className="w-5 h-5 rounded-full bg-[#810B38] text-white flex items-center justify-center hover:bg-[#6B082D] cursor-pointer shadow-sm hover:scale-105 transition-transform" onClick={() => showScreen('appointments')}>
+                            <button className="w-5 h-5 rounded-full text-white flex items-center justify-center cursor-pointer shadow-sm hover:scale-105 transition-transform" style={{ background: 'var(--color-primary)' }} onMouseEnter={e => e.currentTarget.style.background = 'var(--color-primary-hover)'} onMouseLeave={e => e.currentTarget.style.background = 'var(--color-primary)'} onClick={() => showScreen('appointments')}>
                               <Plus size={11} />
                             </button>
                           </div>
@@ -451,7 +510,8 @@ const Dashboard = () => {
                   </div>
 
                   <button
-                    className="flex items-center justify-center gap-1.5 text-xs font-extrabold text-[#810B38] hover:underline mt-4 pt-3 border-t border-slate-50 cursor-pointer self-center md:self-start"
+                    className="flex items-center justify-center gap-1.5 text-xs font-extrabold hover:underline mt-4 pt-3 border-t border-slate-50 cursor-pointer self-center md:self-start"
+                    style={{ color: 'var(--color-primary)' }}
                     onClick={() => showScreen('appointments')}
                   >
                     <span>View Full Schedule</span>
@@ -514,7 +574,7 @@ const Dashboard = () => {
               {tasksList.map((task, index) => {
                 const TaskIcon = task.icon;
                 return (
-                  <div key={index} className="flex items-center justify-between gap-2.5 bg-slate-50/30 hover:bg-slate-50/70 px-3 py-1.5 rounded-xl border border-slate-100/30 transition-all cursor-pointer group">
+                  <div key={index} className="flex items-center justify-between gap-2.5 bg-transparent hover:bg-slate-50/70 px-3 py-1.5 rounded-xl border border-slate-100/30 transition-all cursor-pointer group">
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 rounded-lg bg-rose-50/50 text-[#810B38] flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
                         <TaskIcon size={12} />
@@ -534,154 +594,157 @@ const Dashboard = () => {
 
       </div>
 
-      {/* Row 4: Bottom Widgets Row (Clinic Overview, Revenue Overview, Recent Documents side-by-side in equal column sizes) */}
+      {/* Row 4: Bottom Widgets Row (Patient Demographics, Revenue Overview, Recent Documents) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch pb-0 flex-shrink-0">
 
-        {/* Column 1: Clinic Overview */}
-        <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-4.5 flex flex-col justify-between gap-4">
+        {/* Column 1: Patient Demographics */}
+        <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-4.5 flex flex-col gap-3">
+          <h2 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Patient Demographics</h2>
+
+          {/* Gender Split */}
           <div>
-            <h2 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Clinic Overview</h2>
+            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-2">Gender Split</p>
+            <div className="space-y-2">
+              {[
+                { label: 'Male',   val: demographics.genderSplit.male,   color: '#2F80ED', bg: '#EBF3FC' },
+                { label: 'Female', val: demographics.genderSplit.female, color: '#EC4899', bg: '#FDE8F4' },
+                { label: 'Other',  val: demographics.genderSplit.other,  color: '#D0693B', bg: '#FAF5F0' },
+              ].map(({ label, val, color, bg }) => {
+                const pct = Math.round((val / demographics.totalPatients) * 100);
+                return (
+                  <div key={label}>
+                    <div className="flex justify-between items-center text-[10px] mb-1">
+                      <span className="font-bold text-slate-600">{label}</span>
+                      <span className="font-extrabold" style={{ color }}>{val} <span className="text-slate-400 font-medium">({pct}%)</span></span>
+                    </div>
+                    <div className="h-1.5 rounded-full" style={{ background: bg }}>
+                      <div
+                        className="h-full rounded-full transition-all duration-700"
+                        style={{ width: `${pct}%`, background: color }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 flex-grow">
-            {/* Doctors Active */}
-            <div className="bg-[#FCF6F7] p-3 rounded-2xl border border-[#FAEDEE] flex flex-col justify-between hover:shadow-sm transition-shadow">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-800">Doctors Active</span>
-                <div className="w-6.5 h-6.5 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
-                  <UserCheck size={13} />
+          {/* Divider */}
+          <div className="border-t border-slate-100"></div>
+
+          {/* Age Groups */}
+          <div>
+            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-2">Age Groups</p>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { label: '< 18',  val: demographics.ageGroups.children, color: '#D0693B', bg: '#FAF5F0', border: '#F3D9C9' },
+                { label: '18–60', val: demographics.ageGroups.adults,   color: '#2F80ED', bg: '#EBF3FC', border: '#D0E3FA' },
+                { label: '60+',   val: demographics.ageGroups.senior,   color: '#810B38', bg: '#FFF0F3', border: '#FFE2E6' },
+              ].map(({ label, val, color, bg, border }) => (
+                <div key={label} className="text-center p-2.5 rounded-2xl border" style={{ background: bg, borderColor: border }}>
+                  <p className="text-lg font-black leading-none" style={{ color }}>{val}</p>
+                  <p className="text-[9px] font-bold text-slate-500 mt-1">{label}</p>
                 </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="border-t border-slate-100"></div>
+
+          {/* Quick sub-stats: Rooms & Emergencies */}
+          <div className="grid grid-cols-2 gap-2">
+            <div className="bg-[#FAF7F3] p-2.5 rounded-2xl border border-[#F5EFE6] flex items-center gap-2">
+              <div className="w-6 h-6 rounded-lg bg-amber-50 text-orange-600 flex items-center justify-center flex-shrink-0">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 14h20M6 8v6" /></svg>
               </div>
-              <div className="mt-2.5">
-                <p className="text-lg font-black text-slate-800 leading-none">12</p>
-                <span className="text-[9px] font-bold text-emerald-600 flex items-center gap-0.5 mt-1">
-                  <span>↑ 2</span> <span className="text-slate-400 font-medium">vs yesterday</span>
-                </span>
+              <div>
+                <p className="text-[9px] text-slate-400 font-medium leading-none">Rooms</p>
+                <p className="text-sm font-black text-slate-800 leading-none mt-0.5">3 <span className="text-[9px] font-bold text-rose-500">↓1</span></p>
               </div>
             </div>
-
-            {/* Patients Waiting */}
-            <div className="bg-[#F6FAFE] p-3 rounded-2xl border border-[#EEF5FC] flex flex-col justify-between hover:shadow-sm transition-shadow">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-800">Patients Waiting</span>
-                <div className="w-6.5 h-6.5 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                  <Users size={13} />
-                </div>
+            <div className="bg-[#F5FBF7] p-2.5 rounded-2xl border border-[#EEFAF0] flex items-center gap-2">
+              <div className="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
+                <HeartPulse size={11} />
               </div>
-              <div className="mt-2.5">
-                <p className="text-lg font-black text-slate-800 leading-none">25</p>
-                <span className="text-[9px] font-bold text-emerald-600 flex items-center gap-0.5 mt-1">
-                  <span>↑ 5</span> <span className="text-slate-400 font-medium">vs yesterday</span>
-                </span>
-              </div>
-            </div>
-
-            {/* Rooms Occupied */}
-            <div className="bg-[#FAF7F3] p-3 rounded-2xl border border-[#F5EFE6] flex flex-col justify-between hover:shadow-sm transition-shadow">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-800">Rooms Occupied</span>
-                <div className="w-6.5 h-6.5 rounded-xl bg-amber-50 text-orange-600 flex items-center justify-center">
-                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 14h20M6 8v6" />
-                  </svg>
-                </div>
-              </div>
-              <div className="mt-2.5">
-                <p className="text-lg font-black text-slate-800 leading-none">3</p>
-                <span className="text-[9px] font-bold text-rose-600 flex items-center gap-0.5 mt-1">
-                  <span>↓ 1</span> <span className="text-slate-400 font-medium">vs yesterday</span>
-                </span>
-              </div>
-            </div>
-
-            {/* Emergency Cases */}
-            <div className="bg-[#F5FBF7] p-3 rounded-2xl border border-[#EEFAF0] flex flex-col justify-between hover:shadow-sm transition-shadow">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-800">Emergency Cases</span>
-                <div className="w-6.5 h-6.5 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                  <HeartPulse size={13} />
-                </div>
-              </div>
-              <div className="mt-2.5">
-                <p className="text-lg font-black text-slate-800 leading-none">1</p>
-                <span className="text-[9px] font-bold text-slate-450 flex items-center gap-0.5 mt-1">
-                  <span className="text-slate-400 font-medium">Same as yesterday</span>
-                </span>
+              <div>
+                <p className="text-[9px] text-slate-400 font-medium leading-none">Emergency</p>
+                <p className="text-sm font-black text-slate-800 leading-none mt-0.5">1 <span className="text-[9px] font-bold text-slate-400">same</span></p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Column 2: Revenue Overview */}
-        <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-4.5 flex flex-col justify-between gap-3">
-          <div>
-            <div className="flex items-center justify-between">
-              <h2 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Revenue Overview</h2>
-              <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400 hover:text-slate-600 cursor-pointer select-none">
-                <span>This Week</span>
-                <ChevronDown size={11} />
-              </div>
+        {/* Column 2: Weekly Appointments Chart */}
+        <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-4.5 flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Weekly Appointments</h2>
+            <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">7 Days</span>
+          </div>
+
+          <div className="flex items-baseline gap-2">
+            <span className="text-lg font-extrabold text-slate-800">150 <span className="text-xs font-bold text-slate-400">total</span></span>
+            <span className="text-[9px] font-bold text-emerald-600">↑ 8% <span className="text-slate-400 font-medium">vs last week</span></span>
+          </div>
+
+          {/* Legend */}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-sm" style={{ background: 'var(--color-primary)' }}></div>
+              <span className="text-[9px] font-bold text-slate-500">Total</span>
             </div>
-            <div className="flex items-baseline gap-2 mt-2">
-              <span className="text-lg font-extrabold text-slate-805">₹8,46,200</span>
-              <span className="text-[9px] font-bold text-emerald-600">↑ 12.5% <span className="text-slate-400 font-medium">vs last week</span></span>
+            <div className="flex items-center gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-sm bg-emerald-400"></div>
+              <span className="text-[9px] font-bold text-slate-500">Completed</span>
             </div>
           </div>
 
-          {/* Spline Area Chart SVG */}
-          <div className="w-full select-none flex-grow flex items-end">
-            <svg className="w-full h-[115px]" viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.25" />
-                  <stop offset="100%" stopColor="var(--color-primary)" stopOpacity="0.0" />
-                </linearGradient>
-              </defs>
+          {/* Dual Bar Chart */}
+          <div className="flex-grow flex items-end">
+            <svg className="w-full" viewBox="0 0 380 110" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+              {/* Horizontal Grid Lines */}
+              <line x1="0" y1="0"   x2="380" y2="0"   stroke="#f1f5f9" strokeWidth="0.8" strokeDasharray="3 3" />
+              <line x1="0" y1="27"  x2="380" y2="27"  stroke="#f1f5f9" strokeWidth="0.8" strokeDasharray="3 3" />
+              <line x1="0" y1="54"  x2="380" y2="54"  stroke="#f1f5f9" strokeWidth="0.8" strokeDasharray="3 3" />
+              <line x1="0" y1="80"  x2="380" y2="80"  stroke="#f1f5f9" strokeWidth="0.8" strokeDasharray="3 3" />
+              <line x1="0" y1="100" x2="380" y2="100" stroke="#e2e8f0" strokeWidth="1" />
 
-              {/* Grid Lines */}
-              <line x1="25" y1="15" x2="385" y2="15" stroke="#f8fafc" strokeWidth="1" strokeDasharray="3 3" />
-              <line x1="25" y1="45" x2="385" y2="45" stroke="#f8fafc" strokeWidth="1" strokeDasharray="3 3" />
-              <line x1="25" y1="75" x2="385" y2="75" stroke="#f8fafc" strokeWidth="1" strokeDasharray="3 3" />
-              <line x1="25" y1="105" x2="385" y2="105" stroke="#f1f5f9" strokeWidth="1" />
-
-              {/* Y Axis Grid values */}
-              <text x="5" y="18" className="text-[9px] fill-slate-400 font-bold font-sans">₹1.5L</text>
-              <text x="5" y="48" className="text-[9px] fill-slate-400 font-bold font-sans">₹1.0L</text>
-              <text x="5" y="78" className="text-[9px] fill-slate-400 font-bold font-sans">₹0.5L</text>
-              <text x="12" y="108" className="text-[9px] fill-slate-400 font-bold font-sans">₹0</text>
-
-              {/* Spline Area Fill */}
-              <path
-                d="M 40 90 C 67.5 90, 67.5 105, 95 105 C 122.5 105, 122.5 70, 150 70 C 177.5 70, 177.5 80, 205 80 C 232.5 80, 232.5 55, 260 55 C 287.5 55, 287.5 70, 315 70 C 342.5 70, 342.5 30, 370 30 L 370 105 L 40 105 Z"
-                fill="url(#revGrad)"
-              />
-
-              {/* Spline Outline Line */}
-              <path
-                d="M 40 90 C 67.5 90, 67.5 105, 95 105 C 122.5 105, 122.5 70, 150 70 C 177.5 70, 177.5 80, 205 80 C 232.5 80, 232.5 55, 260 55 C 287.5 55, 287.5 70, 315 70 C 342.5 70, 342.5 30, 370 30"
-                stroke="var(--color-primary)"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-
-              {/* Highlighted dots on coordinates */}
-              <circle cx="40" cy="90" r="4" fill="#ffffff" stroke="var(--color-primary)" strokeWidth="2" />
-              <circle cx="95" cy="105" r="4" fill="#ffffff" stroke="var(--color-primary)" strokeWidth="2" />
-              <circle cx="150" cy="70" r="4" fill="#ffffff" stroke="var(--color-primary)" strokeWidth="2" />
-              <circle cx="205" cy="80" r="4" fill="#ffffff" stroke="var(--color-primary)" strokeWidth="2" />
-              <circle cx="260" cy="55" r="4" fill="#ffffff" stroke="var(--color-primary)" strokeWidth="2" />
-              <circle cx="315" cy="70" r="4" fill="#ffffff" stroke="var(--color-primary)" strokeWidth="2" />
-              <circle cx="370" cy="30" r="4" fill="#ffffff" stroke="var(--color-primary)" strokeWidth="2" />
-
-              {/* Axis Labels */}
-              <text x="40" y="118" textAnchor="middle" className="text-[9px] fill-slate-400 font-bold">Mon</text>
-              <text x="95" y="118" textAnchor="middle" className="text-[9px] fill-slate-400 font-bold">Tue</text>
-              <text x="150" y="118" textAnchor="middle" className="text-[9px] fill-slate-400 font-bold">Wed</text>
-              <text x="205" y="118" textAnchor="middle" className="text-[9px] fill-slate-400 font-bold">Thu</text>
-              <text x="260" y="118" textAnchor="middle" className="text-[9px] fill-slate-400 font-bold">Fri</text>
-              <text x="315" y="118" textAnchor="middle" className="text-[9px] fill-slate-400 font-bold">Sat</text>
-              <text x="370" y="118" textAnchor="middle" className="text-[9px] fill-slate-400 font-bold">Sun</text>
+              {/* Grouped Bars */}
+              {weeklyData.map((d, i) => {
+                const slotW = 380 / weeklyData.length; // ~54px per day
+                const barW = 10;
+                const gap = 3;
+                const groupX = slotW * i + (slotW - barW * 2 - gap) / 2;
+                const maxH = 80;
+                const totalH = (d.total / maxBar) * maxH;
+                const completedH = (d.completed / maxBar) * maxH;
+                const dayX = slotW * i + slotW / 2;
+                return (
+                  <g key={d.day}>
+                    {/* Total bar */}
+                    <rect
+                      x={groupX}
+                      y={100 - totalH}
+                      width={barW}
+                      height={totalH}
+                      rx="3"
+                      fill="var(--color-primary)"
+                      fillOpacity="0.85"
+                    />
+                    {/* Completed bar */}
+                    <rect
+                      x={groupX + barW + gap}
+                      y={100 - completedH}
+                      width={barW}
+                      height={completedH}
+                      rx="3"
+                      fill="#34d399"
+                    />
+                    {/* Day label */}
+                    <text x={dayX} y={110} textAnchor="middle" fontSize="8" fill="#94a3b8" fontWeight="700">{d.day}</text>
+                  </g>
+                );
+              })}
             </svg>
           </div>
         </div>
@@ -721,6 +784,7 @@ const Dashboard = () => {
 
       </div>
 
+      </div>
     </div>
   );
 };

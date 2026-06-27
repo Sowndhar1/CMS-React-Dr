@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
+import { useAuth } from '../../context/AuthContext';
 import { Search, Bell, Plus, Calendar, Menu, Palette } from 'lucide-react';
 
 const Header = () => {
   const { currentScreen, showScreen, isSidebarCollapsed, setIsSidebarCollapsed, theme, setTheme } = useApp();
+  const { currentUser } = useAuth();
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -109,16 +111,16 @@ const Header = () => {
 
         <div className="w-px h-5 bg-slate-200 hidden lg:block"></div>
 
-        {/* Admin profile pill */}
+        {/* User profile pill */}
         <div className="flex items-center gap-3">
           <img 
-            src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&h=150&q=80" 
-            alt="Admin" 
+            src={currentUser?.avatar || 'https://api.dicebear.com/7.x/notionists/svg?seed=User&backgroundColor=f1f5f9'}
+            alt={currentUser?.name}
             className="w-9 h-9 rounded-full border-2 border-slate-200 object-cover shadow-sm flex-shrink-0"
           />
           <div className="text-left hidden md:block">
-            <p className="text-xs font-bold text-slate-800" style={{ lineHeight: 1.1 }}>Admin</p>
-            <p className="text-[10px] text-slate-400 font-medium mt-0.5" style={{ lineHeight: 1 }}>System Admin</p>
+            <p className="text-xs font-bold text-slate-800" style={{ lineHeight: 1.1 }}>{currentUser?.name}</p>
+            <p className="text-[10px] text-slate-400 font-medium mt-0.5" style={{ lineHeight: 1 }}>{currentUser?.specialty}</p>
           </div>
         </div>
       </div>

@@ -45,7 +45,8 @@ const LabReports = () => {
   });
 
   return (
-    <div className="screen-fade h-full overflow-hidden p-4 flex flex-col gap-4 bg-slate-50/50">
+    <div className="screen-fade h-full overflow-hidden p-2 bg-transparent">
+      <div className="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 flex flex-col gap-4 h-full min-h-full overflow-hidden min-h-0">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 flex-shrink-0">
         <div className="flex items-center gap-2">
@@ -198,6 +199,7 @@ const LabReports = () => {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
