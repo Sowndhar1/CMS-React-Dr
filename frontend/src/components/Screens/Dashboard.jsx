@@ -100,7 +100,7 @@ const Dashboard = () => {
             </p>
           </div>
           {/* Detailed building illustration */}
-          <div className="absolute right-2 bottom-0 z-0">
+          <div className="absolute right-2 bottom-0 z-0 hidden sm:block">
             <svg viewBox="0 0 200 150" className="w-40 h-28" fill="none" xmlns="http://www.w3.org/2000/svg">
               {/* Cloud in background */}
               <path d="M150 45 C150 38, 165 38, 170 43 C173 38, 188 40, 188 48 C188 55, 150 55, 150 45 Z" fill="#F8FAFC" fillOpacity="0.6" stroke="#94A3B8" strokeWidth="0.8" strokeOpacity="0.3" />
@@ -526,10 +526,10 @@ const Dashboard = () => {
         </div>
 
         {/* Right column - Available Doctors + Tasks stacked (col-span-4) */}
-        <div className="lg:col-span-4 flex flex-col justify-between">
+        <div className="lg:col-span-4 flex flex-col gap-5 lg:gap-0 justify-between mt-5 lg:mt-0">
 
           {/* Available Doctors */}
-          <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-4.5 flex flex-col justify-between h-[47.5%]">
+          <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-4.5 flex flex-col justify-between lg:h-[47.5%] min-h-[250px]">
             <div className="flex items-center justify-between">
               <h2 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Available Doctors</h2>
               <button
@@ -563,7 +563,7 @@ const Dashboard = () => {
           </div>
 
           {/* Tasks & Reminders */}
-          <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-4.5 flex flex-col justify-between h-[47.5%]">
+          <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-4.5 flex flex-col justify-between lg:h-[47.5%] min-h-[250px]">
             <div className="flex items-center justify-between">
               <h2 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Tasks & Reminders</h2>
               <button className="text-[10px] font-extrabold text-[#810B38] hover:underline cursor-pointer" onClick={() => alert('Tasks and reminders filter')}>
