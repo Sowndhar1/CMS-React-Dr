@@ -18,7 +18,8 @@ import {
   Download,
   ArrowRight,
   UserCheck,
-  Grid
+  Grid,
+  Bed
 } from 'lucide-react';
 
 // Patient demographics mock data (sourced from friend's dashboard pattern)
@@ -608,7 +609,7 @@ const Dashboard = () => {
             <div className="bg-[#FFF5F5]/70 rounded-2xl p-3 flex flex-col justify-between">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-[11px] font-bold text-slate-700 leading-tight">Doctors Active</span>
-                <MdCheckCircle className="text-rose-500/80" size={16} />
+                <UserCheck className="text-rose-500/80" size={16} />
               </div>
               <div>
                 <div className="text-xl font-black text-slate-900 mb-0.5">12</div>
@@ -622,7 +623,7 @@ const Dashboard = () => {
             <div className="bg-[#F0F7FF]/70 rounded-2xl p-3 flex flex-col justify-between">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-[11px] font-bold text-slate-700 leading-tight">Patients Waiting</span>
-                <MdPeople className="text-blue-500/80" size={16} />
+                <Users className="text-blue-500/80" size={16} />
               </div>
               <div>
                 <div className="text-xl font-black text-slate-900 mb-0.5">25</div>
@@ -636,7 +637,7 @@ const Dashboard = () => {
             <div className="bg-[#FFF8F0]/70 rounded-2xl p-3 flex flex-col justify-between">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-[11px] font-bold text-slate-700 leading-tight">Rooms Occupied</span>
-                <MdInsertDriveFile className="text-orange-500/80" size={16} />
+                <Bed className="text-orange-500/80" size={16} />
               </div>
               <div>
                 <div className="text-xl font-black text-slate-900 mb-0.5">3</div>
@@ -650,7 +651,7 @@ const Dashboard = () => {
             <div className="bg-[#F0FDF4]/70 rounded-2xl p-3 flex flex-col justify-between">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-[11px] font-bold text-slate-700 leading-tight">Emergency Cases</span>
-                <MdMedicalServices className="text-emerald-500/80" size={16} />
+                <HeartPulse className="text-emerald-500/80" size={16} />
               </div>
               <div>
                 <div className="text-xl font-black text-slate-900 mb-0.5">1</div>
