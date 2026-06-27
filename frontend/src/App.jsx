@@ -2,6 +2,7 @@ import React from 'react';
 import { AppProvider, useApp } from './context/AppContext';
 import { AuthProvider } from './context/AuthContext';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import Sidebar from './components/Layout/Sidebar';
 import Header from './components/Layout/Header';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
@@ -90,6 +91,7 @@ const App = () => {
         <AppProvider>
           <MainLayout />
           <Analytics />
+          <SpeedInsights />
         </AppProvider>
       </ProtectedRoute>
     </AuthProvider>

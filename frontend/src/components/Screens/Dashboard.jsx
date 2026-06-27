@@ -594,10 +594,75 @@ const Dashboard = () => {
 
       </div>
 
-      {/* Row 4: Bottom Widgets Row (Patient Demographics, Revenue Overview, Recent Documents) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch pb-0 flex-shrink-0">
+      {/* Row 4: Bottom Widgets Row (Clinic Overview, Patient Demographics, Revenue Overview, Recent Documents) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch pb-0 flex-shrink-0">
 
-        {/* Column 1: Patient Demographics */}
+        {/* Column 1: Clinic Overview */}
+        <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-5 flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-[10.5px] font-extrabold text-slate-400 uppercase tracking-widest">Clinic Overview</h2>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-3 h-full">
+            {/* Doctors Active */}
+            <div className="bg-[#FFF5F5]/70 rounded-2xl p-3 flex flex-col justify-between">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-bold text-slate-700 leading-tight">Doctors Active</span>
+                <MdCheckCircle className="text-rose-500/80" size={16} />
+              </div>
+              <div>
+                <div className="text-xl font-black text-slate-900 mb-0.5">12</div>
+                <div className="flex items-center gap-1 text-[9px] font-bold text-slate-400">
+                  <span className="text-emerald-600">↑ 2</span> vs yesterday
+                </div>
+              </div>
+            </div>
+
+            {/* Patients Waiting */}
+            <div className="bg-[#F0F7FF]/70 rounded-2xl p-3 flex flex-col justify-between">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-bold text-slate-700 leading-tight">Patients Waiting</span>
+                <MdPeople className="text-blue-500/80" size={16} />
+              </div>
+              <div>
+                <div className="text-xl font-black text-slate-900 mb-0.5">25</div>
+                <div className="flex items-center gap-1 text-[9px] font-bold text-slate-400">
+                  <span className="text-emerald-600">↑ 5</span> vs yesterday
+                </div>
+              </div>
+            </div>
+
+            {/* Rooms Occupied */}
+            <div className="bg-[#FFF8F0]/70 rounded-2xl p-3 flex flex-col justify-between">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-bold text-slate-700 leading-tight">Rooms Occupied</span>
+                <MdInsertDriveFile className="text-orange-500/80" size={16} />
+              </div>
+              <div>
+                <div className="text-xl font-black text-slate-900 mb-0.5">3</div>
+                <div className="flex items-center gap-1 text-[9px] font-bold text-slate-400">
+                  <span className="text-rose-600">↓ 1</span> vs yesterday
+                </div>
+              </div>
+            </div>
+
+            {/* Emergency Cases */}
+            <div className="bg-[#F0FDF4]/70 rounded-2xl p-3 flex flex-col justify-between">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-bold text-slate-700 leading-tight">Emergency Cases</span>
+                <MdMedicalServices className="text-emerald-500/80" size={16} />
+              </div>
+              <div>
+                <div className="text-xl font-black text-slate-900 mb-0.5">1</div>
+                <div className="text-[9px] font-bold text-slate-400">
+                  Same as yesterday
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Column 2: Patient Demographics */}
         <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-4.5 flex flex-col gap-3">
           <h2 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Patient Demographics</h2>
 
