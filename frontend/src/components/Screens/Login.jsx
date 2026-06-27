@@ -754,17 +754,24 @@ const Login = () => {
         @media (max-width: 1024px) {
           .login-root {
             flex-direction: column;
+            position: relative;
+            height: auto;
+            min-height: 100vh;
+            overflow-y: auto;
           }
           .login-left {
             display: none;
           }
           .login-right {
             width: 100%;
-            height: 100vh;
+            height: auto;
+            min-height: 100vh;
             padding: 24px;
+            padding-bottom: 40px; /* Extra padding for mobile keyboards */
           }
           .login-card {
             padding: 32px 24px;
+            margin: auto 0; /* Vertically centers the card within the scroll area */
           }
         }
 
