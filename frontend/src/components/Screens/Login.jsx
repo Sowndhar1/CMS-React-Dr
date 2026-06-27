@@ -754,25 +754,28 @@ const Login = () => {
         @media (max-width: 1024px) {
           .login-root {
             flex-direction: column;
-            position: relative;
-            height: auto;
-            min-height: 100vh;
+            position: fixed;
+            height: 100dvh;
+            width: 100vw;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
           }
           .login-left {
             display: none;
           }
           .login-right {
             width: 100%;
-            height: auto;
-            min-height: 100vh;
+            display: block; /* Removes flexbox to completely eliminate mobile clipping */
+            height: max-content;
+            min-height: 100dvh;
             padding: 24px;
-            padding-bottom: 40px; /* Extra padding for mobile keyboards */
-            overflow-y: auto;
-            align-items: flex-start; /* Fixes top/bottom crop on tall forms */
+            padding-bottom: 100px; /* Generous bottom padding for virtual keyboards and safe areas */
+            overflow: visible;
           }
           .login-wrapper {
-            margin: auto 0;
+            margin: 40px auto;
             width: 100%;
+            max-width: 440px;
           }
           .login-card {
             padding: 32px 24px;
